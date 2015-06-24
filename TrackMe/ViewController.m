@@ -24,20 +24,11 @@
 int lastRequest = -1;
 bool deviceAlreadyAdded = false;
 CLLocationManager *locationManager;
+NSMutableArray *trackablesList;
+bool addedRecord = false;
 
 - (IBAction)loginClicked:(id)sender {
     
-    /*NSData* postData= [<yourJSON> dataUsingEncoding:NSUTF8StringEncoding];
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:[NSString stringWithFormat:@"%d", postData.length] forHTTPHeaderField:@"Content-Length"];
-    [request setValue:@"application/x-www-form-urlencoded charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-    [request setHTTPBody:postData];
-    
-    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
-                                                                  delegate:self];
-    
-    [connection start];*/
     
     //initialize new mutable data
     self.receivedData = [[NSMutableData alloc] init];
@@ -97,10 +88,16 @@ CLLocationManager *locationManager;
             
         case REQUEST_DEVICES_LIST:
             [self parseDevicesList:dict];
+            //now get trackables list
+            [self getTrackablesList:user];
             break;
             
         case REQUEST_DEVICE_ADD:
             [self parseAddUserDevice: dict];
+            break;
+            
+        case REQUEST_TRACKABLES_LIST:
+            [self parseTrackablesList: dict];
             break;
             
         default:
@@ -155,11 +152,39 @@ CLLocationManager *locationManager;
     }
 }
 
+//parse trackables list
+-(void) parseTrackablesList: (NSDictionary *) dict {
+    if(trackablesList==nil) {
+        trackablesList = [[NSMutableArray alloc] init];
+    }
+    
+        id arrayTrackables = [dict valueForKey:@"name"];
+        
+        if( arrayTrackables!=nil && [arrayTrackables isKindOfClass:NSArray.class]) {
+            NSLog(@"is an array");
+            NSArray *trackList = (NSArray*)arrayTrackables;
+            for (id tid in trackList) {
+                NSString *trackableName = (NSString *)tid;
+                NSLog(@"parsed trackable id/name %@",trackableName);
+                if([trackablesList valueForKey:trackableName]==nil) {
+                    //not present yet, add it
+                    [trackablesList addObject:trackableName];
+                }
+                else {
+                    NSLog(@"already present trckable %@",trackableName);
+                }
+                
+            }
+        }
+}
+
 -(void) parseUserLogin: (NSDictionary *) dict {
     NSString *user = [dict valueForKey:@"email"];
     if(user!=nil) {
         NSLog(@"login ok");
         self.username = user;
+        
+        //get devices list
         [self getDevicesList:user];
         
         //report current location
@@ -221,6 +246,53 @@ CLLocationManager *locationManager;
     [connection start];
 }
 
+//get trackables list
+-(void) getTrackablesList:(NSString *)username {
+    
+    self.receivedData = [[NSMutableData alloc] init];
+    
+    lastRequest = REQUEST_TRACKABLES_LIST;
+    
+    NSLog(@"TEST getTrackablesList");
+    
+    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.67/trackme/rest/trackables_list?username=%@",username];
+    
+    // Note that the URL is the "action" URL parameter from the form.
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
+    [request setHTTPMethod:@"GET"];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
+                                                                  delegate:self];
+    
+    [connection start];
+}
+
+-(void)addRecord: (NSString*) name withDescription:(NSString*) description withDeviceId: (NSString *)deviceId withTrackableId:(NSString *)trackableId
+                forLatitude:(NSString *)latitude forLongitude:(NSString *) longitude{
+    //name,description,latitude,longitude,device_id,trackable_id
+    self.receivedData = [[NSMutableData alloc] init];
+    
+    lastRequest = REQUEST_RECORD_ADD;
+    
+    
+    // Note that the URL is the "action" URL parameter from the form.
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.67/trackme/rest/record_add"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+    //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
+    NSString *postString = [NSString stringWithFormat: @"device_id=%@&trackable_id=%@&name=%@&description=%@&latitude=%@&longitude=%@",deviceId,trackableId,name,description,latitude,longitude];
+    NSLog(@"the POST PARAMS ARE: %@",postString);
+    
+    NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:data];
+    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
+                                                                  delegate:self];
+    
+    [connection start];
+}
+
 - (void)getCurrentLocation {
     NSLog(@"Get current location now...");
     locationManager.delegate = self;
@@ -247,6 +319,11 @@ CLLocationManager *locationManager;
     if (currentLocation != nil) {
         NSString *longitude = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.longitude];
         NSString *latitute = [NSString stringWithFormat:@"%.8f", currentLocation.coordinate.latitude];
+        
+        if(!addedRecord) {
+            NSLog(@"adding record NOW!!!");
+            [self addRecord:@"added_from_device" withDescription:@"rec_description" withDeviceId:@"12" withTrackableId:@"9" forLatitude:latitute forLongitude:longitude];
+        }
         
         NSLog(@"lat: %@         long: %@",latitute,longitude);
     }
