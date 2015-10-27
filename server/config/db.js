@@ -2,7 +2,7 @@
  * Created by paulocristo on 26/10/15.
  */
 
-// config/db.js
+// config/db.views
 module.exports = {
     url : 'mongodb://localhost/trackme-dev'
 }

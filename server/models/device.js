@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DeviceSchema = new Schema({
-    id: ObjectId,
+    //id: String,
     deviceId: String,
     deviceDescription: String,
     deviceOwner: String

@@ -84,3 +84,6 @@ var server = app.listen(port, function () {
 
   console.log('Example app listening at http://%s:%s', host, port);
 });
+
+//https://scotch.io/tutorials/creating-a-single-page-todo-app-with-node-and-angular
+// https://scotch.io/tutorials/easy-node-authentication-setup-and-local

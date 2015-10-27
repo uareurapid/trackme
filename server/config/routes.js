@@ -3,36 +3,42 @@
  */
 
 
-// app/routes.js
+// app/routes.views
 module.exports = function(app, passport) {
 
     // show the home page
     app.get('/home', function(req, res) {
-        res.sendfile('./public/home.html'); // map/home page
+        res.sendfile('./views/home.html'); // map/home page
+        // load the single view file (angular will handle the page changes on the front-end)
     });
 
+    app.get('/core.js', function(req, res) {
+        res.sendfile('./js/core.js');
+    });
 
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
-        res.sendfile('./public/index.html'); // load the single view file (angular will handle the page changes on the front-end)
+        res.render('index.ejs');
     });
 
     // =====================================
     // LOGIN ===============================
     // =====================================
     // show the login form
+    // render the page and pass in any flash data if it exists
     app.get('/login', function(req, res) {
-        res.sendfile('./public/login.html'); // login page
+        res.render('login.ejs', { message: req.flash('loginMessage') }); // login page
     });
 
     // =====================================
     // SIGNUP ==============================
     // =====================================
     // show the signup form
+    // render the page and pass in any flash data if it exists
     app.get('/signup', function(req, res) {
-        res.sendfile('./public/signup.html'); // signup page
+        res.render('signup.ejs', { message: req.flash('signupMessage') }); // signup page
     });
 
     // process the signup form
@@ -43,15 +49,12 @@ module.exports = function(app, passport) {
         failureFlash : true // allow flash messages
     }));
 
-
-    //app.get('/login', function(req, res) {
-
-        // render the page and pass in any flash data if it exists
-    //    res.render('login.ejs', { message: req.flash('loginMessage') });
-    //});
-
     // process the login form
-    // app.post('/login', do all our passport stuff here);
+    app.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/home', // redirect to the secure profile section
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }));
 
 
     //app.get('/signup', function(req, res) {
@@ -79,6 +82,63 @@ module.exports = function(app, passport) {
     app.get('/logout', function(req, res) {
         req.logout();
         res.redirect('/');
+    });
+
+
+    //================DEVICES================================
+
+    var Device  = require('../models/device');
+    // get all devices
+    app.get('/api/devices', function(req, res) {
+
+        // use mongoose to get all todos in the database
+        Device.find(function(err, devices) {
+
+            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+            if (err)
+                res.send(err)
+
+            res.json(devices); // return all devices in JSON format
+        });
+
+    });
+
+    // create device and send back all todos after creation
+    app.post('/api/devices', function(req, res) {
+
+        // create a device, information comes from AJAX request from Angular
+        Device.create({
+            text : req.body.text,
+            done : false
+        }, function(err, device) {
+            if (err)
+                res.send(err);
+
+            // get and return all the todos after you create another
+            Device.find(function(err, devices) {
+                if (err)
+                    res.send(err)
+                res.json(devices);
+            });
+        });
+
+    });
+
+    // delete a todo
+    app.delete('/api/devices/:device_id', function(req, res) {
+        Device.remove({
+            _id : req.params.todo_id
+        }, function(err, device) {
+            if (err)
+                res.send(err);
+
+            // get and return all the todos after you create another
+            Todo.find(function(err, devices) {
+                if (err)
+                    res.send(err)
+                res.json(devices);
+            });
+        });
     });
 };
 

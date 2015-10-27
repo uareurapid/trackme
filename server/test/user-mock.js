@@ -3,7 +3,7 @@
  */
 
 //test user mock mongoose stuff
-//http://miamicoder.com/2014/mocha-and-node-js-testing-the-backend-for-a-mobile-application/
+//http://miamicoder.com/2014/mocha-and-node-views-testing-the-backend-for-a-mobile-application/
 var UserMock = function () {
 
     this.uuid = require('node-uuid');
