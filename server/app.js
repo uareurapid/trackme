@@ -12,6 +12,12 @@ var db = require('./config/db');
 //var mongoose = require('mongoose');
 mongoose.connect(db.url);
 
+//serve js,css and images from public folder
+app.use(express.static('public'));
+
+//EJS tutorial
+//https://scotch.io/tutorials/use-ejs-to-template-your-node-application
+
 // configure app to use bodyParser()
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));

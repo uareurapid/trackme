@@ -1,126 +1,204 @@
-<!--<!doctype html>
-<html ng-app>
-<head>
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        #map {
-            height: 100%;
-        }
-    </style>
-</head>
-<body>
-<div id="map"></div>
-<script>
-
-    var map;
-    function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: {lat: -34.397, lng: 150.644},
-            zoom: 8
-        });
-    }
-
-</script>
-<script src="https://maps.googleapis.com/maps/api/views?key=AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8&callback=initMap"
-        async defer></script>
-<div>
-    <label>Name:</label>
-    <input type="text" ng-model="yourName" placeholder="Enter a name here">
-    <hr>
-    <h1>Hello {{yourName}}!</h1>
-</div>
-</body>
-</html>-->
-<!-- index.html -->
 <!doctype html>
 
+<html lang="en" ng-app="trackme">
 <!-- ASSIGN OUR ANGULAR MODULE -->
-<html ng-app="device">
+
 <head>
-    <!-- META -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Optimize mobile viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a responsive email layout.">
 
-    <title>Node/Angular Todo App</title>
+    <title>Track.Me - The place to track the things you love!</title>
 
-    <!-- SCROLLS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
-    <style>
-        html                    { overflow-y:scroll; }
-        body                    { padding-top:50px; }
-        #todo-list              { margin-bottom:30px; }
-        #map                    {  height: 90%;  }
-    </style>
+    <!-- optionally install locally npm install purecss-->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="css/layouts/email-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="css/layouts/email.css">
+    <!--<![endif]-->
 
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
-    <script src="core.js"></script>
+    <script src="js/core.js"></script>
+
+
+    <link rel="stylesheet" href="bootstrap/3.3.5/css/bootstrap.css">
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <script src="bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" href="css/trackme.css">
+
+    <style>
+        /*html, body { height: 100%; margin: 0; padding: 0; }*/
+        #map-container                    {  height: 100%; width: 100%  }
+    </style>
 
 </head>
 <!-- SET THE CONTROLLER AND GET ALL DEVICES -->
-<body ng-controller="mainController">
-<div class="container">
-
-    <div id="map"></div>
-    <script>
-
-        var map;
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: -34.397, lng: 150.644},
-                zoom: 8
-            });
-        }
-    </script>
-    <script src="//maps.googleapis.com/maps/api/views?key=AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8&callback=initMap"
-            async defer></script>
-
-    <!-- HEADER AND TODO COUNT -->
-    <div class="jumbotron text-center">
-        <h1>I'm a Todo-aholic <span class="label label-info">{{ devices.length }}</span></h1>
+<body>
+<!-- BEGIN: Sticky Header -->
+<div id="header_container">
+    <div id="my_header">
+        Header Content
     </div>
+</div>
+<!-- END: Sticky Header -->
 
-    <!-- DEVICES LIST -->
-    <div id="device-list" class="row">
-        <div class="col-sm-4 col-sm-offset-4">
 
-            <!-- LOOP OVER THE TODOS IN $scope.todos -->
-            <div class="checkbox" ng-repeat="dev in devices">
-                <label>
-                    <input type="checkbox" ng-click="deleteDevice(dev.deviceId)"> {{ dev.deviceId }}
-                </label>
-            </div>
+<div id="layout" class="content pure-g">
+    <div id="nav" class="pure-u">
 
-        </div>
-    </div>
 
-    <!-- FORM TO CREATE devices -->
-    <div id="device-form" class="row">
-        <div class="col-sm-8 col-sm-offset-2 text-center">
-            <form>
-                <div class="form-group">
+        <div class="container">
+            <h2>My Panel</h2>
 
-                    <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-
-                    <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">
-                    <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceDescription">
-                    <input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceOwner">
-                    <!--<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">-->
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">My Trackables</a>
+                        </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body">TODO</div>
+                    </div>
                 </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Add New Trackable</a>
+                        </h4>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            TODO ADD FORM HERE!!
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-controller="mainController">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">My Devices ({{ devices.length }})</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse">
+                        <div class="panel-body">
 
-                <!-- createToDo() WILL CREATE NEW TODOS -->
-                <button type="submit" class="btn btn-primary btn-lg" ng-click="createDevice()">Add</button>
-            </form>
+                            <!-- devices list -->
+
+                            <!-- DEVICES LIST -->
+                            <div id="devices-list" class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+
+                                    <!-- LOOP OVER THE TODOS IN $scope.todos -->
+                                    <div class="checkbox" ng-repeat="dev in devices">
+                                        <label>{{ dev.deviceId }}</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- end devices list -->
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default" ng-controller="mainController">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Add new device</a>
+                        </h4>
+                    </div>
+                    <div id="collapse4" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <!-- Form to create devices -->
+                            <!-- FORM TO CREATE devices -->
+                            <div id="device-form" class="row">
+                                <div class="col-sm-8 col-sm-offset-2 text-center">
+                                    <form>
+                                        <div class="form-group">
+
+                                            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+                                            <label for="device_id">Device Id:</label>
+                                            <input id="device_id" type="text" class="form-control input-lg text-center" placeholder="Device id" ng-model="formData.deviceId">
+                                            <label for="device-description">Device description:</label>
+                                            <input id="device-description" type="text" class="form-control input-lg text-center" placeholder="Device description" ng-model="formData.deviceDescription">
+
+                                            <input type="text" class="form-control input-lg text-center" placeholder="Device owner" ng-model="formData.deviceOwner">
+                                            <!--<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">-->
+                                        </div>
+
+                                        <!-- createDevice() WILL CREATE NEW devices -->
+                                        <button type="submit" class="btn btn-primary btn-lg" ng-click="createDevice()">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end form create devices -->
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">My Account</a>
+                        </h4>
+                    </div>
+                    <div id="collapse5" class="panel-collapse collapse">
+                        <div class="panel-body">
+
+                            <div ng-controller="GreetingController">
+                                {{ greeting }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">Settings</a>
+                        </h4>
+                    </div>
+                    <div id="collapse6" class="panel-collapse collapse">
+                        <div class="panel-body">TODO</div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 
+    <div id="main" class="pure-u-1">
+        <!-- put the map here-->
+        <!--google maps goes here -->
+        <div id="map-container"></div>
+        <script type="text/javascript">
+
+            var map;
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map-container'), {
+                    center: {lat: -34.397, lng: 150.644},
+                    zoom: 8
+                });
+            }
+        </script>
+        <script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8&callback=initMap"></script>
+
+    </div>
 </div>
 
+
+<!-- BEGIN: Sticky Footer -->
+<div id="footer_container">
+    <div id="my_footer">
+        Footer Content
+    </div>
+</div>
+<!-- END: Sticky Footer -->
 </body>
 </html>

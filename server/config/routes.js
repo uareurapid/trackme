@@ -12,9 +12,9 @@ module.exports = function(app, passport) {
         // load the single view file (angular will handle the page changes on the front-end)
     });
 
-    app.get('/core.js', function(req, res) {
-        res.sendfile('./js/core.js');
-    });
+    //app.get('/core.js', function(req, res) {
+    //    res.sendfile('./js/core.js');
+    //});
 
     // =====================================
     // HOME PAGE (with login links) ========
@@ -108,7 +108,10 @@ module.exports = function(app, passport) {
 
         // create a device, information comes from AJAX request from Angular
         Device.create({
-            text : req.body.text,
+
+            deviceId: req.body.deviceId,
+            deviceDescription: req.body.deviceDescription,
+            deviceOwner: req.body.deviceOwner,
             done : false
         }, function(err, device) {
             if (err)
