@@ -12,8 +12,29 @@
 var trackme = angular.module('trackme', []);
 
 trackme.controller('GreetingController', ['$scope', function($scope) {
-    $scope.greeting = 'Hola Paulo!';
+    $scope.greeting2 = 'Hola Paulo!';
 }]);
+
+function profileController($scope, $http) {
+    $scope.username = {};
+    $scope.greeting = 'Welcome ' + $scope.username +'!';
+    $http.get('/profile/user')
+        .success(function (data) {
+            $scope.username = data;
+            console.log(data);
+        })
+        .error(function (data) {
+            console.log('Error: ' + data);
+        });
+}
+//http://stackoverflow.com/questions/21505157/session-username-not-showing-inside-angularjs-ngview-template-but-does-outside-o
+
+/*function getCurrentUser(Users, $scope) {
+    Users.get()
+        .success(function (username) {
+            $scope.username = username.user;
+        });
+}*/
 
 
 function mainController($scope, $http) {

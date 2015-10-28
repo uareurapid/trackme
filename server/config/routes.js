@@ -8,8 +8,17 @@ module.exports = function(app, passport) {
 
     // show the home page
     app.get('/home', function(req, res) {
-        res.sendfile('./views/home.html'); // map/home page
-        // load the single view file (angular will handle the page changes on the front-end)
+        if(req.isAuthenticated()) {
+           console.log("received: "+req.user.local.email) ;
+           res.sendfile('./views/home.html', {username: req.user.local.email }); // map/home page
+           // load the single view file (angular will handle the page changes on the front-end)
+        }
+        else {
+            //send him to login page
+            res.render('login.ejs');
+        }
+        
+        
     });
 
     //app.get('/core.js', function(req, res) {
@@ -55,6 +64,14 @@ module.exports = function(app, passport) {
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true // allow flash messages
     }));
+
+    //return username
+    app.get('/profile/user', function (req, res) {
+        console.log('profile/user');
+        console.log(req.user.local.email);
+        res.jsonp({ user:req.user.local.email});
+
+    });
 
 
     //app.get('/signup', function(req, res) {
