@@ -21,8 +21,8 @@ module.exports = function(app, passport) {
         
     });
 
-    //app.get('/core.js', function(req, res) {
-    //    res.sendfile('./js/core.js');
+    //app.get('/trackme-angular-core.js', function(req, res) {
+    //    res.sendfile('./js/trackme-angular-core.js');
     //});
 
     // =====================================
@@ -148,7 +148,7 @@ module.exports = function(app, passport) {
     // delete a device
     app.delete('/api/devices/:device_id', function(req, res) {
         Device.remove({
-            _id : req.params.todo_id
+            _id : req.params.device_id
         }, function(err, device) {
             if (err)
                 res.send(err);
@@ -224,6 +224,69 @@ module.exports = function(app, passport) {
                 if (err)
                     res.send(err)
                 res.json(records);
+            });
+        });
+    });
+
+    //================== trackables ======================
+
+    var Trackable  = require('../models/trackable');
+    // get all trackables
+    app.get('/api/trackables', function(req, res) {
+
+        // use mongoose to get all records in the database
+        Trackable.find(function(err, trackables) {
+
+            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+            if (err)
+                res.send(err)
+
+            res.json(trackables); // return all trackables in JSON format
+        });
+
+    });
+
+    // create trackables and send back all todos after creation
+    app.post('/api/trackables', function(req, res) {
+
+        //Return the number of milliseconds since 1970/01/01:
+        var timeOfCreation = new Date().getTime();
+        // create a device, information comes from AJAX request from Angular
+        Trackable.create({
+
+            name: req.body.name,
+            description: req.body.description,
+            owner: req.body.owner,
+            creationDate: timeOfCreation,
+            type: req.body.type,
+            done : false
+        }, function(err, trackable) {
+            if (err)
+                res.send(err);
+
+            // get and return all the trackables after you create another
+            Trackable.find(function(err, trackables) {
+                if (err)
+                    res.send(err)
+                res.json(trackables);
+            });
+        });
+
+    });
+
+    // delete a trackable
+    app.delete('/api/trackables/:trackable_id', function(req, res) {
+        Device.remove({
+            _id : req.params.trackable_id
+        }, function(err, trackable) {
+            if (err)
+                res.send(err);
+
+            // get and return all the trackables after you create another
+            Todo.find(function(err, trackables) {
+                if (err)
+                    res.send(err)
+                res.json(trackables);
             });
         });
     });

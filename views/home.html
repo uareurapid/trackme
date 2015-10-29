@@ -38,11 +38,11 @@
     <!-- for the modal dialogs mainly -->
     <!--<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>-->
 
-    <!-- this should not be the way to include it, must come included from core.js-->
+    <!-- this should not be the way to include it, must come included from trackme-angular-core.js-->
     <!--<script src="js/modules/welcome-dialog.js"></script>-->
 
     <!-- my angular js core file -->
-    <script src="js/core.js"></script>
+    <script src="js/trackme-angular-core.js"></script>
 
 
     <script src='js/lodash.min.js'></script>
@@ -71,10 +71,10 @@
     <div id="nav" class="pure-u">
 
 
-        <div class="container">
+        <div class="container" ng-controller="TrackablesController">
             <h2>My Panel</h2>
 
-            <div class="panel-group" id="accordion">
+            <div class="panel-group" id="accordion" ng-controller="DevicesController">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -82,7 +82,24 @@
                         </h4>
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
-                        <div class="panel-body">TODO</div>
+                        <div class="panel-body">
+
+                            <!-- trackables list -->
+
+                            <!-- trackables LIST -->
+                            <div id="trackables-list" class="row">
+                                <div class="col-sm-4 col-sm-offset-4">
+
+                                    <!-- LOOP OVER THE trackables IN $scope.trackables -->
+                                    <div class="checkbox" ng-repeat="trackable in trackables">
+                                        <label>{{ trackable.name }}</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- end trackables list -->
+
+                        </div>
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -93,11 +110,33 @@
                     </div>
                     <div id="collapse2" class="panel-collapse collapse">
                         <div class="panel-body">
-                            TODO ADD FORM HERE!!
+                            <!-- Form to create trackables -->
+                            <!-- FORM TO CREATE trackables -->
+                            <div id="trackable-form" class="row">
+                                <div class="col-sm-8 col-sm-offset-2 text-center">
+                                    <form>
+                                        <div class="form-group">
+
+                                            <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
+                                            <label for="trackable_name">Name:</label>
+                                            <input id="trackable_name" type="text" class="form-control input-lg text-center" placeholder="Device id" ng-model="formData.name">
+                                            <label for="trackable-description">Description:</label>
+                                            <input id="trackable-description" type="text" class="form-control input-lg text-center" placeholder="Device description" ng-model="formData.description">
+
+                                            <input type="text" class="form-control input-lg text-center" placeholder="Device owner" ng-model="formData.deviceOwner">
+                                            <!--<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">-->
+                                        </div>
+
+                                        <!-- createDevice() WILL CREATE NEW devices -->
+                                        <button type="submit" class="btn btn-primary btn-lg" ng-click="createTrackable()">Add</button>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- end form create devices -->
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-controller="DevicesController">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">My Devices ({{ devices.length }})</a>
@@ -125,7 +164,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-controller="DevicesController">
+                <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Add new device</a>

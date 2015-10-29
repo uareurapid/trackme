@@ -14,7 +14,7 @@ var TrackableSchema = new Schema({
     //type: String //'person','animal','object',
     type: {
         validator: function(v) {
-            return v==='animal' || v==='animal' || v==='object';
+            return v==='animal' || v==='person' || v==='object';
         },
         message: '{VALUE} is not a valid trackable type!'
     }
