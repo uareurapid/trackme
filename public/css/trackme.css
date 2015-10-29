@@ -4,8 +4,23 @@
 
 /* CSS for the content of page. I am giving top and bottom padding of 80px to make sure the header and footer do not overlap the content.*/
 #my_container { margin:0 auto; overflow:auto; padding:80px 0; width:940px; }
+
+.angular-google-map-container{margin:0 auto; overflow:auto; padding:80px 0; width:100%; min-height: 800px}
+
 #my_content{}
 
 /* Make Footer Sticky */
 #footer_container { background:#eee; border:1px solid #666; bottom:0; height:60px; left:0; position:fixed; width:100%; }
 #my_footer { line-height:60px; margin:0 auto; width:940px; text-align:center; }
+
+#html_colored {
+
+    background: #70bf32;
+    /*background: url('linear-gradient.png') 0 0 repeat-x;*/
+    background: -webkit-linear-gradient(#a1e048, #6a942f);
+    background: -moz-linear-gradient(#a1e048, #6a942f);
+    background: -ms-linear-gradient(#a1e048, #6a942f);
+    background: -o-linear-gradient(#a1e048, #6a942f);
+    background: linear-gradient(#a1e048, #6a942f);
+
+}

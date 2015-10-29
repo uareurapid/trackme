@@ -69,7 +69,7 @@ module.exports = function(app, passport) {
     app.get('/profile/user', function (req, res) {
         console.log('profile/user');
         console.log(req.user.local.email);
-        res.jsonp({ user:req.user.local.email});
+        res.jsonp({ username:req.user.local.email});
 
     });
 
@@ -97,6 +97,7 @@ module.exports = function(app, passport) {
     // LOGOUT ==============================
     // =====================================
     app.get('/logout', function(req, res) {
+        console.log("user logout...");
         req.logout();
         res.redirect('/');
     });
@@ -144,7 +145,7 @@ module.exports = function(app, passport) {
 
     });
 
-    // delete a todo
+    // delete a device
     app.delete('/api/devices/:device_id', function(req, res) {
         Device.remove({
             _id : req.params.todo_id
@@ -160,6 +161,73 @@ module.exports = function(app, passport) {
             });
         });
     });
+
+    //===============Records=============
+    var Record  = require('../models/record');
+    // get all records
+    app.get('/api/records', function(req, res) {
+
+        // use mongoose to get all records in the database
+        Record.find(function(err, records) {
+
+            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+            if (err)
+                res.send(err)
+
+            res.json(records); // return all records in JSON format
+        });
+
+    });
+
+    // create device and send back all todos after creation
+    app.post('/api/records', function(req, res) {
+
+        console.log("latitude: "+req.body.longitude);
+        //Return the number of milliseconds since 1970/01/01:
+        var timeOfRecord = new Date().getTime();
+        // create a record, information comes from AJAX request from Angular
+        Record.create({
+
+
+            name: req.body.name,
+            description: req.body.description,
+            latitude: req.body.latitude,
+            longitude : req.body.longitude,
+            time: timeOfRecord,
+            trackableId: req.body.trackableId,
+            deviceId: req.body.deviceId,
+            done: false
+        }, function(err, record) {
+            if (err)
+                res.send(err);
+
+            // get and return all the records after you create another
+            Record.find(function(err, records) {
+                if (err)
+                    res.send(err)
+                res.json(records);
+            });
+        });
+
+    });
+
+    // delete a record
+    app.delete('/api/records/:record_id', function(req, res) {
+        Record.remove({
+            _id : req.params.record_id
+        }, function(err, record) {
+            if (err)
+                res.send(err);
+
+            // get and return all the records after you create another
+            Record.find(function(err, records) {
+                if (err)
+                    res.send(err)
+                res.json(records);
+            });
+        });
+    });
+
 };
 
 // route middleware to make sure a user is logged in

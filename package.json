@@ -18,7 +18,7 @@
   "homepage": "https://github.com/uareurapid/trackme#readme",
   "dependencies": {
     "express": "^4.13.3",
-    "angular": "1.4.7",
+    "angular": "1.4.0",
     "mongodb": "2.0.46",
     "mongoskin": "2.0.3",
     "mongoose":"4.2.2",
@@ -36,7 +36,8 @@
     "cookie-parser":"~1.4.0",
     "connect-flash": "~0.1.1",
     "bcrypt-nodejs":"~0.0.3",
-    "ejs":"~2.3.4"
+    "ejs":"~2.3.4",
+    "angular-google-maps":"~2.2.1"
 
   }
 }

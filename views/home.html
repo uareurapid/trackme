@@ -20,22 +20,39 @@
     <link rel="stylesheet" href="css/layouts/email.css">
     <!--<![endif]-->
 
+    <link rel="stylesheet" href="bootstrap/3.3.5/css/bootstrap.css">
+    <link rel="stylesheet" href="css/trackme.css">
+
+
     <!-- SPELLS -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script><!-- load angular -->
-    <script src="js/core.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script><!-- load angular -->
+
+    <!-- check this ONE TODO -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
 
 
-    <link rel="stylesheet" href="bootstrap/3.3.5/css/bootstrap.css">
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
     <script src="bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+    <!-- for the modal dialogs mainly -->
+    <!--<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>-->
 
-    <link rel="stylesheet" href="css/trackme.css">
+    <!-- this should not be the way to include it, must come included from core.js-->
+    <!--<script src="js/modules/welcome-dialog.js"></script>-->
+
+    <!-- my angular js core file -->
+    <script src="js/core.js"></script>
+
+
+    <script src='js/lodash.min.js'></script>
+    <script src='js/angular-simple-logger.min.js'></script>
+    <script src='js/angular-google-maps.min.js'></script>
+
 
     <style>
         /*html, body { height: 100%; margin: 0; padding: 0; }*/
-        #map-container                    {  height: 100%; width: 100%  }
+        /*#map-container                    {  height: 100%; width: 100%  }*/
     </style>
 
 </head>
@@ -80,7 +97,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-controller="mainController">
+                <div class="panel panel-default" ng-controller="DevicesController">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">My Devices ({{ devices.length }})</a>
@@ -108,7 +125,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="panel panel-default" ng-controller="mainController">
+                <div class="panel panel-default" ng-controller="DevicesController">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Add new device</a>
@@ -156,9 +173,11 @@
                                 {{ greeting2 }}
                             </div>
 
-                            <div ng-controller="profileController">
-                                {{ username }}
+                            <div ng-controller="ProfileController">
+                                {{ userinfo.username }}
                             </div>
+
+                            <a href="/logout">Logout</a>
                         </div>
                     </div>
                 </div>
@@ -169,7 +188,18 @@
                         </h4>
                     </div>
                     <div id="collapse6" class="panel-collapse collapse">
-                        <div class="panel-body">TODO</div>
+                        <div class="panel-body">
+
+                            <!-- modal code here-->
+                            <div ng-controller="RecordsController">
+                                <div class="checkbox" ng-repeat="rec in records">
+                                    <label>{{ rec.latitude }}</label>
+                                    <label>{{ rec.longitude }}</label>
+                                </div>
+                            </div>
+                            <!-- end modal -->
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -177,10 +207,15 @@
 
     </div>
 
-    <div id="main" class="pure-u-1">
+    <div id="main" class="pure-u-1" ng-controller="MapController">
+
+
+
+        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+
         <!-- put the map here-->
         <!--google maps goes here -->
-        <div id="map-container"></div>
+        <!--<div id="map-container"></div>
         <script type="text/javascript">
 
             var map;
@@ -192,7 +227,7 @@
             }
         </script>
         <script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8&callback=initMap"></script>
-
+            -->
     </div>
 </div>
 

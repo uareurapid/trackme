@@ -9,35 +9,70 @@
  https://scotch.io/tutorials/creating-a-single-page-todo-app-with-node-and-angular
  */
 
-var trackme = angular.module('trackme', []);
+//var modalModule = angular.module('modalModule', ['ui.bootstrap']);
 
-trackme.controller('GreetingController', ['$scope', function($scope) {
+// A module in AngularJS is a place where you can collect and organize
+// components like controllers, services, directives, and filters
+
+var trackme = angular.module('trackme', ['uiGmapgoogle-maps']);
+
+trackme.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8',
+        v: '3.20', //defaults to latest 3.X anyhow
+        libraries: 'weather,geometry,visualization'
+    });
+});
+
+trackme.controller("MapController", function($scope, uiGmapGoogleMapApi) {
+    // Do stuff with your $scope.
+    // Note: Some of the directives require at least something to be defined originally!
+    // e.g. $scope.markers = []
+
+    $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
+    // uiGmapGoogleMapApi is a promise.
+    // The "then" callback function provides the google.maps object.
+    uiGmapGoogleMapApi.then(function(maps) {
+
+    });
+});
+
+trackme.controller('GreetingController', ['$scope', function($scope,$http) {
     $scope.greeting2 = 'Hola Paulo!';
 }]);
 
-function profileController($scope, $http) {
-    $scope.username = {};
-    $scope.greeting = 'Welcome ' + $scope.username +'!';
+//get the records on main page to load into the map
+trackme.controller('RecordsController', function($scope,$http) {
+    $scope.formData = {};
+
+    // when landing on the page, get all todos and show them
+    $http.get('/api/records')
+        .success(function(data) {
+            $scope.records = data;
+            console.log(data);
+        })
+        .error(function(data) {
+            console.log('Error: ' + data);
+        });
+
+});
+
+trackme.controller('ProfileController',function ($scope, $http) {
+    $scope.userinfo = {};
+    $scope.greeting = {};
     $http.get('/profile/user')
         .success(function (data) {
-            $scope.username = data;
+            $scope.userinfo = data;
+            $scope.greeting = 'Welcome ' + $scope.userinfo.username +'!'
             console.log(data);
         })
         .error(function (data) {
             console.log('Error: ' + data);
         });
-}
-//http://stackoverflow.com/questions/21505157/session-username-not-showing-inside-angularjs-ngview-template-but-does-outside-o
-
-/*function getCurrentUser(Users, $scope) {
-    Users.get()
-        .success(function (username) {
-            $scope.username = username.user;
-        });
-}*/
+});
 
 
-function mainController($scope, $http) {
+trackme.controller('DevicesController',function ($scope, $http) {
  $scope.formData = {};
 
  // when landing on the page, get all todos and show them
@@ -76,4 +111,4 @@ function mainController($scope, $http) {
       });
  };
 
-}
+});

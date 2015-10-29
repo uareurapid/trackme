@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var TrackableSchema = new Schema({
-    id: ObjectId,
+    //id: ObjectId,
     name: String,
     description: String,
     owner: String,
