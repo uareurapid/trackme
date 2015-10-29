@@ -276,7 +276,7 @@ module.exports = function(app, passport) {
 
     // delete a trackable
     app.delete('/api/trackables/:trackable_id', function(req, res) {
-        Device.remove({
+        Trackable.remove({
             _id : req.params.trackable_id
         }, function(err, trackable) {
             if (err)

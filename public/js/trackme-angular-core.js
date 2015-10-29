@@ -119,7 +119,7 @@ trackme.controller('DevicesController',function ($scope, $http) {
 // Trackables
 trackme.controller('TrackablesController',function ($scope, $http) {
 
-    $scope.formData = {};
+    $scope.formTrackablesData = {};
 
 
     // when landing on the page, get all trackables and show them
@@ -135,9 +135,9 @@ trackme.controller('TrackablesController',function ($scope, $http) {
     // when submitting the add form, send the text to the node API
     $scope.createTrackable = function() {
 
-        $http.post('/api/trackables', $scope.formData)
+        $http.post('/api/trackables', $scope.formTrackablesData)
             .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
+                $scope.formTrackablesData = {}; // clear the form so our user is ready to enter another
                 $scope.trackables = data;
                 console.log(data);
             })

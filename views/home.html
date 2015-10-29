@@ -71,14 +71,14 @@
     <div id="nav" class="pure-u">
 
 
-        <div class="container" ng-controller="TrackablesController">
+        <div class="container min-300" ng-controller="TrackablesController">
             <h2>My Panel</h2>
 
-            <div class="panel-group" id="accordion" ng-controller="DevicesController">
+            <div class="panel-group min-300" id="accordion" ng-controller="DevicesController">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">My Trackables</a>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">My Trackables ({{ trackables.length }})</a>
                         </h4>
                     </div>
                     <div id="collapse1" class="panel-collapse collapse in">
@@ -115,16 +115,35 @@
                             <div id="trackable-form" class="row">
                                 <div class="col-sm-8 col-sm-offset-2 text-center">
                                     <form>
-                                        <div class="form-group">
+                                        <div class="form-group" ng-controller="ProfileController">
 
                                             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                                            <label for="trackable_name">Name:</label>
-                                            <input id="trackable_name" type="text" class="form-control input-lg text-center" placeholder="Device id" ng-model="formData.name">
-                                            <label for="trackable-description">Description:</label>
-                                            <input id="trackable-description" type="text" class="form-control input-lg text-center" placeholder="Device description" ng-model="formData.description">
+                                            <div class="form-group">
+                                                <label for="trackable_name">Name:</label>
+                                                <input id="trackable_name" type="text" class="form-control input-sm" placeholder="name" ng-model="formTrackablesData.name">
+                                            </div>
 
-                                            <input type="text" class="form-control input-lg text-center" placeholder="Device owner" ng-model="formData.deviceOwner">
-                                            <!--<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">-->
+                                            <div class="form-group">
+                                                <label for="trackable-description">Description:</label>
+                                                <input id="trackable-description" type="text" class="form-control input-sm" placeholder="description" ng-model="formTrackablesData.description">
+                                            </div>
+
+
+                                            <!-- this should be the logged user-->
+                                            <div class="form-group">
+                                                <label for="trackable-owner">Description:</label>
+                                                <input id="trackable-owner" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formTrackablesData.owner">
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <label for="trackable-type">Type:</label>
+                                                <select id="trackable-type" class="form-control input-sm" ng-model="formTrackablesData.type">
+                                                    <option value="person" selected>person</option>
+                                                    <option value="object">object</option>
+                                                    <option value="animal">animal</option>
+                                                </select>
+                                            </div>
                                         </div>
 
                                         <!-- createDevice() WILL CREATE NEW devices -->

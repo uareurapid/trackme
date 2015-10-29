@@ -9,6 +9,8 @@
 
 #my_content{}
 
+.min-300 {width: 300px; min-width: 300px;}
+
 /* Make Footer Sticky */
 #footer_container { background:#eee; border:1px solid #666; bottom:0; height:60px; left:0; position:fixed; width:100%; }
 #my_footer { line-height:60px; margin:0 auto; width:940px; text-align:center; }

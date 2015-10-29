@@ -11,13 +11,14 @@ var TrackableSchema = new Schema({
     description: String,
     owner: String,
     creationDate: String,
-    //type: String //'person','animal','object',
-    type: {
+    type: String
+    //'person','animal','object',
+    /*type: {
         validator: function(v) {
             return v==='animal' || v==='person' || v==='object';
         },
         message: '{VALUE} is not a valid trackable type!'
-    }
+    }*/
 });
 
 module.exports = mongoose.model('Trackable', TrackableSchema);

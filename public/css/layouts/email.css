@@ -213,7 +213,7 @@ a {
         bottom: 0;
         overflow: auto;
         margin:0; /* "left col (nav + list)" width */
-        width:300px;
+        width:360px;
         height: 100%;
     }
 
@@ -233,7 +233,7 @@ a {
         position: fixed;
         top: 0;
 
-        left: 300px;
+        left: 360px;
         right: 0;
         bottom: 0;
         overflow: auto;
