@@ -78,6 +78,13 @@ router.get('/test', function(req, res) {
 app.use('/api', router);
 
 
+//app.use('xpto',function (req, res, next) {
+//  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+//  console.log('Client IP:', ip);
+//  next();
+//});
+
+// handle the route at yourdomain.com/sayHello
 
 
 // set our port

@@ -7,6 +7,10 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
 
     $scope.formData = {};
 
+    //all these stuff should be on the services, not on the controllers,
+    //$http and $resource on services, $scope on controllers
+    //like: https://scotch.io/tutorials/setting-up-a-mean-stack-single-page-application
+    //http://kirkbushell.me/when-to-use-directives-controllers-or-services-in-angular/
 
     // when landing on the page, get all todos and show them
     $http.get('/api/devices')

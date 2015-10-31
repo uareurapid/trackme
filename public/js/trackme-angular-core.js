@@ -107,18 +107,12 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
         // Only need to regenerate once
         if (!ov.southwest && nv.southwest) {
             var markers = [];
-            console.log("do you see me?");
-            /*
-            for (var i = 0; i < 50; i++) {
-
-                markers.push(createMarker(i, $scope.map.bounds));
-            }was ok */
 
             $scope.polylines = [];
             // when landing on the page, get all todos and show them
             $http.get('/api/records')
                 .success(function(data) {
-                    console.log("got the records?: " + JSON.stringify(data));
+                    console.log("records: " + JSON.stringify(data));
 
                     var previous = 0;
                     var current = 0;
@@ -130,10 +124,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                         current = i;
 
                         var latitude = data[i].latitude;
-                        console.log("latitude: " + data[i].latitude);
                         var longitude = data[i].longitude;
-                        console.log("longitude: " + data[i].longitude);
-
                         markers.push(createRecordMarker(i,latitude, longitude, $scope.map.bounds));
 
                         current = i;
@@ -202,6 +193,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
     });
 });
+
+
 
 //trackme.controller('GreetingController', ['$scope', function($scope,$http) {
 //    $scope.greeting2 = 'Hola Paulo!';

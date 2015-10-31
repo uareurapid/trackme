@@ -65,6 +65,24 @@ module.exports = function(app, passport) {
         failureFlash : true // allow flash messages
     }));
 
+
+    //TEST ME
+    //http://mherman.org/blog/2015/07/02/handling-user-authentication-with-the-mean-stack/#
+
+    //http://passportjs.org/docs/authenticate
+    //CUSTOM CALLBACK EXAMPLE
+    //remote login only
+    app.post('/rlogin', function(req, res, next) {
+
+        console.log("rlogin called");
+        var ProfileControler = require('../controllers/profile.js');
+        ProfileControler.remoteLogin(req,res,next,passport);
+
+    });
+
+
+
+
     //return username
     app.get('/profile/user', function (req, res) {
         console.log('profile/user');
@@ -154,7 +172,7 @@ module.exports = function(app, passport) {
                 res.send(err);
 
             // get and return all the todos after you create another
-            Todo.find(function(err, devices) {
+            Device.find(function(err, devices) {
                 if (err)
                     res.send(err)
                 res.json(devices);
@@ -290,6 +308,20 @@ module.exports = function(app, passport) {
             });
         });
     });
+
+    app.get('/api/sendmail', function(req,res) {
+
+
+        var MailerService = require('../controllers/mail.js');
+        MailerService.sendEmail(req,res, function(response) {
+            console.log("my callback response: " + response);
+        });
+
+        //app.use('/sendmail', router);
+        //router.post('/', sendFunction);
+    });
+
+
 
 };
 
