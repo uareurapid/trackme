@@ -43,6 +43,10 @@
 
     <!-- my angular js core file -->
     <script src="js/trackme-angular-core.js"></script>
+    <script src="js/modules/trackme-angular-device.js"></script>
+    <script src="js/modules/trackme-angular-trackable.js"></script>
+    <script src="js/modules/trackme-angular-profile.js"></script>
+    <script src="js/modules/trackme-angular-record.js"></script>
 
 
     <script src='js/lodash.min.js'></script>
@@ -112,44 +116,34 @@
                         <div class="panel-body">
                             <!-- Form to create trackables -->
                             <!-- FORM TO CREATE trackables -->
-                            <div id="trackable-form" class="row">
-                                <div class="col-sm-8 col-sm-offset-2 text-center">
-                                    <form>
-                                        <div class="form-group" ng-controller="ProfileController">
+                            <div class="trackable-form s">
+                               <!-- <div class="col-sm-8 col-sm-offset-2 text-center">-->
+                                    <form role="form">
 
                                             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                                            <div class="form-group">
                                                 <label for="trackable_name">Name:</label>
                                                 <input id="trackable_name" type="text" class="form-control input-sm" placeholder="name" ng-model="formTrackablesData.name">
-                                            </div>
 
-                                            <div class="form-group">
                                                 <label for="trackable-description">Description:</label>
                                                 <input id="trackable-description" type="text" class="form-control input-sm" placeholder="description" ng-model="formTrackablesData.description">
-                                            </div>
-
 
                                             <!-- this should be the logged user-->
-                                            <div class="form-group">
-                                                <label for="trackable-owner">Description:</label>
-                                                <input id="trackable-owner" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formTrackablesData.owner">
-                                            </div>
+                                                <label for="trackable-owner">Owner:</label>
+                                                <input id="trackable-owner" ng-controller="ProfileController" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formTrackablesData.owner">
 
-
-                                            <div class="form-group">
                                                 <label for="trackable-type">Type:</label>
-                                                <select id="trackable-type" class="form-control input-sm" ng-model="formTrackablesData.type">
-                                                    <option value="person" selected>person</option>
-                                                    <option value="object">object</option>
-                                                    <option value="animal">animal</option>
+                                                <select id="trackable-type" class="form-control input-sm"
+                                                        ng-model="formTrackablesData.type.selectedOption"
+                                                        ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
                                                 </select>
-                                            </div>
-                                        </div>
+
+                                                <br/>
+                                                <button type="submit" class="btn btn-primary btn-sm" ng-click="createTrackable()">Add trackable</button>
 
                                         <!-- createDevice() WILL CREATE NEW devices -->
-                                        <button type="submit" class="btn btn-primary btn-lg" ng-click="createTrackable()">Add</button>
+                                        <!--<button type="submit" class="btn btn-primary btn-lg" ng-click="createTrackable()">Add</button>-->
                                     </form>
-                                </div>
+                                <!--</div>-->
                             </div>
                             <!-- end form create devices -->
                         </div>
@@ -194,25 +188,25 @@
 
                             <!-- Form to create devices -->
                             <!-- FORM TO CREATE devices -->
-                            <div id="device-form" class="row">
-                                <div class="col-sm-8 col-sm-offset-2 text-center">
-                                    <form>
-                                        <div class="form-group">
+                            <div class="device-form s">
+
+                                    <form role="form">
 
                                             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
                                             <label for="device_id">Device Id:</label>
-                                            <input id="device_id" type="text" class="form-control input-lg text-center" placeholder="Device id" ng-model="formData.deviceId">
+                                            <input id="device_id" type="text" class="form-control input-sm" placeholder="Identifier" ng-model="formData.deviceId">
+
                                             <label for="device-description">Device description:</label>
-                                            <input id="device-description" type="text" class="form-control input-lg text-center" placeholder="Device description" ng-model="formData.deviceDescription">
+                                            <input id="device-description" type="text" class="form-control input-sm" placeholder="Description" ng-model="formData.deviceDescription">
 
-                                            <input type="text" class="form-control input-lg text-center" placeholder="Device owner" ng-model="formData.deviceOwner">
-                                            <!--<input type="text" class="form-control input-lg text-center" placeholder="I want to buy a puppy that will love me forever" ng-model="formData.deviceId">-->
-                                        </div>
+                                            <label for="device-owner">Owner:</label>
+                                            <input ng-controller="ProfileController" id="device-owner" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formData.owner">
 
+                                        <br/>
                                         <!-- createDevice() WILL CREATE NEW devices -->
-                                        <button type="submit" class="btn btn-primary btn-lg" ng-click="createDevice()">Add</button>
+                                        <button type="submit" class="btn btn-primary btn-sm" ng-click="createDevice()">Add device</button>
                                     </form>
-                                </div>
+
                             </div>
                             <!-- end form create devices -->
                         </div>
@@ -227,9 +221,9 @@
                     <div id="collapse5" class="panel-collapse collapse">
                         <div class="panel-body">
 
-                            <div ng-controller="GreetingController">
+                            <!--<div ng-controller="GreetingController">
                                 {{ greeting2 }}
-                            </div>
+                            </div>-->
 
                             <div ng-controller="ProfileController">
                                 {{ userinfo.username }}
@@ -265,27 +259,18 @@
 
     </div>
 
+
+
     <div id="main" class="pure-u-1" ng-controller="MapController">
 
+        <ui-gmap-google-map center='map.center' zoom='map.zoom' draggable="true" options="map.options" bounds="map.bounds">
 
+            <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+            <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+            geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
 
-        <ui-gmap-google-map center='map.center' zoom='map.zoom'></ui-gmap-google-map>
+        </ui-gmap-google-map>
 
-        <!-- put the map here-->
-        <!--google maps goes here -->
-        <!--<div id="map-container"></div>
-        <script type="text/javascript">
-
-            var map;
-            function initMap() {
-                map = new google.maps.Map(document.getElementById('map-container'), {
-                    center: {lat: -34.397, lng: 150.644},
-                    zoom: 8
-                });
-            }
-        </script>
-        <script async defer src="//maps.googleapis.com/maps/api/js?key=AIzaSyBQVDtQOCDfWg4ikGXBvOTB9y03RgLb0M8&callback=initMap"></script>
-            -->
     </div>
 </div>
 

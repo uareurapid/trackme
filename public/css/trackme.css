@@ -7,9 +7,16 @@
 
 .angular-google-map-container{margin:0 auto; overflow:auto; padding:80px 0; width:100%; min-height: 800px}
 
+.trackable-form, .device-form { text-align: left }
 #my_content{}
 
-.min-300 {width: 300px; min-width: 300px;}
+#main {overflow: hidden;}
+
+.btn-sm-right{text-align: right}
+
+.input-trackme {padding-bottom: 30px}
+
+.min-300 {width: 300px; min-width: 300px;padding-right: 5px; padding-left:5px }
 
 /* Make Footer Sticky */
 #footer_container { background:#eee; border:1px solid #666; bottom:0; height:60px; left:0; position:fixed; width:100%; }
@@ -25,4 +32,15 @@
     background: -o-linear-gradient(#a1e048, #6a942f);
     background: linear-gradient(#a1e048, #6a942f);
 
+}
+
+.labelClass {
+    padding-top:29px;
+    padding-left:2px;
+    color:#000;
+    font-family: 'open_sansregular';
+    height:61px;
+    width:37px;
+    font-size:9px;
+    line-height: 12px;
 }

@@ -12,7 +12,7 @@ var TrackableSchema = new Schema({
     owner: String,
     creationDate: String,
     type: String
-    //'person','animal','object',
+    //'1-person','3-animal','2-object',
     /*type: {
         validator: function(v) {
             return v==='animal' || v==='person' || v==='object';

@@ -15,7 +15,7 @@ module.exports = function(app, passport) {
         }
         else {
             //send him to login page
-            res.render('login.ejs');
+            res.render('login.ejs', { message: req.flash('loginMessage') });
         }
         
         
