@@ -26,6 +26,7 @@ bool deviceAlreadyAdded = false;
 CLLocationManager *locationManager;
 NSMutableArray *trackablesList;
 bool addedRecord = false;
+const NSString *server = @"192.168.1.66:8080";
 
 - (IBAction)loginClicked:(id)sender {
     
@@ -36,11 +37,11 @@ bool addedRecord = false;
     lastRequest = REQUEST_LOGIN;
     
     // Note that the URL is the "action" URL parameter from the form.
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.67/trackme/rest/login"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/rlogin"]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
-    NSString *postString = [NSString stringWithFormat:  @"username=%@&password=%@",self.txtUsername.text,self.txtPassword.text];
+    NSString *postString = [NSString stringWithFormat:  @"email=%@&password=%@",self.txtUsername.text,self.txtPassword.text];
     NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
     [request setHTTPBody:data];
     [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
@@ -89,7 +90,7 @@ bool addedRecord = false;
         case REQUEST_DEVICES_LIST:
             [self parseDevicesList:dict];
             //now get trackables list
-            [self getTrackablesList:user];
+            //[self getTrackablesList:user];
             break;
             
         case REQUEST_DEVICE_ADD:
@@ -125,11 +126,12 @@ bool addedRecord = false;
 
 -(void) parseDevicesList: (NSDictionary *) dict {
     
+    NSLog(@"PARSING DEVICES LIST");
     self.deviceName = [[UIDevice currentDevice] name];
     NSLog(@"device name is %@",self.deviceName);
     BOOL devicePresent = false;
     
-    id arrayDevices = [dict valueForKey:@"device_id"];
+    id arrayDevices = [dict valueForKey:@"deviceId"];
 
     if( arrayDevices!=nil && [arrayDevices isKindOfClass:NSArray.class]) {
         NSLog(@"is an array");
@@ -204,11 +206,11 @@ bool addedRecord = false;
         
         
         // Note that the URL is the "action" URL parameter from the form.
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.67/trackme/rest/device_add"]];
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/api/devices"]];
         [request setHTTPMethod:@"POST"];
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
         //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
-        NSString *postString = [NSString stringWithFormat: @"device_id=%@&device_description=%@&device_owner=%@",self.deviceName,self.deviceName,self.username];
+        NSString *postString = [NSString stringWithFormat: @"deviceId=%@&deviceDescription=%@&deviceOwner=%@",self.deviceName,self.deviceName,self.username];
         NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:data];
         [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
@@ -228,7 +230,7 @@ bool addedRecord = false;
     
     NSLog(@"TEST getDevicesList");
     
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.67/trackme/rest/devices_list?username=%@",username];
+    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/devices?username=%@",username];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
@@ -255,7 +257,7 @@ bool addedRecord = false;
     
     NSLog(@"TEST getTrackablesList");
     
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.67/trackme/rest/trackables_list?username=%@",username];
+    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/trackables?username=%@",username];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
@@ -276,7 +278,7 @@ bool addedRecord = false;
     
     
     // Note that the URL is the "action" URL parameter from the form.
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.67/trackme/rest/record_add"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/api/records"]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
@@ -322,7 +324,9 @@ bool addedRecord = false;
         
         if(!addedRecord) {
             NSLog(@"adding record NOW!!!");
-            [self addRecord:@"added_from_device" withDescription:@"rec_description" withDeviceId:@"12" withTrackableId:@"9" forLatitude:latitute forLongitude:longitude];
+            
+            //TODO THIS IS OK
+            //[self addRecord:@"added_from_device" withDescription:@"rec_description" withDeviceId:@"12" withTrackableId:@"9" forLatitude:latitute forLongitude:longitude];
         }
         
         NSLog(@"lat: %@         long: %@",latitute,longitude);
