@@ -137,17 +137,19 @@
                                                         ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
                                                 </select>
 
-                                                <!-- privacy options-->s
-                                                <div class="radio">
-                                                    <label><input type="radio" name="optradio">Option 1</label>
-                                                </div>
-                                                <div class="radio">
-                                                    <label><input type="radio" name="optradio">Option 2</label>
-                                                </div>
-                                                <div class="radio disabled">
-                                                    <label><input type="radio" name="optradio" disabled>Option 3</label>
-                                                </div>
+                                                <!-- privacy options-->
+                                                <br/>
+                                                <label for="trackable_privacy">Privacy:</label>
+                                                <div class="radio" id="trackable_privacy" name="trackable_privacy">
+                                                    <label><input type="radio" name="privacy" checked="checked" ng-checked="true" ng-model="formTrackablesData.privacy">Private</label>
 
+
+                                                    <label><input type="radio" name="privacy" ng-model="formTrackablesData.privacy">Protected</label>
+
+
+                                                    <label><input type="radio" name="privacy" ng-model="formTrackablesData.privacy">Public</label>
+
+                                                </div>
                                                 <br/>
                                                 <button type="submit" class="btn btn-primary btn-sm" ng-click="createTrackable()">Add trackable</button>
 

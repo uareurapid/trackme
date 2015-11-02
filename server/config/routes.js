@@ -276,6 +276,7 @@ module.exports = function(app, passport) {
             description: req.body.description,
             owner: req.body.owner,
             creationDate: timeOfCreation,
+            privacy: req.body.privacy,
             type: req.body.type,
             done : false
         }, function(err, trackable) {
