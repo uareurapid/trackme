@@ -137,6 +137,17 @@
                                                         ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
                                                 </select>
 
+                                                <!-- privacy options-->s
+                                                <div class="radio">
+                                                    <label><input type="radio" name="optradio">Option 1</label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="optradio">Option 2</label>
+                                                </div>
+                                                <div class="radio disabled">
+                                                    <label><input type="radio" name="optradio" disabled>Option 3</label>
+                                                </div>
+
                                                 <br/>
                                                 <button type="submit" class="btn btn-primary btn-sm" ng-click="createTrackable()">Add trackable</button>
 
