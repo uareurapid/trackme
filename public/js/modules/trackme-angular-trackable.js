@@ -15,6 +15,8 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
         selectedOption: {id: '1', name: 'Person'} //This sets the default value of the select in the ui
     };
 
+    $scope.formTrackablesData.privacy = 'Private';//public and protected
+
 
     // when landing on the page, get all trackables and show them
     $http.get('/api/trackables')
