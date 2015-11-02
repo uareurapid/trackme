@@ -44,3 +44,12 @@
     font-size:9px;
     line-height: 12px;
 }
+
+.invisible {
+    visibility: hidden;
+}
+
+
+.visible {
+    visibility: visible;
+}

@@ -132,29 +132,28 @@
                                                 <input id="trackable-owner" ng-controller="ProfileController" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formTrackablesData.owner">
 
                                                 <label for="trackable-type">Type:</label>
-                                                <select id="trackable-type" class="form-control input-sm"
+                                                <!--<select id="trackable-type" class="form-control input-sm"
                                                         ng-model="formTrackablesData.type.selectedOption"
                                                         ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
-                                                </select>
+                                                </select>-->
+
+                                                    <select ng-init="formTrackablesData.type = formTrackablesData.typeOptions[0]"
+                                                            ng-model="formTrackablesData.type"
+                                                            ng-options="option.name for option in formTrackablesData.typeOptions">
+                                                    </select>
 
                                                 <!-- privacy options-->
                                                 <br/>
-                                                <label for="trackable_privacy">Privacy:</label>
-                                                <div class="radio" id="trackable_privacy" name="trackable_privacy">
-                                                    <label><input type="radio" name="privacy" checked="checked" ng-checked="true" ng-model="formTrackablesData.privacy">Private</label>
-
-
-                                                    <label><input type="radio" name="privacy" ng-model="formTrackablesData.privacy">Protected</label>
-
-
-                                                    <label><input type="radio" name="privacy" ng-model="formTrackablesData.privacy">Public</label>
-
+                                                <label>Privacy:</label>
+                                                <div class="form-group">
+                                                    <label><input type="radio" ng-change="privacyChanged()" name="privacy" value="Private" ng-checked="true" ng-model="formTrackablesData.privacy">Private</label>
+                                                    <label><input type="radio" ng-change="privacyChanged()" name="privacy" value="Protected" ng-model="formTrackablesData.privacy">Protected</label>
+                                                    <label><input type="radio" ng-change="privacyChanged()" name="privacy" value="Public" ng-model="formTrackablesData.privacy">Public</label>
                                                 </div>
+                                                <!-- this is filled when the trackable is set to 'protected'-->
+                                                <!--<input name="trackable_unlockcode" id="trackable_unlockcode" type="hidden" size="20" value="" ng-model="formTrackablesData.unlockCode">-->
                                                 <br/>
                                                 <button type="submit" class="btn btn-primary btn-sm" ng-click="createTrackable()">Add trackable</button>
-
-                                        <!-- createDevice() WILL CREATE NEW devices -->
-                                        <!--<button type="submit" class="btn btn-primary btn-lg" ng-click="createTrackable()">Add</button>-->
                                     </form>
                                 <!--</div>-->
                             </div>

@@ -75,8 +75,8 @@ module.exports = function(app, passport) {
     app.post('/rlogin', function(req, res, next) {
 
         console.log("rlogin called");
-        var ProfileControler = require('../controllers/profile.js');
-        ProfileControler.remoteLogin(req,res,next,passport);
+        var ProfileController = require('../controllers/profile.js');
+        ProfileController.remoteLogin(req,res,next,passport);
 
     });
 
@@ -267,6 +267,13 @@ module.exports = function(app, passport) {
     // create trackables and send back all todos after creation
     app.post('/api/trackables', function(req, res) {
 
+        //only used if privacy protected
+        var protectedCode = "";
+        if(req.body.privacy=="Protected") {
+            var ProfileController = require('../controllers/profile.js');
+            protectedCode = ProfileController.generateUUID();
+        }
+
         //Return the number of milliseconds since 1970/01/01:
         var timeOfCreation = new Date().getTime();
         // create a device, information comes from AJAX request from Angular
@@ -277,16 +284,22 @@ module.exports = function(app, passport) {
             owner: req.body.owner,
             creationDate: timeOfCreation,
             privacy: req.body.privacy,
-            type: req.body.type,
+            type: req.body.type.name,
+            unlockCode: protectedCode,
             done : false
         }, function(err, trackable) {
             if (err)
+            {
+                console.log("unable to create trackable: " + err);
                 res.send(err);
+            }
+
 
             // get and return all the trackables after you create another
             Trackable.find(function(err, trackables) {
                 if (err)
                     res.send(err)
+
                 res.json(trackables);
             });
         });
@@ -302,7 +315,7 @@ module.exports = function(app, passport) {
                 res.send(err);
 
             // get and return all the trackables after you create another
-            Todo.find(function(err, trackables) {
+            Trackable.find(function(err, trackables) {
                 if (err)
                     res.send(err)
                 res.json(trackables);
@@ -312,14 +325,10 @@ module.exports = function(app, passport) {
 
     app.get('/api/sendmail', function(req,res) {
 
-
         var MailerService = require('../controllers/mail.js');
         MailerService.sendEmail(req,res, function(response) {
             console.log("my callback response: " + response);
         });
-
-        //app.use('/sendmail', router);
-        //router.post('/', sendFunction);
     });
 
 

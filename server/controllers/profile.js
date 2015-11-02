@@ -2,11 +2,11 @@
  * Created by paulocristo on 31/10/15.
  */
 
-var ProfileControler =  function(req,res) {
+var ProfileController =  function(req,res) {
 
 };
 
-ProfileControler.remoteLogin = function(req,res,next,passport){
+ProfileController.remoteLogin = function(req,res,next,passport){
 
     passport.authenticate('local-login', function(err, user, info) {
         if (err) {
@@ -27,7 +27,7 @@ ProfileControler.remoteLogin = function(req,res,next,passport){
     })(req, res, next);
 };
 
-ProfileControler.remoteSignup = function(req,res,next,passport){
+ProfileController.remoteSignup = function(req,res,next,passport){
 
     passport.authenticate('local-login', function(err, user, info) {
         if (err) {
@@ -48,4 +48,11 @@ ProfileControler.remoteSignup = function(req,res,next,passport){
     })(req, res, next);
 };
 
-module.exports = ProfileControler;
+ProfileController.generateUUID = function() {
+
+      var uuid = require('node-uuid');
+      return uuid.v4() ;
+
+};
+
+module.exports = ProfileController;
