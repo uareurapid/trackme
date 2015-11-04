@@ -16,7 +16,7 @@
 #define REQUEST_TRACKABLES_LIST 4
 #define REQUEST_RECORD_ADD 5
 
-@interface ViewController : UIViewController<NSURLConnectionDataDelegate,CLLocationManagerDelegate,UITextFieldDelegate>
+@interface LoginViewController : UIViewController<NSURLConnectionDataDelegate,CLLocationManagerDelegate,UITextFieldDelegate>
 
 -(void) getDevicesList;
 

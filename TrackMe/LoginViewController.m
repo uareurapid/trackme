@@ -6,20 +6,22 @@
 //  Copyright (c) 2015 Paulo Cristo. All rights reserved.
 //
 
-#import "ViewController.h"
+#import "LoginViewController.h"
+#import "SWRevealViewController.h"
 
 
-@interface ViewController ()
+@interface LoginViewController ()
 @property (strong, nonatomic) IBOutlet UITextField *txtUsername;
 @property (strong, nonatomic) IBOutlet UITextField *txtPassword;
 @property (strong, nonatomic) NSMutableData *receivedData;
 @property (strong, nonatomic) NSString *username;
 @property (strong, nonatomic) NSString *deviceName;
+@property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
 
 
 @end
 
-@implementation ViewController
+@implementation LoginViewController
 
 int lastRequest = -1;
 bool deviceAlreadyAdded = false;
@@ -340,6 +342,7 @@ const NSString *server = @"192.168.1.66:8080";
     
     self.txtPassword.delegate = self;
     self.txtUsername.delegate = self;
+    [self customSetup];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -350,6 +353,54 @@ const NSString *server = @"192.168.1.66:8080";
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)customSetup
+{
+    SWRevealViewController *revealViewController = self.revealViewController;
+    if ( revealViewController )
+    {
+        [self.revealButtonItem setTarget: revealViewController];
+        [self.revealButtonItem setAction: @selector( revealToggle: )];
+        [self.navigationController.navigationBar addGestureRecognizer:revealViewController.panGestureRecognizer];
+    }
+    
+    //_label.text = _text;
+    //_label.textColor = _color;
+}
+
+#pragma mark state preservation / restoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    // Save what you need here
+    //[coder encodeObject: _text forKey: @"text"];
+    //[coder encodeObject: _color forKey: @"color"];
+    
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    // Restore what you need here
+    //_color = [coder decodeObjectForKey: @"color"];
+    //_text = [coder decodeObjectForKey: @"text"];
+    
+    [super decodeRestorableStateWithCoder:coder];
+}
+
+
+- (void)applicationFinishedRestoringState
+{
+    NSLog(@"%s", __PRETTY_FUNCTION__);
+    
+    // Call whatever function you need to visually restore
+    [self customSetup];
 }
 
 @end
