@@ -8,15 +8,12 @@
 
 #import "LoginViewController.h"
 #import "SWRevealViewController.h"
+#import "SSKeychain.h"
+#import <Foundation/Foundation.h>
 
 
 @interface LoginViewController ()
-@property (strong, nonatomic) IBOutlet UITextField *txtUsername;
-@property (strong, nonatomic) IBOutlet UITextField *txtPassword;
-@property (strong, nonatomic) NSMutableData *receivedData;
-@property (strong, nonatomic) NSString *username;
-@property (strong, nonatomic) NSString *deviceName;
-@property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
+
 
 
 @end
@@ -33,6 +30,21 @@ const NSString *server = @"192.168.1.66:8080";
 - (IBAction)loginClicked:(id)sender {
     
     
+    if([self.btnLogin.titleLabel.text isEqualToString:@"Signup"]) {
+        //am performing  signup
+        [self performSignupRequest];
+    }
+    else {
+        //normal login
+        [self performLoginRequest];
+    }
+    
+    
+    
+}
+
+//LOGIN
+-(void) performLoginRequest {
     //initialize new mutable data
     self.receivedData = [[NSMutableData alloc] init];
     
@@ -40,6 +52,30 @@ const NSString *server = @"192.168.1.66:8080";
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/rlogin"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+    //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
+    NSString *postString = [NSString stringWithFormat:  @"email=%@&password=%@",self.txtUsername.text,self.txtPassword.text];
+    NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
+    [request setHTTPBody:data];
+    [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
+    
+    NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
+                                                                  delegate:self];
+    
+    [connection start];
+}
+
+-(void) performSignupRequest {
+    //initialize new mutable data
+    self.receivedData = [[NSMutableData alloc] init];
+    
+    lastRequest = REQUEST_SIGNUP;
+    
+    //TODO check if password and retype are equal!!!
+    
+    // Note that the URL is the "action" URL parameter from the form.
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/rsignup"]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
@@ -87,6 +123,10 @@ const NSString *server = @"192.168.1.66:8080";
             
         case REQUEST_LOGIN:
             [self parseUserLogin: dict];
+            break;
+            
+        case REQUEST_SIGNUP:
+            [self parseUserSignup: dict];
             break;
             
         case REQUEST_DEVICES_LIST:
@@ -185,18 +225,49 @@ const NSString *server = @"192.168.1.66:8080";
 -(void) parseUserLogin: (NSDictionary *) dict {
     NSString *user = [dict valueForKey:@"email"];
     if(user!=nil) {
-        NSLog(@"login ok");
+        NSLog(@"login ok for username %@",user);
         self.username = user;
         
+        //save the credentials
+        [self rememberMeChanged:self ];
+        
+        //open reveal controller
+        [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+        
+        //SWRevealViewController *revealViewController = self.revealViewController;
+        //[self presentViewController:revealViewController animated:YES completion:nil];
+        
         //get devices list
-        [self getDevicesList:user];
+        /*[self getDevicesList:user];
         
         //report current location
-        [self getCurrentLocation];
+        [self getCurrentLocation];*/
     }
     else {
         NSLog(@"login failed");
     }
+}
+
+-(void) parseUserSignup: (NSDictionary *) dict {
+    NSString *user = [dict valueForKey:@"email"];
+    if(user!=nil) {
+        NSLog(@"login ok for username %@",user);
+        self.username = user;
+        
+        //save the credentials
+        [self rememberMeChanged:self ];
+        
+        //open reveal controller
+        [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+    
+    }
+    else {
+        NSLog(@"login failed");
+    }
+}
+
+-(void)saveUsername:(NSString *) user {
+   
 }
 
 -(void) addUserDevice {
@@ -342,6 +413,17 @@ const NSString *server = @"192.168.1.66:8080";
     
     self.txtPassword.delegate = self;
     self.txtUsername.delegate = self;
+    //clear any previous stuff
+    self.txtPassword.text = @"";
+    self.txtUsername.text = @"";
+    
+ 
+   // self.btnLoginSignup.titleLabel.text = @"Login";
+    
+    
+    //prefills if there is saved data
+    [self prefillUserFields];
+    
     [self customSetup];
 }
 
@@ -360,6 +442,7 @@ const NSString *server = @"192.168.1.66:8080";
     SWRevealViewController *revealViewController = self.revealViewController;
     if ( revealViewController )
     {
+        NSLog(@"yes it exists");
         [self.revealButtonItem setTarget: revealViewController];
         [self.revealButtonItem setAction: @selector( revealToggle: )];
         [self.navigationController.navigationBar addGestureRecognizer:revealViewController.panGestureRecognizer];
@@ -382,6 +465,42 @@ const NSString *server = @"192.168.1.66:8080";
     [super encodeRestorableStateWithCoder:coder];
 }
 
+- (IBAction)rememberMeChanged:(id)sender;
+{
+    if(self.rememberMe.on == YES)
+    {
+        
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+        NSString* user = self.txtUsername.text;
+        [defaults setObject:user forKey:USERNAME_KEY];
+        
+        [defaults synchronize];
+        
+        NSString *pass = self.txtPassword.text;
+        //[defaults setObject:pass forKey:@"textField2Text"];
+        
+        //save the password on keychain
+        [SSKeychain setPassword:pass forService:@"trackme_service" account:user];
+        
+        
+    }
+    
+}
+
+-(void) prefillUserFields {
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString* user = [defaults objectForKey:USERNAME_KEY];
+    
+    if(user!=nil) {
+        self.txtUsername.text = user;
+        NSString *pass = [SSKeychain passwordForService:@"trackme_service" account:user];
+        if(pass!=nil) {
+            self.txtPassword.text = pass;
+        }
+    }
+
+}
 
 - (void)decodeRestorableStateWithCoder:(NSCoder *)coder
 {
@@ -403,4 +522,22 @@ const NSString *server = @"192.168.1.66:8080";
     [self customSetup];
 }
 
+
+- (IBAction)btnSignupClicked:(id)sender{
+    //hide this one
+    self.btnSignup.hidden = true;
+    //change the label of the other one
+    self.btnLogin.titleLabel.text = @"Signup";
+    //hidde the hint
+    self.lblCreateAccountHint.hidden = true;
+    
+    //clear these
+    self.txtPassword.text=@"";
+    self.txtPassword.text=@"";
+    
+    //perform signup and hidde them again
+    
+    //self.lblRetypePassword.hidden = true;
+    //self.txtRetypePassword.hidden = true;
+}
 @end
