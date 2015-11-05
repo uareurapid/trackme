@@ -41,7 +41,7 @@ ProfileController.remoteSignup = function(req,res,next,passport){
                 return res.status(500).json({err: 'Could not log in user'});
             }
             console.log("request headers: " + JSON.stringify(req.headers));
-            res.status(200).json({status: 'Login successful!',email:user.local.email});
+            res.status(200).json({status: 'Signup successful!',email:user.local.email});
             //res.header("Location","http://www.sapo.pt");
 
         });
