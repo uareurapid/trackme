@@ -76,7 +76,7 @@
 
 
         <div class="container min-300" ng-controller="TrackablesController">
-            <h2>My Panel</h2>
+            <h2 class="h2_white_bold">My Panel</h2>
 
             <div class="panel-group min-300" id="accordion" ng-controller="DevicesController">
                 <div class="panel panel-default">
@@ -92,14 +92,19 @@
 
                             <!-- trackables LIST -->
                             <div id="trackables-list" class="row">
-                                <div class="col-sm-4 col-sm-offset-4">
+                                <!--<div class="col-sm-4 col-sm-offset-4">-->
+                                <form role="form">
 
+                                    <label for="filter_by_trackable">Filter by trackable:</label>
+                                    <select id="filter_by_trackable" ng-model="selectedTrackable" ng-options="trackable._id as trackable.name for trackable in trackables">
+                                        <option value="">Show all</option>
+                                    </select>
                                     <!-- LOOP OVER THE trackables IN $scope.trackables -->
-                                    <div class="checkbox" ng-repeat="trackable in trackables">
+                                    <!--<div class="checkbox" ng-repeat="trackable in trackables">
                                         <label>{{ trackable.name }}</label>
-                                    </div>
-
-                                </div>
+                                    </div>-->
+                                </form>
+                               <!-- </div>-->
                             </div>
                             <!-- end trackables list -->
 
@@ -174,14 +179,20 @@
 
                             <!-- DEVICES LIST -->
                             <div id="devices-list" class="row">
-                                <div class="col-sm-4 col-sm-offset-4">
+                               <!-- <div class="col-sm-4 col-sm-offset-4">-->
+                                <form role="form">
 
                                     <!-- LOOP OVER THE TODOS IN $scope.todos -->
-                                    <div class="checkbox" ng-repeat="dev in devices">
+                                   <!-- <div class="checkbox" ng-repeat="dev in devices">
                                         <label>{{ dev.deviceId }}</label>
-                                    </div>
+                                    </div>-->
+                                    <label for="filter_by_device">Filter by device:</label>
+                                    <select id="filter_by_device" ng-model="selectedDevice" ng-options="device._id as device.deviceId for device in devices">
+                                        <option value="">Show all</option>
+                                    </select>
 
-                                </div>
+                                </form>
+                                <!--</div>-->
                             </div>
                             <!-- end devices list -->
 

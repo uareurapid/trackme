@@ -12,6 +12,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     //like: https://scotch.io/tutorials/setting-up-a-mean-stack-single-page-application
     //http://kirkbushell.me/when-to-use-directives-controllers-or-services-in-angular/
 
+    $scope.selectedDevice = "Show all";
     // when landing on the page, get all todos and show them
     $http.get('/api/devices')
         .success(function(data) {

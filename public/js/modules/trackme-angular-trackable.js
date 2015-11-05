@@ -29,6 +29,21 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
         //selectedOption will be an object as:
         //selectedOption: {id: '1', name: 'Person'}
         //This sets the default value of the select in the ui
+    /**
+     * OTHER EXAMPLE
+     *
+     * <select ng-model="selectedCountry.countryId" ng-options="country.countryId as country.name for country in chooseCountries"></select>
+
+     <span>Selected country id is {{selectedCountry.countryId}}</span>
+     *    $scope.chooseCountries=[
+     {countryId : 1, name : "France - Mainland", desc: "some description" },
+     {countryId : 2, name : "Gibraltar", desc: "some description"},
+     {countryId : 3, name : "Malta", desc: "some description"}
+     ];
+
+     $scope.selectedCountry = angular.copy($scope.chooseCountries[0]);
+     });
+     */
 
     $scope.privacyChanged = function() {
         console.log("privacy changed to: " + $scope.formTrackablesData.privacy);
@@ -43,6 +58,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     //FORM VALIDATION HOWTO
     //https://scotch.io/tutorials/angularjs-form-validation
 
+    $scope.selectedTrackable = "Show all";
     // when landing on the page, get all trackables and show them
     $http.get('/api/trackables')
         .success(function(data) {
