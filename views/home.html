@@ -71,7 +71,7 @@
 <!-- END: Sticky Header -->
 
 
-<div id="layout" class="content pure-g">
+<div id="layout" class="content pure-g" ng-controller="MapController">
     <div id="nav" class="pure-u">
 
 
@@ -96,7 +96,7 @@
                                 <form role="form">
 
                                     <label for="filter_by_trackable">Filter by trackable:</label>
-                                    <select id="filter_by_trackable" ng-model="selectedTrackable" ng-options="trackable._id as trackable.name for trackable in trackables">
+                                    <select id="filter_by_trackable" ng-model="selectedTrackable" ng-change="trackableChanged(selectedTrackable)" ng-options="trackable._id as trackable.name for trackable in trackables">
                                         <option value="">Show all</option>
                                     </select>
                                     <!-- LOOP OVER THE trackables IN $scope.trackables -->
@@ -142,7 +142,7 @@
                                                         ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
                                                 </select>-->
 
-                                                    <select ng-init="formTrackablesData.type = formTrackablesData.typeOptions[0]"
+                                                    <select id="trackable-type" ng-init="formTrackablesData.type = formTrackablesData.typeOptions[0]"
                                                             ng-model="formTrackablesData.type"
                                                             ng-options="option.name for option in formTrackablesData.typeOptions">
                                                     </select>
@@ -187,7 +187,7 @@
                                         <label>{{ dev.deviceId }}</label>
                                     </div>-->
                                     <label for="filter_by_device">Filter by device:</label>
-                                    <select id="filter_by_device" ng-model="selectedDevice" ng-options="device._id as device.deviceId for device in devices">
+                                    <select id="filter_by_device" ng-model="selectedDevice" ng-change="deviceChanged(selectedDevice)" ng-options="device._id as device.deviceId for device in devices">
                                         <option value="">Show all</option>
                                     </select>
 
@@ -284,9 +284,9 @@
 
 
 
-    <div id="main" class="pure-u-1" ng-controller="MapController">
+    <div id="main" class="pure-u-1"> <!--ng-controller="MapController"-->
 
-        <ui-gmap-google-map center='map.center' zoom='map.zoom' draggable="true" options="map.options" bounds="map.bounds">
+        <ui-gmap-google-map control="map.control" center='map.center' zoom='map.zoom' draggable="true" options="map.options" bounds="map.bounds">
 
             <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'"></ui-gmap-markers>
             <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'

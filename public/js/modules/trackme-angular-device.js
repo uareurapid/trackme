@@ -23,6 +23,10 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             console.log('Error: ' + data);
         });
 
+    /*$scope.deviceChanged = function() {
+      console.log("device changed to: " + $scope.selectedDevice);
+    };*/
+
     // when submitting the add form, send the text to the node API
     $scope.createDevice = function() {
 
