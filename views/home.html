@@ -288,7 +288,20 @@
 
         <ui-gmap-google-map control="map.control" center='map.center' zoom='map.zoom' draggable="true" options="map.options" bounds="map.bounds">
 
-            <ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'"></ui-gmap-markers>
+            <!--<ui-gmap-markers models="randomMarkers" coords="'self'" icon="'icon'">
+
+            </ui-gmap-markers>->
+<!--click="map2.onMarkerClick(m)"-->
+            <ui-gmap-marker ng-repeat="m in randomMarkers" icon="m.icon" coords="m.coords"  idkey="m.id">
+                <ui-gmap-window show="m.show" ng-cloak>
+                    <p>
+                        Latitude: {{m.coords.latitude}}<br/>
+                        Longitude: {{m.coords.longitude}}<br/>
+                        <!--Last signal: <strong>{{m.lastSignal}}</strong>-->
+                    </p>
+                </ui-gmap-window>
+            </ui-gmap-marker>
+
             <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
             geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
 
