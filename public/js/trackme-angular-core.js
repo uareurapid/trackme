@@ -32,73 +32,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
     //$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
-
-    $scope.map = {
-        center: {
-            latitude: 40.1451,
-            longitude: -99.6680
-        },
-        zoom: 4,
-        control:{},
-        bounds: {}
-    };
-    $scope.options = {
-        scrollwheel: true
-    };
-
-    //call this
-    $scope.refreshMap = function (newMarkers) {
-        console.log("refreshing map for device...." + deviceId);
-        //optional param if you want to refresh you can pass null undefined or false or empty arg
-        $scope.map.control.refresh({latitude: 32.779680, longitude: -79.935493});
-        $scope.map.control.getGMap().setZoom(11);
-        return;
-    };
-
-    var deviceFilter = "";
-    var trackableFilter = "";
-
-    $scope.deviceChanged = function(device) {
-        console.log("device changed to: " + device);
-        deviceFilter = device;
-        //TODO
-        var markers = {};
-
-        //TODO
-        //i need a new API for the filtering
-        $http.get('/api/filter/device/records/:device_id')
-            .success(function(data) {
-                $scope.records = data;
-                console.log(data);
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-
-
-        $scope.refreshMap(markers);
-    };
-
-    $scope.trackableChanged = function(trackable) {
-        console.log("trackable changed to: " + trackable);
-        trackableFilter = trackable;
-        //TODO
-        var markers = {};
-
-        //TODO
-        //i need a new API for the filtering
-        $http.get('/api/filter/trackables/records/:trackable_id')
-            .success(function(data) {
-                $scope.records = data;
-                console.log(data);s
-            })
-            .error(function(data) {
-                console.log('Error: ' + data);
-            });
-        $scope.refreshMap(markers);
-    };
-
-
+    //will hold the map markers
+    $scope.mapMarkers = [];
 
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
@@ -154,16 +89,104 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
         return marker;
     };
 
+    $scope.map = {
+        center: {
+            latitude: 40.1451,
+            longitude: -99.6680
+        },
+        zoom: 4,
+        control:{},
+        bounds: {}
+    };
+    $scope.options = {
+        scrollwheel: true
+    };
+
+    //call this
+    $scope.refreshMap = function (newMarkers) {
+        //clear previous markers
+        $scope.mapMarkers = [];
+
+        $scope.mapMarkers.push(createRecordMarker(1,32.779680, -79.935493, $scope.map.bounds));  
+
+        console.log("refreshing map for device....");
+        //optional param if you want to refresh you can pass null undefined or false or empty arg
+        $scope.map.control.refresh($scope.map.center);//{latitude: 32.779680, longitude: -79.935493}
+        $scope.map.control.getGMap().setZoom($scope.map.zoom);
+        return;
+    };
+
+    $scope.deviceChanged = function(deviceFilter) {
+        console.log("device changed to: " + deviceFilter);
+        var path = "/api/records";
+
+        if(deviceFilter!=="Show all") {
+            path = path + "?device_id=" + deviceFilter;
+        }
+        //clear markers
+        var markers = [];
+        $http.get(path)
+            .success(function(data) {
+                $scope.records = data;
+                console.log("received" + JSON.stringify(data));
+                for(var i=0; i< data.length; i++) {
+
+                    var latitude = data[i].latitude;
+                    var longitude = data[i].longitude;
+                    markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
+                }
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+
+
+        $scope.refreshMap(markers);
+    };
+
+    $scope.trackableChanged = function(trackableFilter) {
+        console.log("trackable changed to: " + trackableFilter);
+        var path = "/api/records";
+
+        if(trackableFilter!=="Show all") {
+            path = path + "?trackable_id=" + trackableFilter;
+        }
+        //clear markers
+        var markers = [];
+        $http.get(path)
+            .success(function(data) {
+                $scope.records = data;
+                console.log("received" + JSON.stringify(data));
+
+                for(var i=0; i< data.length; i++) {
+
+                    var latitude = data[i].latitude;
+                    var longitude = data[i].longitude;
+                    markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
+                }
+
+
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+        $scope.refreshMap(markers);
+    };
+
+
+
+    
+
 
     //TODO make sure we have values on everything!!!!! makes the map unresponsive
 
-    $scope.randomMarkers = [];
+    
     // Get the bounds from the map once it's loaded
     $scope.$watch(function() {
         return $scope.map.bounds;
     }, function(nv, ov) {
 
-        console.log("generating map...");
+        console.log("generating new map...");
 
         // Only need to regenerate once
         if (!ov.southwest && nv.southwest) {
@@ -243,7 +266,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                 });
 
 
-            $scope.randomMarkers = markers;
+            $scope.mapMarkers = markers;
         }
     }, true);
 

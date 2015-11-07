@@ -199,15 +199,45 @@ module.exports = function(app, passport) {
     // get all records
     app.get('/api/records', function(req, res) {
 
-        // use mongoose to get all records in the database
-        Record.find(function(err, records) {
+        var expression = null;
+        if(req.query.device_id) {
 
-            // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-            if (err)
-                res.send(err)
+            console.log("filter records by device_id: " + req.query.device_id);
+            //query with mongoose, we need to explicitly remove the _d field with a - sign,
+            //since it´s always included by default
+            expression = {
+                deviceId : req.query.device_id
+            };
+        }
+        else if(req.query.trackable_id) {
+            console.log("filter records by trackable_id: " + req.query.trackable_id);
+            expression = {
+                trackableId : req.query.trackable_id
+            };
+        }
 
-            res.json(records); // return all records in JSON format
-        });
+        //do we have a filtering option?
+        if(expression!==null) {
+
+            var query = Record.find(expression);
+            query.exec(function (err, records) {
+                if (err)
+                    res.send(err)
+
+                res.send(records);
+            });
+        }
+        else {
+            //just use mongoose to get all records in the database
+            Record.find(function(err, records) {
+
+                // if there is an error retrieving, send the error. nothing after res.send(err) will execute
+                if (err)
+                    res.send(err)
+
+                res.json(records); // return all records in JSON format
+            });
+        }
 
     });
 
