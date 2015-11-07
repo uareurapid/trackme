@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "SWRevealViewController.h"
+#import "NewTrackableController.h"
 
 @interface HomeViewController ()
 
@@ -83,6 +84,7 @@
     // Call whatever function you need to visually restore
     [self customSetup];
 }
+
 
 @end
 

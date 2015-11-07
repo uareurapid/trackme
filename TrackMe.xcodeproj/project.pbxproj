@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7204C9701B3A0D44000CB6AD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7204C96F1B3A0D44000CB6AD /* CoreLocation.framework */; };
+		725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070DC1BEE1FF90078EA82 /* NewTrackableController.m */; };
+		725070E11BEE20CB0078EA82 /* Trackable.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070E01BEE20CB0078EA82 /* Trackable.m */; };
 		725610941B3362B800E52A42 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610931B3362B800E52A42 /* main.m */; };
 		725610971B3362B800E52A42 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610961B3362B800E52A42 /* AppDelegate.m */; };
 		7256109A1B3362B800E52A42 /* TrackMe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 725610981B3362B800E52A42 /* TrackMe.xcdatamodeld */; };
@@ -48,6 +50,10 @@
 		34A74A0ED50FDFB829CFB364 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7204C96F1B3A0D44000CB6AD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7208A8C81BEA9B9500CAA4A6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		725070DB1BEE1FF90078EA82 /* NewTrackableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewTrackableController.h; sourceTree = "<group>"; };
+		725070DC1BEE1FF90078EA82 /* NewTrackableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTrackableController.m; sourceTree = "<group>"; };
+		725070DF1BEE20CB0078EA82 /* Trackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trackable.h; sourceTree = "<group>"; };
+		725070E01BEE20CB0078EA82 /* Trackable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trackable.m; sourceTree = "<group>"; };
 		7256108E1B3362B800E52A42 /* TrackMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		725610921B3362B800E52A42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		725610931B3362B800E52A42 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -120,6 +126,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		725070DE1BEE20AF0078EA82 /* models */ = {
+			isa = PBXGroup;
+			children = (
+				725070DF1BEE20CB0078EA82 /* Trackable.h */,
+				725070E01BEE20CB0078EA82 /* Trackable.m */,
+			);
+			name = models;
+			sourceTree = "<group>";
+		};
 		725610851B3362B800E52A42 = {
 			isa = PBXGroup;
 			children = (
@@ -146,6 +161,7 @@
 				726EAADA1BE935770034134C /* Animation Controllers */,
 				726EAAD31BE923480034134C /* SWRevealViewController */,
 				725610951B3362B800E52A42 /* AppDelegate.h */,
+				725070DE1BEE20AF0078EA82 /* models */,
 				7208A8C81BEA9B9500CAA4A6 /* Constants.h */,
 				725610961B3362B800E52A42 /* AppDelegate.m */,
 				726EAAEA1BE984D90034134C /* TrackablesViewController.h */,
@@ -161,6 +177,8 @@
 				7256109B1B3362B800E52A42 /* LoginViewController.h */,
 				7256109C1B3362B800E52A42 /* LoginViewController.m */,
 				726EAAE81BE96F5F0034134C /* MainStoryboard.storyboard */,
+				725070DB1BEE1FF90078EA82 /* NewTrackableController.h */,
+				725070DC1BEE1FF90078EA82 /* NewTrackableController.m */,
 				726EAAF31BE98FFF0034134C /* ProfileViewController.h */,
 				726EAAF41BE98FFF0034134C /* ProfileViewController.m */,
 				725610A11B3362B800E52A42 /* Images.xcassets */,
@@ -390,6 +408,7 @@
 				726EAAF21BE98AFE0034134C /* SettingsViewController.m in Sources */,
 				7256109A1B3362B800E52A42 /* TrackMe.xcdatamodeld in Sources */,
 				72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */,
+				725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */,
 				7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */,
 				726EAAE31BE939C10034134C /* HomeViewController.m in Sources */,
 				726EAAD91BE935700034134C /* CustomAnimationController.m in Sources */,
@@ -397,6 +416,7 @@
 				726EAAD21BE9231E0034134C /* MenuViewController.m in Sources */,
 				726EAAEC1BE984D90034134C /* TrackablesViewController.m in Sources */,
 				725610941B3362B800E52A42 /* main.m in Sources */,
+				725070E11BEE20CB0078EA82 /* Trackable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
