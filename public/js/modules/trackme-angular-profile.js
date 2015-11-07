@@ -14,4 +14,17 @@ var trackme = angular.module('trackme').controller('ProfileController',function 
         .error(function (data) {
             console.log('Error: ' + data);
         });
+
+    $scope.getLoggedInUser = function() {
+        // task
+        console.log("getLoggedInUser called...");
+    };
+
+    //use the service broadcats approach to use functions of one controller into another one
+    $scope.$on("GetUserProfile", function(){
+        console.log("broadcast event:::");
+        $scope.getLoggedInUser();
+    });
+
+
 });

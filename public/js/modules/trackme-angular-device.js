@@ -12,7 +12,37 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     //like: https://scotch.io/tutorials/setting-up-a-mean-stack-single-page-application
     //http://kirkbushell.me/when-to-use-directives-controllers-or-services-in-angular/
 
+    $scope.getDeviceOwner = function(successCallback, errorCallback) {
+
+        console.log("getting device owner...");
+        $http.get('/profile/user')
+            .success(function (data) {
+                console.log("device owner: " + data.username);
+                //assign the username to the scope var
+                $scope.formData.deviceOwner = data.username;
+                successCallback();
+
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
+    };
+
     $scope.selectedDevice = "Show all";
+
+    //get all user devices
+    $scope.getUserDevices = function() {
+
+        $http.get('/api/devices')
+            .success(function(data) {
+                $scope.devices = data;
+                console.log(data);
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };
+
     // when landing on the page, get all todos and show them
     $http.get('/api/devices')
         .success(function(data) {
@@ -23,13 +53,13 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             console.log('Error: ' + data);
         });
 
-    /*$scope.deviceChanged = function() {
-      console.log("device changed to: " + $scope.selectedDevice);
-    };*/
 
-    // when submitting the add form, send the text to the node API
-    $scope.createDevice = function() {
+    //this is actually the submit of the form
+    $scope.createNewUserDevice = function() {
 
+        console.log("submitting the form to add a new device for user: " + $scope.formData.deviceOwner);
+
+        //now submit the form and create the device
         $http.post('/api/devices', $scope.formData)
             .success(function(data) {
                 $scope.formData = {}; // clear the form so our user is ready to enter another
@@ -39,6 +69,14 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+    };
+
+    //called from ui, to add a new device
+    $scope.createDevice = function() {
+
+        //pass a success and failure callback (optional)
+        $scope.getDeviceOwner($scope.createNewUserDevice);
+
     };
 
     // delete a device after checking it

@@ -16,6 +16,27 @@
 
 var trackme = angular.module('trackme', ['uiGmapgoogle-maps']);
 
+/**
+ * A service can be used to share data between controllers
+trackme.service('sharedProperties', function () {
+    var property = 'First';
+
+    return {
+        getProperty: function () {
+            return property;
+        },
+        setProperty: function(value) {
+            property = value;
+        }
+    };
+
+    //use it in a controller
+    function Ctrl2($scope, sharedProperties) {
+    $scope.prop2 = "Second";
+    $scope.both = sharedProperties.getProperty() + $scope.prop2;
+}
+});*/
+
 
 trackme.config(function(uiGmapGoogleMapApiProvider) {
     uiGmapGoogleMapApiProvider.configure({

@@ -132,19 +132,11 @@
                                                 <label for="trackable-description">Description:</label>
                                                 <input id="trackable-description" type="text" class="form-control input-sm" placeholder="description" ng-model="formTrackablesData.description">
 
-                                            <!-- this should be the logged user-->
-                                                <label for="trackable-owner">Owner:</label>
-                                                <input id="trackable-owner" ng-controller="ProfileController" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formTrackablesData.owner">
-
                                                 <label for="trackable-type">Type:</label>
-                                                <!--<select id="trackable-type" class="form-control input-sm"
-                                                        ng-model="formTrackablesData.type.selectedOption"
-                                                        ng-options="option.name for option in formTrackablesData.type.availableOptions track by option.id">
-                                                </select>-->
 
                                                     <select id="trackable-type" ng-init="formTrackablesData.type = formTrackablesData.typeOptions[0]"
                                                             ng-model="formTrackablesData.type"
-                                                            ng-options="option.name for option in formTrackablesData.typeOptions">
+                                                            ng-options="option for option in formTrackablesData.typeOptions">
                                                     </select>
 
                                                 <!-- privacy options-->
@@ -221,9 +213,6 @@
 
                                             <label for="device-description">Device description:</label>
                                             <input id="device-description" type="text" class="form-control input-sm" placeholder="Description" ng-model="formData.deviceDescription">
-
-                                            <label for="device-owner">Owner:</label>
-                                            <input ng-controller="ProfileController" id="device-owner" type="text" class="form-control input-sm" placeholder="{{ userinfo.username }}" ng-model="formData.owner">
 
                                         <br/>
                                         <!-- createDevice() WILL CREATE NEW devices -->

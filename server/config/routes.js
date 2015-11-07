@@ -318,6 +318,7 @@ module.exports = function(app, passport) {
             protectedCode = ProfileController.generateUUID();
         }
 
+        console.log("received: " + JSON.stringify(req.body));
         //Return the number of milliseconds since 1970/01/01:
         var timeOfCreation = new Date().getTime();
         // create a device, information comes from AJAX request from Angular
@@ -328,7 +329,7 @@ module.exports = function(app, passport) {
             owner: req.body.owner,
             creationDate: timeOfCreation,
             privacy: req.body.privacy,
-            type: req.body.type.name,
+            type: req.body.type,
             unlockCode: protectedCode,
             done : false
         }, function(err, trackable) {

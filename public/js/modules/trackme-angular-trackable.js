@@ -5,54 +5,43 @@
 //trackables controller
 var trackme = angular.module('trackme').controller('TrackablesController',function ($scope, $http) {
 
+
+    $scope.testGetProfile = function() {
+        $scope.$emit("GetUserProfile", {});
+    };
+
+    console.log("trying it now....");
+    $scope.testGetProfile();
+
     //store the main object on the scope
     $scope.formTrackablesData = {};
 
+    //default privacy level
+    $scope.formTrackablesData.privacy = "Private"
+
     $scope.formTrackablesData.showPrivacy = false;
 
-    $scope.formTrackablesData.type = {
-        availableOptions: [
-            {id: '1', name: 'Person'},
-            {id: '2', name: 'Object'},
-            {id: '3', name: 'Animal'}
-        ],
-        //selectedOption will be an object as:
-        selectedOption: {id: '1', name: 'Person'}
-        //This sets the default value of the select in the ui
-    };
-
-    $scope.formTrackablesData.typeOptions = [
-            {id: '1', name: 'Person'},
-            {id: '2', name: 'Object'},
-            {id: '3', name: 'Animal'}
-    ];
-        //selectedOption will be an object as:
-        //selectedOption: {id: '1', name: 'Person'}
-        //This sets the default value of the select in the ui
-    /**
-     * OTHER EXAMPLE
-     *
-     * <select ng-model="selectedCountry.countryId" ng-options="country.countryId as country.name for country in chooseCountries"></select>
-
-     <span>Selected country id is {{selectedCountry.countryId}}</span>
-     *    $scope.chooseCountries=[
-     {countryId : 1, name : "France - Mainland", desc: "some description" },
-     {countryId : 2, name : "Gibraltar", desc: "some description"},
-     {countryId : 3, name : "Malta", desc: "some description"}
-     ];
-
-     $scope.selectedCountry = angular.copy($scope.chooseCountries[0]);
-     });
-     */
+    $scope.formTrackablesData.typeOptions = ['Person','Object', 'Animal'];
 
     $scope.privacyChanged = function() {
         console.log("privacy changed to: " + $scope.formTrackablesData.privacy);
-        /*if($scope.formTrackablesData.privacy=="Protected") {
+    };
 
-            var uuid = require('node-uuid');
-            $scope.formTrackablesData.unlockCode = uuid.v4() ;
-            console.log("generated value: " + $scope.formTrackablesData.unlockCode);
-        }*/
+
+    $scope.getTrackableOwner = function(successCallback, errorCallback) {
+
+        console.log("getting trackable owner...");
+        $http.get('/profile/user')
+            .success(function (data) {
+                console.log("trackable owner: " + data.username);
+                //assign the username to the scope var
+                $scope.formTrackablesData.owner = data.username;
+                successCallback();
+
+            })
+            .error(function (data) {
+                console.log('Error: ' + data);
+            });
     };
 
     //FORM VALIDATION HOWTO
@@ -69,9 +58,11 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             console.log('Error: ' + data);
         });
 
-    // when submitting the add form, send the text to the node API
-    $scope.createTrackable = function() {
+    //this is actually the submit of the form
+    $scope.createNewUserTrackable = function() {
 
+        //now send the trackable data
+        console.log("sending new trackable request now...");
         $http.post('/api/trackables', $scope.formTrackablesData)
             .success(function(data) {
                 $scope.formTrackablesData = {}; // clear the form so our user is ready to enter another
@@ -81,6 +72,15 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+    };
+
+
+    //called from ui to create a new trackable object
+    $scope.createTrackable = function() {
+
+        //first thing is get the username
+        $scope.getTrackableOwner($scope.createNewUserTrackable);
+
     };
 
     // delete a trackable after checking it
