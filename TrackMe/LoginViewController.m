@@ -10,7 +10,7 @@
 #import "SWRevealViewController.h"
 #import "SSKeychain.h"
 #import <Foundation/Foundation.h>
-
+#import "NewDeviceController.h"
 
 @interface LoginViewController ()
 
@@ -168,6 +168,7 @@ const NSString *server = @"192.168.1.66:8080";
 
 -(void) parseDevicesList: (NSDictionary *) dict {
     
+    //we double check if a device with same identifier was not created outside (that´s why we don´t blindly trust the nsdefaults)
     NSLog(@"PARSING DEVICES LIST");
     self.deviceName = [[UIDevice currentDevice] name];
     NSLog(@"device name is %@",self.deviceName);
@@ -183,17 +184,50 @@ const NSString *server = @"192.168.1.66:8080";
             NSLog(@"parsed device id %@",deviceId);
             if([deviceId isEqualToString:self.deviceName]) {
                 devicePresent = true;
+                NSLog(@"already added this device, skipping it...");
             }
             
         }
         if(!devicePresent && !deviceAlreadyAdded) {
-            NSLog(@"Adding the device now");
-            [self addUserDevice];
+        
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add new tracking device"
+                                                            message:@"Do you want to use this device as a new tracking device."
+                                                           delegate:nil
+                                                  cancelButtonTitle:@"No"
+                                                  otherButtonTitles:@"Yes", nil];
+            alert.delegate = self;
+            [alert show];
+    
+            
+        }
+        else {
+            //already added this device, perform the segue
+            [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
         }
     }
     else {
         NSLog(@"something is wrong");
     }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(buttonIndex==1) {
+       //pressed "yes"
+        //we show the controller to allow pass a description
+            NewDeviceController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"NewDeviceController"];
+            //we pass the device identifier as param
+            controller.deviceIdentifier = self.deviceName;
+            controller.callbackController = self;
+            [self presentViewController:controller animated:NO completion:nil];
+        
+            //UIStoryboard *storyboard = [UIStoryboard sto
+    }
+}
+
+-(void)callBackSuccess {
+    //already added this device, perform the segue
+    [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
 }
 
 //parse trackables list
@@ -215,7 +249,7 @@ const NSString *server = @"192.168.1.66:8080";
                     [trackablesList addObject:trackableName];
                 }
                 else {
-                    NSLog(@"already present trckable %@",trackableName);
+                    NSLog(@"already present trackable %@",trackableName);
                 }
                 
             }
@@ -231,8 +265,8 @@ const NSString *server = @"192.168.1.66:8080";
         //save the credentials
         [self rememberMeChanged:self ];
         
-        //open reveal controller
-        [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+        //get the devices and check for this one
+        [self checkIfDeviceExists:user];
         
         //SWRevealViewController *revealViewController = self.revealViewController;
         //[self presentViewController:revealViewController animated:YES completion:nil];
@@ -257,8 +291,11 @@ const NSString *server = @"192.168.1.66:8080";
         //save the credentials
         [self rememberMeChanged:self ];
         
+        //get devices list and add this one
+        [self getDevicesList: user];
+        
         //open reveal controller
-        [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+        //[self performSegueWithIdentifier:@"segue_reveal" sender:nil];
     
     }
     else {
@@ -270,7 +307,7 @@ const NSString *server = @"192.168.1.66:8080";
    
 }
 
--(void) addUserDevice {
+/*-(void) addUserDevice {
     if(self.deviceName!=nil && self.username!=nil) {
         
         self.receivedData = [[NSMutableData alloc] init];
@@ -293,7 +330,7 @@ const NSString *server = @"192.168.1.66:8080";
         
         [connection start];
     }
-}
+}*/
 
 -(void) getDevicesList:(NSString *)username {
     
@@ -473,7 +510,6 @@ const NSString *server = @"192.168.1.66:8080";
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
         NSString* user = self.txtUsername.text;
         [defaults setObject:user forKey:USERNAME_KEY];
-        
         [defaults synchronize];
         
         NSString *pass = self.txtPassword.text;
@@ -485,6 +521,18 @@ const NSString *server = @"192.168.1.66:8080";
         
     }
     
+}
+
+-(void) checkIfDeviceExists: (NSString *) username{
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    if([defaults objectForKey:DEVICE_IDENTIFIER ]==nil) {
+        //the device does not exists yet, add it
+        [self getDevicesList: username];
+    }
+    else {
+        //open reveal controller
+        [self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+    }
 }
 
 -(void) prefillUserFields {

@@ -17,7 +17,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jfS-Ct-udX" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1602" y="49"/>
+            <point key="canvasLocation" x="-1444" y="460"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="18W-n6-bHb">
@@ -34,7 +34,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ynC-gU-u9t" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1558" y="1035"/>
+            <point key="canvasLocation" x="-1934" y="1435"/>
         </scene>
         <!--Login Controller-->
         <scene sceneID="mLz-YO-pRW">
@@ -156,7 +156,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tVA-JL-HZu" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2743" y="448"/>
+            <point key="canvasLocation" x="-2979" y="612"/>
         </scene>
         <!--Add Trackable Controller-->
         <scene sceneID="9CT-tK-agH">
@@ -285,7 +285,88 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aYf-Fh-Vw8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2056" y="-771"/>
+            <point key="canvasLocation" x="-1988" y="-1527"/>
+        </scene>
+        <!--Add Device Controller-->
+        <scene sceneID="kKY-wj-cX3">
+            <objects>
+                <viewController storyboardIdentifier="NewDeviceController" id="6Yp-yN-FX4" userLabel="Add Device Controller" customClass="NewDeviceController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="GuL-m2-jto"/>
+                        <viewControllerLayoutGuide type="bottom" id="1cC-Nc-rUe"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Qhp-M1-5Hb">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Identifier:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSi-0p-FXr">
+                                <rect key="frame" x="141" y="122" width="94" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sQV-9H-eVC">
+                                <rect key="frame" x="339" y="118" width="202" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Description:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fah-jd-iSQ">
+                                <rect key="frame" x="141" y="205" width="126" height="21"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZKR-3H-Zgi">
+                                <rect key="frame" x="339" y="196" width="202" height="30"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jdi-0Z-nBx">
+                                <rect key="frame" x="419" y="280" width="122" height="39"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.37357329080000001" green="0.63550729920000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Add device">
+                                    <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="addDeviceClicked:" destination="6Yp-yN-FX4" eventType="touchUpInside" id="va8-aW-PO6"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P99-Yk-fEp">
+                                <rect key="frame" x="141" y="280" width="100" height="39"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.37357329080000001" green="0.63550729920000004" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <state key="normal" title="Close">
+                                    <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="btnCloseClicked:" destination="6Yp-yN-FX4" eventType="touchUpInside" id="NkU-IL-It0"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="VSi-0p-FXr" firstAttribute="leading" secondItem="Qhp-M1-5Hb" secondAttribute="leadingMargin" constant="10" id="7Ui-65-Jat"/>
+                            <constraint firstItem="Jdi-0Z-nBx" firstAttribute="leading" secondItem="P99-Yk-fEp" secondAttribute="trailing" constant="20" id="Q2K-qb-LCH"/>
+                            <constraint firstItem="ZKR-3H-Zgi" firstAttribute="leading" secondItem="fah-jd-iSQ" secondAttribute="trailing" constant="20" id="RbC-x1-nmG"/>
+                            <constraint firstItem="sQV-9H-eVC" firstAttribute="leading" secondItem="VSi-0p-FXr" secondAttribute="trailing" constant="20" id="Rx2-TY-KeR"/>
+                            <constraint firstItem="P99-Yk-fEp" firstAttribute="leading" secondItem="Qhp-M1-5Hb" secondAttribute="leadingMargin" constant="10" id="TJ4-1B-sk5"/>
+                            <constraint firstItem="fah-jd-iSQ" firstAttribute="leading" secondItem="Qhp-M1-5Hb" secondAttribute="leadingMargin" constant="10" id="sHo-LZ-i1P"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="txtDescription" destination="ZKR-3H-Zgi" id="H76-yO-GRH"/>
+                        <outlet property="txtIdentifier" destination="sQV-9H-eVC" id="ZlI-cN-AG2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="r2n-J0-HMk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2185" y="-761"/>
         </scene>
         <!--Left Menu Controller-->
         <scene sceneID="Tt9-Ua-OPn">
@@ -450,7 +531,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DnA-fA-Zsb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-428" y="-1534"/>
+            <point key="canvasLocation" x="-448" y="-1950"/>
         </scene>
         <!--Navigation Controller (Trackables)-->
         <scene sceneID="PM7-GJ-nBM">
@@ -852,6 +933,14 @@
                                     <segue destination="3w2-a9-aOX" kind="presentation" id="DQL-1U-EYz"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Byp-nh-1TT">
+                                <rect key="frame" x="167" y="335" width="125" height="30"/>
+                                <animations/>
+                                <state key="normal" title="Add new device"/>
+                                <connections>
+                                    <segue destination="6Yp-yN-FX4" kind="presentation" id="8ju-vU-WQr"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -883,7 +972,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vJC-aK-l29" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1793" y="-1613"/>
+            <point key="canvasLocation" x="-2953" y="-1908"/>
         </scene>
     </scenes>
     <resources>

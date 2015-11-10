@@ -13,6 +13,9 @@
 #define SERVER_LOCATION @"http://192.168.1.66:8080"
 
 #define API_ADD_TRACKABLE @"/api/trackables"
+#define API_ADD_DEVICE @"/api/devices"
+
+#define DEVICE_IDENTIFIER @"device_indentifier"
 
 
 #endif /* Constants_h */

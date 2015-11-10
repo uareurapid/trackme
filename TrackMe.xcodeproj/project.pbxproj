@@ -31,6 +31,7 @@
 		726EAAEF1BE984EA0034134C /* DevicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAEE1BE984EA0034134C /* DevicesViewController.m */; };
 		726EAAF21BE98AFE0034134C /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAF11BE98AFE0034134C /* SettingsViewController.m */; };
 		726EAAF51BE98FFF0034134C /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAF41BE98FFF0034134C /* ProfileViewController.m */; };
+		72D84D411BF1575600D6B77C /* NewDeviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D84D401BF1575600D6B77C /* NewDeviceController.m */; };
 		72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72DB9F931BE81E3400DDEC75 /* MapViewController.m */; };
 		FF030E7196A07D12D45F98A6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A74A0ED50FDFB829CFB364 /* libPods.a */; };
 /* End PBXBuildFile section */
@@ -89,6 +90,8 @@
 		726EAAF11BE98AFE0034134C /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		726EAAF31BE98FFF0034134C /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		726EAAF41BE98FFF0034134C /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
+		72D84D3F1BF1575600D6B77C /* NewDeviceController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewDeviceController.h; sourceTree = "<group>"; };
+		72D84D401BF1575600D6B77C /* NewDeviceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDeviceController.m; sourceTree = "<group>"; };
 		72DB9F921BE81E3400DDEC75 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		72DB9F931BE81E3400DDEC75 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		BA808A83FE33D0998EE4A9FD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
@@ -164,6 +167,8 @@
 				725070DE1BEE20AF0078EA82 /* models */,
 				7208A8C81BEA9B9500CAA4A6 /* Constants.h */,
 				725610961B3362B800E52A42 /* AppDelegate.m */,
+				72D84D3F1BF1575600D6B77C /* NewDeviceController.h */,
+				72D84D401BF1575600D6B77C /* NewDeviceController.m */,
 				726EAAEA1BE984D90034134C /* TrackablesViewController.h */,
 				726EAAEB1BE984D90034134C /* TrackablesViewController.m */,
 				726EAAED1BE984EA0034134C /* DevicesViewController.h */,
@@ -416,6 +421,7 @@
 				726EAAD21BE9231E0034134C /* MenuViewController.m in Sources */,
 				726EAAEC1BE984D90034134C /* TrackablesViewController.m in Sources */,
 				725610941B3362B800E52A42 /* main.m in Sources */,
+				72D84D411BF1575600D6B77C /* NewDeviceController.m in Sources */,
 				725070E11BEE20CB0078EA82 /* Trackable.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

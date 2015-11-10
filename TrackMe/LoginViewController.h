@@ -18,7 +18,7 @@
 #define REQUEST_RECORD_ADD 5
 #define REQUEST_SIGNUP 6
 
-@interface LoginViewController : UIViewController<NSURLConnectionDataDelegate,CLLocationManagerDelegate,UITextFieldDelegate>
+@interface LoginViewController : UIViewController<NSURLConnectionDataDelegate,CLLocationManagerDelegate,UITextFieldDelegate,UIAlertViewDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *btnLogin;
 
 -(void) getDevicesList;
@@ -39,6 +39,8 @@
 - (IBAction)rememberMeChanged:(id)sender;
 - (IBAction)loginClicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *lblCreateAccountHint;
+
+-(void)callBackSuccess;
 
 @end
 
