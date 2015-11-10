@@ -161,13 +161,13 @@ module.exports = function(app, passport) {
 
             deviceId: req.body.deviceId,
             deviceDescription: req.body.deviceDescription,
-            deviceOwner: req.body.deviceOwner,
+            deviceOwner: req.body.owner,
             done : false
         }, function(err, device) {
             if (err)
                 res.send(err);
 
-            // get and return all the todos after you create another
+            // get and return all the devices after you create another
             Device.find(function(err, devices) {
                 if (err)
                     res.send(err)

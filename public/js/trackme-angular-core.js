@@ -126,11 +126,11 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
     //call this
     $scope.refreshMap = function (newMarkers) {
         //clear previous markers
-        $scope.mapMarkers = [];
+        $scope.mapMarkers = newMarkers;
 
         $scope.mapMarkers.push(createRecordMarker(1,32.779680, -79.935493, $scope.map.bounds));  
 
-        console.log("refreshing map for device....");
+        console.log("refreshing map for device/trackable change....");
         //optional param if you want to refresh you can pass null undefined or false or empty arg
         $scope.map.control.refresh($scope.map.center);//{latitude: 32.779680, longitude: -79.935493}
         $scope.map.control.getGMap().setZoom($scope.map.zoom);
@@ -138,12 +138,17 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
     };
 
     $scope.deviceChanged = function(deviceFilter) {
-        console.log("device changed to: " + deviceFilter);
+
         var path = "/api/records";
 
-        if(deviceFilter!=="Show all") {
+        if(deviceFilter==null) {
+            deviceFilter = "Show all";
+        }
+        else {
             path = path + "?device_id=" + deviceFilter;
         }
+        console.log("device changed to: " + deviceFilter);
+
         //clear markers
         var markers = [];
         $http.get(path)
@@ -156,22 +161,26 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                     var longitude = data[i].longitude;
                     markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
                 }
+                $scope.refreshMap(markers);
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
 
-
-        $scope.refreshMap(markers);
     };
 
     $scope.trackableChanged = function(trackableFilter) {
-        console.log("trackable changed to: " + trackableFilter);
+
         var path = "/api/records";
 
-        if(trackableFilter!=="Show all") {
+        if(trackableFilter==null) {
+            trackableFilter = "Show all";
+        }
+        else {
             path = path + "?trackable_id=" + trackableFilter;
         }
+        console.log("trackable changed to: " + trackableFilter);
+
         //clear markers
         var markers = [];
         $http.get(path)
@@ -186,12 +195,12 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                     markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
                 }
 
-
+                $scope.refreshMap(markers);
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
-        $scope.refreshMap(markers);
+
     };
 
 

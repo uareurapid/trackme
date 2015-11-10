@@ -19,7 +19,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             .success(function (data) {
                 console.log("device owner: " + data.username);
                 //assign the username to the scope var
-                $scope.formData.deviceOwner = data.username;
+                $scope.formData.owner = data.username;
                 successCallback();
 
             })
@@ -57,7 +57,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     //this is actually the submit of the form
     $scope.createNewUserDevice = function() {
 
-        console.log("submitting the form to add a new device for user: " + $scope.formData.deviceOwner);
+        console.log("submitting the form to add a new device for user: " + $scope.formData.owner);
 
         //now submit the form and create the device
         $http.post('/api/devices', $scope.formData)
