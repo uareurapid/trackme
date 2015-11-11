@@ -5,12 +5,6 @@
 //trackables controller
 var trackme = angular.module('trackme').controller('TrackablesController',function ($scope, $cookies, $http) {
 
-
-    var accessToken = $cookies.get("token");
-    if(accessToken===null) {
-        accessToken="";
-    }
-
     $scope.testGetProfile = function() {
         $scope.$emit("GetUserProfile", {});
     };
@@ -37,7 +31,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     $scope.getTrackableOwner = function(successCallback, errorCallback) {
 
         //actually gets the logged in username
-        $http.get('/profile/user', {headers: {'x-access-token': 'accessToken'}})
+        $http.get('/profile/user')
             .success(function (data) {
                 console.log("trackable owner: " + data.username);
                 //assign the username to the scope var
@@ -61,7 +55,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
 
         console.log("getting all available trackables for username: " + $scope.formTrackablesData.owner);
 
-        var apiPath = '/api/trackables?owner=' + $scope.formTrackablesData.owner + '&token='+accessToken;
+        var apiPath = '/api/trackables?owner=' + $scope.formTrackablesData.owner;
         $http.get(apiPath)
             .success(function(data) {
 
@@ -94,7 +88,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
 
         //now send the trackable data
         console.log("sending new trackable request now...");
-        $http.post('/api/trackables' + '?token='+accessToken, $scope.formTrackablesData)
+        $http.post('/api/trackables', $scope.formTrackablesData)
             .success(function(data) {
                 //get them all again and clear the form fields
                 $scope.getAllTrackables();
@@ -108,7 +102,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     // delete a trackable after checking it
     $scope.deleteTrackable = function(id) {
 
-        $http.delete('/api/trackables/' + id + '&token='+accessToken)
+        $http.delete('/api/trackables/' + id)
             .success(function(data) {
                 $scope.trackables = data;
                 console.log(data);

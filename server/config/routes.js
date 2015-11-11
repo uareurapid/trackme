@@ -147,16 +147,6 @@ module.exports = function(app, passport) {
     });
 
 
-
-
-
-
-
-
-
-
-
-
 };
 
 // route middleware to make sure a user is logged in

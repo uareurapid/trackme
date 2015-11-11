@@ -7,11 +7,6 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
 
     $scope.formData = {};
 
-    var accessToken = $cookies.get("token");
-    if(accessToken===null) {
-        accessToken="";
-    }
-
     //all these stuff should be on the services, not on the controllers,
     //$http and $resource on services, $scope on controllers
     //like: https://scotch.io/tutorials/setting-up-a-mean-stack-single-page-application
@@ -20,7 +15,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     $scope.getDeviceOwner = function(successCallback, errorCallback) {
 
         console.log("getting device owner...");
-        $http.get('/profile/user?token=' + accessToken)
+        $http.get('/profile/user')
             .success(function (data) {
                 console.log("device owner: " + data.username);
                 //assign the username to the scope var
@@ -41,7 +36,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
 
         console.log("getting all available devices for username: " + $scope.formData.owner);
 
-        var apiPath = '/api/devices?owner=' + $scope.formData.owner + '&token='+ accessToken;
+        var apiPath = '/api/devices?owner=' + $scope.formData.owner;
         $http.get(apiPath)
             .success(function(data) {
                 $scope.devices = data;
@@ -63,7 +58,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
         console.log("submitting the form to add a new device for user: " + $scope.formData.owner);
 
         //now submit the form and create the device
-        $http.post('/api/devices?token=' + accessToken, $scope.formData)
+        $http.post('/api/devices', $scope.formData)
             .success(function(data) {
 
                 $scope.formData.deviceId = ""; // clear the form so our user is ready to enter another
@@ -81,7 +76,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     // delete a device after checking it
     $scope.deleteDevice = function(id) {
 
-        $http.delete('/api/devices/' + id + '&token=' + accessToken)
+        $http.delete('/api/devices/' + id)
             .success(function(data) {
                 $scope.devices = data;
                 console.log(data);

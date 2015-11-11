@@ -73,8 +73,8 @@ router.use(function(req, res, next) {
 
   console.log("checking tokens and all that stuff");
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.signedCookies.token;
-  console.log("i have the cookies: " + req.signedCookies.token);
+  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
+  console.log("i have the cookies: " + req.cookies.token);
   // decode token
   if (token) {
 
