@@ -24,6 +24,12 @@ var TrackableSchema = new Schema({
     }*/
 });
 
+/*TrackableSchema.methods.toJSON = function() {
+    var obj = this.toObject();
+    delete obj.passwordHash
+    return obj;
+};*/
+
 module.exports = mongoose.model('Trackable', TrackableSchema);
 
 

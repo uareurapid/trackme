@@ -9,11 +9,17 @@ var session  = require('express-session');//express session
 var cookieParser = require('cookie-parser');//read the cookies for auth
 var flash    = require('connect-flash');
 var db = require('./config/db');
-//var mongoose = require('mongoose');
+
+//configurations for the json tokens
+var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
+var config = require('./config/config');
+app.set('superSecret', config.secret); // secret variable
+
 mongoose.connect(db.url);
 
 //serve js,css and images from public folder
 app.use(express.static('public'));
+
 
 //EJS tutorial
 //https://scotch.io/tutorials/use-ejs-to-template-your-node-application
@@ -26,7 +32,6 @@ app.use(bodyParser.json());
 app.use(cookieParser()); // read cookies (needed for auth)
 
 //app.use(bodyParser()); // get information from html forms
-
 //app.set('view engine', 'ejs'); // set up ejs for templating
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -40,7 +45,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 
 
 // application -------------------------------------------------------------
-
+// Configure normal routes
 // routes ======================================================================
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
@@ -52,23 +57,54 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 //===============================
 // REST API
 //===============================
-
+// ---------------------------------------------------------
+// get an instance of the router for api routes
+// ---------------------------------------------------------
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router();
 // get an instance of the express Router
 
+//-----------------------------------------------
 // middleware to use for all requests
+// route middleware to verify a token
+//-----------------------------------------------
 router.use(function(req, res, next) {
-  // do logging
-  console.log('Something is happening.');
-  next(); // make sure we go to the next routes and don't stop here
+
+  console.log("checking tokens and all that stuff");
+  // check header or url parameters or post parameters for token
+  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.signedCookies.token;
+  console.log("i have the cookies: " + req.signedCookies.token);
+  // decode token
+  if (token) {
+
+    // verifies secret and checks exp
+    jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+      if (err) {
+        return res.json({ success: false, message: 'Failed to authenticate token.' });
+      } else {
+        // if everything is good, save to request for use in other routes
+        req.decoded = decoded;
+        next();
+      }
+    });
+
+  } else {
+
+    // if there is no token
+    // return an error
+    return res.status(403).send({
+      success: false,
+      message: 'No token provided.'
+    });
+
+  }
 });
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
-router.get('/test', function(req, res) {
-  res.json({ message: 'hooray! welcome to our api!' });
-});
+// ---------------------------------------------------------
+// Configure authenticated routes
+// ---------------------------------------------------------
+require('./config/api.js')(router);
 
 //TODO check https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4
 
@@ -77,14 +113,12 @@ router.get('/test', function(req, res) {
 // all of our routes will be prefixed with /api
 app.use('/api', router);
 
-
-//app.use('xpto',function (req, res, next) {
-//  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-//  console.log('Client IP:', ip);
-//  next();
-//});
-
-// handle the route at yourdomain.com/sayHello
+/*
+router.use('xpto',function (req, res, next) {
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  console.log('Client IP:', ip);
+  next();
+});*/
 
 
 // set our port

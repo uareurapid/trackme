@@ -3,8 +3,13 @@
  */
 
 //trackables controller
-var trackme = angular.module('trackme').controller('TrackablesController',function ($scope, $http) {
+var trackme = angular.module('trackme').controller('TrackablesController',function ($scope, $cookies, $http) {
 
+
+    var accessToken = $cookies.get("token");
+    if(accessToken===null) {
+        accessToken="";
+    }
 
     $scope.testGetProfile = function() {
         $scope.$emit("GetUserProfile", {});
@@ -28,10 +33,11 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     };
 
 
+    //############ GET THE TRACKABLE OWNER #####################################
     $scope.getTrackableOwner = function(successCallback, errorCallback) {
 
-        console.log("getting trackable owner...");
-        $http.get('/profile/user')
+        //actually gets the logged in username
+        $http.get('/profile/user', {headers: {'x-access-token': 'accessToken'}})
             .success(function (data) {
                 console.log("trackable owner: " + data.username);
                 //assign the username to the scope var
@@ -44,28 +50,29 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             });
     };
 
-    //FORM VALIDATION HOWTO
+    //TODO FOR FORM VALIDATION HOWTO CHECK:
     //https://scotch.io/tutorials/angularjs-form-validation
 
     $scope.selectedTrackable = "Show all";
-    // when landing on the page, get all trackables and show them
-    $http.get('/api/trackables')
-        .success(function(data) {
-            $scope.trackables = data;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
 
-    //this is actually the submit of the form
-    $scope.createNewUserTrackable = function() {
 
-        //now send the trackable data
-        console.log("sending new trackable request now...");
-        $http.post('/api/trackables', $scope.formTrackablesData)
+    //######## GET ALL TRACKABLES ###############
+    $scope.getAllTrackables = function() {
+
+        console.log("getting all available trackables for username: " + $scope.formTrackablesData.owner);
+
+        var apiPath = '/api/trackables?owner=' + $scope.formTrackablesData.owner + '&token='+accessToken;
+        $http.get(apiPath)
             .success(function(data) {
-                $scope.formTrackablesData = {}; // clear the form so our user is ready to enter another
+
+                //reset all input fields, so we can add a new one again
+                $scope.formTrackablesData.privacy = "Private";
+                $scope.formTrackablesData.name = "";
+                $scope.formTrackablesData.description = "";
+                $scope.formTrackablesData.type = $scope.formTrackablesData.typeOptions[0];
+                //do not clear $scope.formTrackablesData.owner
+
+                //add new received data to the $scope var
                 $scope.trackables = data;
                 console.log("received: " +data);
             })
@@ -74,19 +81,34 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             });
     };
 
+    // when landing on the page, get the username, all his trackables, and then we show them!
+    $scope.getTrackableOwner($scope.getAllTrackables);
 
+    //############## CREATE NEW TRACKABLE ######################
+    //this is actually the submit of the form
     //called from ui to create a new trackable object
     $scope.createTrackable = function() {
 
         //first thing is get the username
-        $scope.getTrackableOwner($scope.createNewUserTrackable);
+        //i do not need to check the username again, since the value is available since first landed on the page
+
+        //now send the trackable data
+        console.log("sending new trackable request now...");
+        $http.post('/api/trackables' + '?token='+accessToken, $scope.formTrackablesData)
+            .success(function(data) {
+                //get them all again and clear the form fields
+                $scope.getAllTrackables();
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
 
     };
 
     // delete a trackable after checking it
     $scope.deleteTrackable = function(id) {
 
-        $http.delete('/api/trackables/' + id)
+        $http.delete('/api/trackables/' + id + '&token='+accessToken)
             .success(function(data) {
                 $scope.trackables = data;
                 console.log(data);

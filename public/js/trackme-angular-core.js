@@ -14,7 +14,7 @@
 // A module in AngularJS is a place where you can collect and organize
 // components like controllers, services, directives, and filters
 
-var trackme = angular.module('trackme', ['uiGmapgoogle-maps']);
+var trackme = angular.module('trackme', ['uiGmapgoogle-maps','ngCookies']);
 
 /**
  * A service can be used to share data between controllers

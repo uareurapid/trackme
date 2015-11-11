@@ -3,9 +3,14 @@
  */
 
 //device module
-var trackme = angular.module('trackme').controller('DevicesController',function ($scope, $http) {
+var trackme = angular.module('trackme').controller('DevicesController',function ($scope, $cookies, $http) {
 
     $scope.formData = {};
+
+    var accessToken = $cookies.get("token");
+    if(accessToken===null) {
+        accessToken="";
+    }
 
     //all these stuff should be on the services, not on the controllers,
     //$http and $resource on services, $scope on controllers
@@ -15,7 +20,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     $scope.getDeviceOwner = function(successCallback, errorCallback) {
 
         console.log("getting device owner...");
-        $http.get('/profile/user')
+        $http.get('/profile/user?token=' + accessToken)
             .success(function (data) {
                 console.log("device owner: " + data.username);
                 //assign the username to the scope var
@@ -30,10 +35,14 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
 
     $scope.selectedDevice = "Show all";
 
-    //get all user devices
+
+    //############ GET ALL USER DEVICES ##################
     $scope.getUserDevices = function() {
 
-        $http.get('/api/devices')
+        console.log("getting all available devices for username: " + $scope.formData.owner);
+
+        var apiPath = '/api/devices?owner=' + $scope.formData.owner + '&token='+ accessToken;
+        $http.get(apiPath)
             .success(function(data) {
                 $scope.devices = data;
                 console.log(data);
@@ -43,46 +52,36 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             });
     };
 
-    // when landing on the page, get all todos and show them
-    $http.get('/api/devices')
-        .success(function(data) {
-            $scope.devices = data;
-            console.log(data);
-        })
-        .error(function(data) {
-            console.log('Error: ' + data);
-        });
+    // when landing on the page, get all devices and and show them!
+    $scope.getDeviceOwner($scope.getUserDevices);
 
-
+    //############ CREATE A NEW DEVICE ####################
     //this is actually the submit of the form
-    $scope.createNewUserDevice = function() {
+    //called from ui, to add a new device
+    $scope.createDevice = function() {
 
         console.log("submitting the form to add a new device for user: " + $scope.formData.owner);
 
         //now submit the form and create the device
-        $http.post('/api/devices', $scope.formData)
+        $http.post('/api/devices?token=' + accessToken, $scope.formData)
             .success(function(data) {
-                $scope.formData = {}; // clear the form so our user is ready to enter another
-                $scope.devices = data;
-                console.log(data);
+
+                $scope.formData.deviceId = ""; // clear the form so our user is ready to enter another
+                $scope.formData.deviceDescription = "";
+                //do not clear $scope.formData.owner
+
+                //get all updated/devices list again
+                $scope.getUserDevices();
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
-    };
-
-    //called from ui, to add a new device
-    $scope.createDevice = function() {
-
-        //pass a success and failure callback (optional)
-        $scope.getDeviceOwner($scope.createNewUserDevice);
-
     };
 
     // delete a device after checking it
     $scope.deleteDevice = function(id) {
 
-        $http.delete('/api/devices/' + id)
+        $http.delete('/api/devices/' + id + '&token=' + accessToken)
             .success(function(data) {
                 $scope.devices = data;
                 console.log(data);
