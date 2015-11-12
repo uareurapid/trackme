@@ -29,21 +29,6 @@ module.exports = function(app, passport) {
     });
 
     // =====================================
-    // Authenticate ========
-    // =====================================
-    /*app.get('/authenticate', function(req, res) {
-        if(req.isAuthenticated()) {
-            var jsonToken = jwt.sign(req.user.local.email, conf.secret, {
-                expiresInMinutes: 1440 // expires in 24 hours
-            });
-        }
-    });*/
-
-    // if user is found and password is right
-    // create a token
-
-
-    // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
@@ -100,23 +85,14 @@ module.exports = function(app, passport) {
                 //set a token
                 res.cookie('token', jsonToken);
                 //also set it on the response url
-                res.redirect('/home?token='+jsonToken);
-                //next();
+                res.redirect('/home');
 
             });
         })(req, res, next);
     });
 
-
-        /*passport.authenticate('local-login', {
-            successRedirect : '/home', // redirect to the secure profile section
-            failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
-    }));*/
-
-    //TEST ME
+    //TODO
     //http://mherman.org/blog/2015/07/02/handling-user-authentication-with-the-mean-stack/#
-
     //http://passportjs.org/docs/authenticate
     //CUSTOM CALLBACK EXAMPLE
     //remote login only
@@ -142,8 +118,20 @@ module.exports = function(app, passport) {
     // =====================================
     app.get('/logout', function(req, res) {
         console.log("user logout...");
-        req.logout();
+
+        /**
+         * If you want to fully clear the session for the user on logout you can call
+         * req.session.destroy() from your everyauth.everymodule.handleLogout
+         * function. Only req.session.auth is cleared when you call req.logout().
+         */
+        if(req.isAuthenticated()) {
+
+            res.clearCookie('connect.sid', { path: '/' });
+            res.clearCookie('token', { path: '/' });
+            req.logout();
+        }
         res.redirect('/');
+
     });
 
 

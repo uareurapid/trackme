@@ -3,7 +3,7 @@
  */
 
 //API ROUTES
-module.exports = function(app) {
+module.exports = function(apiRouter) {
 
 //TODO authenticate API REQUESTS
 //https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
@@ -12,7 +12,7 @@ module.exports = function(app) {
 
     var Trackable  = require('../models/trackable');
     // get all trackables
-    app.get('/api/trackables', function(req, res) {
+    apiRouter.get('/trackables', function(req, res) {
 
 
         var expression = null;
@@ -48,7 +48,7 @@ module.exports = function(app) {
     });
 
     // create trackables and send back all todos after creation
-    app.post('/api/trackables', function(req, res) {
+    apiRouter.post('/trackables', function(req, res) {
 
         //only used if privacy protected
         var protectedCode = "";
@@ -87,7 +87,7 @@ module.exports = function(app) {
     });
 
     // delete a trackable
-    app.delete('/api/trackables/:trackable_id', function(req, res) {
+    apiRouter.delete('/trackables/:trackable_id', function(req, res) {
         Trackable.remove({
             _id : req.params.trackable_id
         }, function(err, trackable) {
@@ -105,7 +105,7 @@ module.exports = function(app) {
 
     //---------------------------------------------------------------------
     // Email API
-    app.get('/api/sendmail', function(req,res) {
+    apiRouter.get('/sendmail', function(req,res) {
 
         var MailerService = require('../controllers/mail.js');
         MailerService.sendEmail(req,res, function(response) {
@@ -117,7 +117,7 @@ module.exports = function(app) {
     //===============Records=============
     var Record  = require('../models/record');
     // get all records
-    app.get('/api/records', function(req, res) {
+    apiRouter.get('/records', function(req, res) {
 
         var expression = null;
         if(req.query.device_id) {
@@ -162,7 +162,7 @@ module.exports = function(app) {
     });
 
     // create device and send back all todos after creation
-    app.post('/api/records', function(req, res) {
+    apiRouter.post('/records', function(req, res) {
 
         console.log("latitude: "+req.body.longitude);
         //Return the number of milliseconds since 1970/01/01:
@@ -194,7 +194,7 @@ module.exports = function(app) {
     });
 
     // delete a record
-    app.delete('/api/records/:record_id', function(req, res) {
+    apiRouter.delete('/records/:record_id', function(req, res) {
         Record.remove({
             _id : req.params.record_id
         }, function(err, record) {
@@ -215,7 +215,7 @@ module.exports = function(app) {
 
     var Device  = require('../models/device');
     // get all devices
-    app.get('/api/devices', function(req, res) {
+    apiRouter.get('/devices', function(req, res) {
 
 
         var expression = null;
@@ -253,7 +253,7 @@ module.exports = function(app) {
 
     });
 
-    app.get('/api/devices/:device_id', function(req, res) {
+    apiRouter.get('/devices/:device_id', function(req, res) {
 
         // use mongoose to get all todos in the database
         Device.findById(req.params.device_id,function(err, device) {
@@ -268,7 +268,7 @@ module.exports = function(app) {
     });
 
     // create device and send back all todos after creation
-    app.post('/api/devices', function(req, res) {
+    apiRouter.post('/devices', function(req, res) {
 
         // create a device, information comes from AJAX request from Angular
         Device.create({
@@ -291,7 +291,7 @@ module.exports = function(app) {
     });
 
     // delete a device
-    app.delete('/api/devices/:device_id', function(req, res) {
+    apiRouter.delete('/devices/:device_id', function(req, res) {
         Device.remove({
             _id : req.params.device_id
         }, function(err, device) {

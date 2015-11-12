@@ -17,18 +17,19 @@ app.set('superSecret', config.secret); // secret variable
 
 mongoose.connect(db.url);
 
+// use morgan to log requests to the console
+app.use(morgan('dev'));
+
 //serve js,css and images from public folder
 app.use(express.static('public'));
 
 
 //EJS tutorial
 //https://scotch.io/tutorials/use-ejs-to-template-your-node-application
-
-// configure app to use bodyParser()
+// use body parser so we can get info from POST and/or URL parameters
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(cookieParser()); // read cookies (needed for auth)
 
 //app.use(bodyParser()); // get information from html forms
@@ -42,42 +43,40 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 
-
-
-// application -------------------------------------------------------------
-// Configure normal routes
-// routes ======================================================================
+//==============================================================================
+// Configure normal routes (un-protected)
+//======================================================================
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 
-//Authentocation stuff
+//Authentication stuff
 //https://scotch.io/courses/easy-node-authentication
 //https://scotch.io/tutorials/easy-node-authentication-setup-and-local
 
-//===============================
-// REST API
-//===============================
+
+//============================================================================
 // ---------------------------------------------------------
-// get an instance of the router for api routes
+// get an instance of the apiRouter for api routes
 // ---------------------------------------------------------
-// ROUTES FOR OUR API
+// ROUTES FOR OUR REST API
 // =============================================================================
-var router = express.Router();
+var apiRouter = express.Router();
 // get an instance of the express Router
 
 //-----------------------------------------------
 // middleware to use for all requests
 // route middleware to verify a token
 //-----------------------------------------------
-router.use(function(req, res, next) {
+apiRouter.use(function(req, res, next) {
 
   console.log("checking tokens and all that stuff");
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
-  console.log("i have the cookies: " + req.cookies.token);
+
   // decode token
   if (token) {
 
+    console.log("i have the token: " + token);
     // verifies secret and checks exp
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
       if (err) {
@@ -100,21 +99,25 @@ router.use(function(req, res, next) {
 
   }
 });
+//TODO CHECK THIS FOR ADDING A TOUR: http://linkedin.github.io/hopscotch/#general-usage
 
-// ---------------------------------------------------------
+//============================================================
 // Configure authenticated routes
-// ---------------------------------------------------------
-require('./config/api.js')(router);
+//============================================================
+require('./config/api.js')(apiRouter);
+
+//TODO authenticate API REQUESTS
+//https://scotch.io/tutorials/authenticate-a-node-js-api-with-json-web-tokens
 
 //TODO check https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4
 
 // more routes for our API will happen here
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
-app.use('/api', router);
+app.use('/api', apiRouter);
 
 /*
-router.use('xpto',function (req, res, next) {
+apiRouter.use('xpto',function (req, res, next) {
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   console.log('Client IP:', ip);
   next();

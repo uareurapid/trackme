@@ -31,7 +31,12 @@ ProfileController.remoteLogin = function(req,res,next,passport){
             });
 
             console.log("request headers: " + JSON.stringify(req.headers));
-            res.status(200).json({status: 'Login successful!',email:user.local.email,token:jsonToken});
+            res.status(200).json(
+                {   status: 'Login successful!',
+                    email:user.local.email,
+                    token:jsonToken,
+                    expires: 1440
+                });
 
         });
     })(req, res, next);
