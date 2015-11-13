@@ -67,34 +67,29 @@
 </head>
 <!-- SET THE CONTROLLER AND GET ALL DEVICES -->
 <body>
-
-<h1 id="header">My First Hopscotch Tour</h1>
-<div id="content">
-    <p>Content goes here...</p>
-</div>
-<script src="js/hopscotch.js"></script>
-<script src="js/tour.js"></script> <!-- define and start your tour in this file -->
-
 <!-- BEGIN: Sticky Header -->
 <div id="header_container">
     <div id="my_header">
         Header Content
     </div>
 </div>
+<div id="tour_content">
+    <p>Content goes here...</p>
+</div>
 <!-- END: Sticky Header -->
-
+<script src="js/hopscotch.js"></script>
+<script src="js/tour.js"></script> <!-- define and start your tour in this file -->
 
 <div id="layout" class="content pure-g" ng-controller="MapController">
     <div id="nav" class="pure-u">
 
-
         <div class="container min-300" ng-controller="TrackablesController">
-            <h2 class="h2_white_bold">My Panel</h2>
+            <h2 class="h2_white_bold" id="my_panel_title">My Panel</h2>
 
             <div class="panel-group min-300" id="accordion" ng-controller="DevicesController">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="my_trackables">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">My Trackables ({{ trackables.length }})</a>
                         </h4>
                     </div>
@@ -126,7 +121,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="add_trackable">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">Add New Trackable</a>
                         </h4>
                     </div>
@@ -173,7 +168,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="my_devices">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">My Devices ({{ devices.length }})</a>
                         </h4>
                     </div>
@@ -207,7 +202,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="add_device">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse4">Add new device</a>
                         </h4>
                     </div>
@@ -239,7 +234,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="my_account">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse5">My Account</a>
                         </h4>
                     </div>
@@ -260,7 +255,7 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">
+                        <h4 class="panel-title" id="my_settings">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapse6">Settings</a>
                         </h4>
                     </div>

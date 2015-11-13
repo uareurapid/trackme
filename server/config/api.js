@@ -139,7 +139,7 @@ module.exports = function(apiRouter) {
         //do we have a filtering option?
         if(expression!==null) {
 
-            var query = Record.find(expression);
+            var query = Record.find(expression).sort( [['time', 1]] );// get all items asc by created date;
             query.exec(function (err, records) {
                 if (err)
                     res.send(err)
@@ -156,7 +156,7 @@ module.exports = function(apiRouter) {
                     res.send(err)
 
                 res.json(records); // return all records in JSON format
-            });
+            }).sort( [['time', 1]] );// get all items asc by created date.;
         }
 
     });
@@ -188,7 +188,7 @@ module.exports = function(apiRouter) {
                 if (err)
                     res.send(err)
                 res.json(records);
-            });
+            })
         });
 
     });
@@ -309,3 +309,43 @@ module.exports = function(apiRouter) {
     //--------------------------------------------------------
 
 };
+
+
+/***
+ * first rows are the oldest, then the most recent, ordered by creation time ASC
+ [
+ {
+ "_id": "563165ec7012bd173cc42b8e",
+ "name": "myname",
+ "description": "mydescription",
+ "latitude": "27.32939",
+ "longitude": "7.3223",
+ "time": "2015-10-29T00:18:52.414Z",
+ "trackableId": "56327103c8f377a602004571",
+ "deviceId": "56301eaa4518091a6d40bf7e",
+ "__v": 0
+ },
+ {
+ "_id": "5631661a7012bd173cc42b8f",
+ "name": "myname",
+ "description": "mydescription",
+ "latitude": "22.32939",
+ "longitude": "9.3223",
+ "time": "2015-10-29T00:19:38.905Z",
+ "trackableId": "56327103c8f377a602004571",
+ "deviceId": "56301eaa4518091a6d40bf7e",
+ "__v": 0
+ },
+ {
+ "_id": "56450c824162cbaf9cf8e2d3",
+ "name": "myname2",
+ "description": "mydescription2",
+ "latitude": "24.32939",
+ "longitude": "8.3223",
+ "time": "2015-11-29T00:20:38.905Z",
+ "trackableId": "56327103c8f377a602004571",
+ "deviceId": "56301eaa4518091a6d40bf7e",
+ "__v": 0
+ }
+ ]
+ */

@@ -55,6 +55,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
     //will hold the map markers
     $scope.mapMarkers = [];
+    //will hold the lines between records
+    $scope.polylines = [];
 
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
@@ -228,14 +230,20 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                 .success(function(data) {
                     console.log("records: " + JSON.stringify(data));
 
+                    //TODO, this is wrong the line should be always between records of same trackable (even if from different devices?)
+                    //TODO and the values should be returned in order/date no?? otherwise the lines are not correct
                     var previous = 0;
                     var current = 0;
+                    var currentTrackableId = "";
+                    var previousTrackableId = "";
                     for(var i=0; i< data.length; i++) {
 
                         if(i > 0) {
                             previous = i-1;
+                            previousTrackableId = data[previous].trackableId;
                         }
                         current = i;
+                        currentTrackableId = data[current].trackableId;
 
                         var latitude = data[i].latitude;
                         var longitude = data[i].longitude;
@@ -244,8 +252,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                         current = i;
 
 
-                        if(current!=previous && current > previous) {
+                        if( (current!=previous && current > previous) && (previousTrackableId===currentTrackableId) ) {
                             //run the loop again BAD!!!
+                            console.log("ADDING A POLYLINE!!!!!");
                             $scope.polylines  = [
                                 {
                                     id: i,
