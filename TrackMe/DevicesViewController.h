@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DevicesViewController : UIViewController
+@interface DevicesViewController : UITableViewController<NSURLConnectionDataDelegate>
 @property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
+@property (strong, nonatomic) NSMutableData *receivedData;
+@property (strong, nonatomic) NSMutableArray *devicesList;
+
+-(void) fetchDevicesFromContext;
 @end

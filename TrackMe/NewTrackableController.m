@@ -56,7 +56,8 @@
 - (IBAction)btnAddTrackableClicked:(id)sender {
     
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString* user = [defaults objectForKey:USERNAME_KEY];
+    NSString *user = [defaults objectForKey:USERNAME_KEY];
+    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
     
     if(user!=nil && self.txtName.text.length>0 && self.txtDescription.text.length > 0) {
         
@@ -79,9 +80,11 @@
         
         NSLog(@"sending add trackable request: %@",postString);
         
-        NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
+        /*NSData *data = [postString dataUsingEncoding:NSUTF8StringEncoding];
         [request setHTTPBody:data];
-        [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
+        [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];*/
+        
+        [request setValue:token forHTTPHeaderField:@"x-access-token"];
         
         NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                       delegate:self];

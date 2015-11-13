@@ -15,6 +15,9 @@
 #import "CustomAnimationController.h"
 #import "HomeViewController.h"
 
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData.h>
+
 @interface AppDelegate ()
 
 @end
@@ -27,7 +30,54 @@
     
     [GMSServices provideAPIKey:@"AIzaSyBjDujuBLvWq__tBFC8jRNt8oo_fHSe2lY"];
     
-
+    //TODO following this article: https://medium.com/ios-os-x-development/restkit-tutorial-how-to-fetch-data-from-an-api-into-core-data-9326af750e10
+    // Initialize RestKit
+    NSURL *baseURL = [NSURL URLWithString:@"http://192.168.1.66:8080"];
+    RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
+    
+    // Initialize managed object model from bundle
+    NSManagedObjectModel *managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    // Initialize managed object store
+    RKManagedObjectStore *managedObjectStore = [[RKManagedObjectStore alloc] initWithManagedObjectModel:managedObjectModel];
+    objectManager.managedObjectStore = managedObjectStore;
+    
+    // Complete Core Data stack initialization
+    [managedObjectStore createPersistentStoreCoordinator];
+    NSString *storePath = [RKApplicationDataDirectory() stringByAppendingPathComponent:@"TrackMe.sqlite"];
+    NSString *seedPath = [[NSBundle mainBundle] pathForResource:@"RKSeedDatabase" ofType:@"sqlite"];
+    NSError *error;
+    NSPersistentStore *persistentStore = [managedObjectStore addSQLitePersistentStoreAtPath:storePath fromSeedDatabaseAtPath:seedPath withConfiguration:nil options:nil error:&error];
+    NSAssert(persistentStore, @"Failed to add persistent store with error: %@", error);
+    
+    // Create the managed object contexts
+    [managedObjectStore createManagedObjectContexts];
+    
+    // Configure a managed object cache to ensure we do not create duplicate objects
+    managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
+    
+    //map the entities
+    RKEntityMapping *devicesListMapping = [RKEntityMapping mappingForEntityForName:@"Device" inManagedObjectStore:managedObjectStore];
+    devicesListMapping.identificationAttributes = @[@"identifier"];
+    [devicesListMapping addAttributeMappingsFromDictionary:@{ @"_id" : @"identifier", @"deviceId" : @"deviceId", @"deviceDescription" : @"deviceDescription", @"deviceOwner" : @"deviceOwner" }];
+    
+    /*RKEntityMapping *articleMapping = [RKEntityMapping mappingForEntityForName:@"Article" inManagedObjectStore:managedObjectStore];
+    articleMapping.identificationAttributes = @[@"source_url"];
+    [articleMapping addAttributeMappingsFromArray:@[@"publish_date", @"source", @"source_url", @"summary", @"title", @"url"]];*/
+    
+    //[devicesListMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"articles" toKeyPath:@"articles" withMapping:articleMapping]];
+    
+    RKResponseDescriptor *articleListResponseDescriptor =
+    [RKResponseDescriptor responseDescriptorWithMapping:devicesListMapping
+                                                 method:RKRequestMethodGET
+                                            pathPattern:@"/api/devices"
+                                                keyPath:nil
+                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)
+     ];
+    
+    [objectManager addResponseDescriptor:articleListResponseDescriptor];
+    
+    // Enable Activity Indicator Spinner
+    [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;
     
     return YES;
 }
@@ -56,6 +106,7 @@
     [self saveContext];
 }
 
+/*
 #pragma mark - Core Data stack
 
 @synthesize managedObjectContext = _managedObjectContext;
@@ -135,5 +186,5 @@
         }
     }
 }
-
+*/
 @end

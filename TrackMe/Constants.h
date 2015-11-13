@@ -17,5 +17,7 @@
 
 #define DEVICE_IDENTIFIER @"device_indentifier"
 
+#define ACCESS_TOKEN @"x-access-token"
+
 
 #endif /* Constants_h */

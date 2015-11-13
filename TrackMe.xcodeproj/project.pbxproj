@@ -8,15 +8,19 @@
 
 /* Begin PBXBuildFile section */
 		7204C9701B3A0D44000CB6AD /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7204C96F1B3A0D44000CB6AD /* CoreLocation.framework */; };
+		720FC8A01BF50498003F3698 /* DeviceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 720FC89F1BF50498003F3698 /* DeviceTableViewCell.m */; };
+		720FC8A51BF54C2D003F3698 /* TrackmeModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A31BF54C2D003F3698 /* TrackmeModel.xcdatamodeld */; };
+		720FC8AA1BF54D9A003F3698 /* Device+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */; };
+		720FC8AB1BF54D9A003F3698 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A91BF54D9A003F3698 /* Device.m */; };
 		725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070DC1BEE1FF90078EA82 /* NewTrackableController.m */; };
 		725070E11BEE20CB0078EA82 /* Trackable.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070E01BEE20CB0078EA82 /* Trackable.m */; };
 		725610941B3362B800E52A42 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610931B3362B800E52A42 /* main.m */; };
 		725610971B3362B800E52A42 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610961B3362B800E52A42 /* AppDelegate.m */; };
-		7256109A1B3362B800E52A42 /* TrackMe.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 725610981B3362B800E52A42 /* TrackMe.xcdatamodeld */; };
 		7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7256109C1B3362B800E52A42 /* LoginViewController.m */; };
 		725610A21B3362B800E52A42 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 725610A11B3362B800E52A42 /* Images.xcassets */; };
 		725610A51B3362B800E52A42 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 725610A31B3362B800E52A42 /* LaunchScreen.xib */; };
 		725610B11B3362B900E52A42 /* TrackMeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610B01B3362B900E52A42 /* TrackMeTests.m */; };
+		726205E31BF40E7B00FFD833 /* TrackableTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 726205E21BF40E7B00FFD833 /* TrackableTableViewCell.m */; };
 		726EAAD21BE9231E0034134C /* MenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAD11BE9231E0034134C /* MenuViewController.m */; };
 		726EAAD61BE923480034134C /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAD51BE923480034134C /* SWRevealViewController.m */; };
 		726EAAD91BE935700034134C /* CustomAnimationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAD81BE935700034134C /* CustomAnimationController.m */; };
@@ -51,6 +55,13 @@
 		34A74A0ED50FDFB829CFB364 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		7204C96F1B3A0D44000CB6AD /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		7208A8C81BEA9B9500CAA4A6 /* Constants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		720FC89E1BF50498003F3698 /* DeviceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeviceTableViewCell.h; sourceTree = "<group>"; };
+		720FC89F1BF50498003F3698 /* DeviceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeviceTableViewCell.m; sourceTree = "<group>"; };
+		720FC8A41BF54C2D003F3698 /* TrackmeModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackmeModel.xcdatamodel; sourceTree = "<group>"; };
+		720FC8A61BF54D9A003F3698 /* Device+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Device+CoreDataProperties.h"; sourceTree = "<group>"; };
+		720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Device+CoreDataProperties.m"; sourceTree = "<group>"; };
+		720FC8A81BF54D9A003F3698 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
+		720FC8A91BF54D9A003F3698 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
 		725070DB1BEE1FF90078EA82 /* NewTrackableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewTrackableController.h; sourceTree = "<group>"; };
 		725070DC1BEE1FF90078EA82 /* NewTrackableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTrackableController.m; sourceTree = "<group>"; };
 		725070DF1BEE20CB0078EA82 /* Trackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trackable.h; sourceTree = "<group>"; };
@@ -60,7 +71,6 @@
 		725610931B3362B800E52A42 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		725610951B3362B800E52A42 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		725610961B3362B800E52A42 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		725610991B3362B800E52A42 /* TrackMe.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TrackMe.xcdatamodel; sourceTree = "<group>"; };
 		7256109B1B3362B800E52A42 /* LoginViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		7256109C1B3362B800E52A42 /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		725610A11B3362B800E52A42 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -68,6 +78,8 @@
 		725610AA1B3362B900E52A42 /* TrackMeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TrackMeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		725610AF1B3362B900E52A42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		725610B01B3362B900E52A42 /* TrackMeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TrackMeTests.m; sourceTree = "<group>"; };
+		726205E11BF40E7B00FFD833 /* TrackableTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackableTableViewCell.h; sourceTree = "<group>"; };
+		726205E21BF40E7B00FFD833 /* TrackableTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackableTableViewCell.m; sourceTree = "<group>"; };
 		726EAAD01BE9231E0034134C /* MenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MenuViewController.h; sourceTree = "<group>"; };
 		726EAAD11BE9231E0034134C /* MenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MenuViewController.m; sourceTree = "<group>"; };
 		726EAAD41BE923480034134C /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
@@ -132,8 +144,16 @@
 		725070DE1BEE20AF0078EA82 /* models */ = {
 			isa = PBXGroup;
 			children = (
+				720FC8A61BF54D9A003F3698 /* Device+CoreDataProperties.h */,
+				720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */,
+				720FC8A81BF54D9A003F3698 /* Device.h */,
+				720FC8A91BF54D9A003F3698 /* Device.m */,
 				725070DF1BEE20CB0078EA82 /* Trackable.h */,
 				725070E01BEE20CB0078EA82 /* Trackable.m */,
+				726205E11BF40E7B00FFD833 /* TrackableTableViewCell.h */,
+				720FC89E1BF50498003F3698 /* DeviceTableViewCell.h */,
+				720FC89F1BF50498003F3698 /* DeviceTableViewCell.m */,
+				726205E21BF40E7B00FFD833 /* TrackableTableViewCell.m */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -173,6 +193,7 @@
 				726EAAEB1BE984D90034134C /* TrackablesViewController.m */,
 				726EAAED1BE984EA0034134C /* DevicesViewController.h */,
 				726EAAEE1BE984EA0034134C /* DevicesViewController.m */,
+				720FC8A31BF54C2D003F3698 /* TrackmeModel.xcdatamodeld */,
 				726EAAE11BE939C10034134C /* HomeViewController.h */,
 				726EAAE21BE939C10034134C /* HomeViewController.m */,
 				726EAAD01BE9231E0034134C /* MenuViewController.h */,
@@ -188,7 +209,6 @@
 				726EAAF41BE98FFF0034134C /* ProfileViewController.m */,
 				725610A11B3362B800E52A42 /* Images.xcassets */,
 				725610A31B3362B800E52A42 /* LaunchScreen.xib */,
-				725610981B3362B800E52A42 /* TrackMe.xcdatamodeld */,
 				725610911B3362B800E52A42 /* Supporting Files */,
 				72DB9F921BE81E3400DDEC75 /* MapViewController.h */,
 				72DB9F931BE81E3400DDEC75 /* MapViewController.m */,
@@ -410,19 +430,23 @@
 				726EAAD61BE923480034134C /* SWRevealViewController.m in Sources */,
 				725610971B3362B800E52A42 /* AppDelegate.m in Sources */,
 				726EAAEF1BE984EA0034134C /* DevicesViewController.m in Sources */,
+				720FC8AB1BF54D9A003F3698 /* Device.m in Sources */,
 				726EAAF21BE98AFE0034134C /* SettingsViewController.m in Sources */,
-				7256109A1B3362B800E52A42 /* TrackMe.xcdatamodeld in Sources */,
+				720FC8A01BF50498003F3698 /* DeviceTableViewCell.m in Sources */,
 				72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */,
 				725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */,
 				7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */,
+				720FC8AA1BF54D9A003F3698 /* Device+CoreDataProperties.m in Sources */,
 				726EAAE31BE939C10034134C /* HomeViewController.m in Sources */,
 				726EAAD91BE935700034134C /* CustomAnimationController.m in Sources */,
 				726EAAF51BE98FFF0034134C /* ProfileViewController.m in Sources */,
 				726EAAD21BE9231E0034134C /* MenuViewController.m in Sources */,
+				720FC8A51BF54C2D003F3698 /* TrackmeModel.xcdatamodeld in Sources */,
 				726EAAEC1BE984D90034134C /* TrackablesViewController.m in Sources */,
 				725610941B3362B800E52A42 /* main.m in Sources */,
 				72D84D411BF1575600D6B77C /* NewDeviceController.m in Sources */,
 				725070E11BEE20CB0078EA82 /* Trackable.m in Sources */,
+				726205E31BF40E7B00FFD833 /* TrackableTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +568,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"/**",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
+					"\"${PODS_ROOT}/Headers/Public/ISO8601DateFormatterValueTransformer\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RKValueTransformers\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RestKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SOCKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SSKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/TransitionKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+				);
 				INFOPLIST_FILE = TrackMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -558,6 +594,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ENABLE_BITCODE = NO;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public/AFNetworking\"/**",
+					"\"${PODS_ROOT}/Headers/Public/GoogleMaps\"",
+					"\"${PODS_ROOT}/Headers/Public/ISO8601DateFormatterValueTransformer\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RKValueTransformers\"/**",
+					"\"${PODS_ROOT}/Headers/Public/RestKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SOCKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public/SSKeychain\"",
+					"\"${PODS_ROOT}/Headers/Public/TransitionKit\"/**",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+				);
 				INFOPLIST_FILE = TrackMe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -633,13 +681,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		725610981B3362B800E52A42 /* TrackMe.xcdatamodeld */ = {
+		720FC8A31BF54C2D003F3698 /* TrackmeModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				725610991B3362B800E52A42 /* TrackMe.xcdatamodel */,
+				720FC8A41BF54C2D003F3698 /* TrackmeModel.xcdatamodel */,
 			);
-			currentVersion = 725610991B3362B800E52A42 /* TrackMe.xcdatamodel */;
-			path = TrackMe.xcdatamodeld;
+			currentVersion = 720FC8A41BF54C2D003F3698 /* TrackmeModel.xcdatamodel */;
+			path = TrackmeModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

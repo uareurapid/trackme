@@ -256,26 +256,25 @@ const NSString *server = @"192.168.1.66:8080";
         }
 }
 
+//parse user login request
 -(void) parseUserLogin: (NSDictionary *) dict {
+    
     NSString *user = [dict valueForKey:@"email"];
+    NSString *token = [dict valueForKey:@"token"];
+    
     if(user!=nil) {
         NSLog(@"login ok for username %@",user);
         self.username = user;
+        
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+        [defaults setObject:token forKey:ACCESS_TOKEN];
         
         //save the credentials
         [self rememberMeChanged:self ];
         
         //get the devices and check for this one
         [self checkIfDeviceExists:user];
-        
-        //SWRevealViewController *revealViewController = self.revealViewController;
-        //[self presentViewController:revealViewController animated:YES completion:nil];
-        
-        //get devices list
-        /*[self getDevicesList:user];
-        
-        //report current location
-        [self getCurrentLocation];*/
+ 
     }
     else {
         NSLog(@"login failed");
@@ -283,16 +282,22 @@ const NSString *server = @"192.168.1.66:8080";
 }
 
 -(void) parseUserSignup: (NSDictionary *) dict {
+    
     NSString *user = [dict valueForKey:@"email"];
+    NSString *token = [dict valueForKey:@"token"];
+    
     if(user!=nil) {
         NSLog(@"login ok for username %@",user);
         self.username = user;
+        
+        NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+        [defaults setObject:token forKey:ACCESS_TOKEN];
         
         //save the credentials
         [self rememberMeChanged:self ];
         
         //get devices list and add this one
-        [self getDevicesList: user];
+        [self getDevicesList: user accessToken: token];
         
         //open reveal controller
         //[self performSegueWithIdentifier:@"segue_reveal" sender:nil];
@@ -332,7 +337,7 @@ const NSString *server = @"192.168.1.66:8080";
     }
 }*/
 
--(void) getDevicesList:(NSString *)username {
+-(void) getDevicesList:(NSString *)username accessToken:(NSString*) token{
     
     self.receivedData = [[NSMutableData alloc] init];
     
@@ -340,7 +345,7 @@ const NSString *server = @"192.168.1.66:8080";
     
     NSLog(@"TEST getDevicesList");
     
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/devices?username=%@",username];
+    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/devices?owner=%@",username];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
@@ -350,7 +355,7 @@ const NSString *server = @"192.168.1.66:8080";
     
     //NSData *data = [getString dataUsingEncoding:NSUTF8StringEncoding];
     //[request setHTTPBody:data];
-    //[request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
+    [request setValue:token forHTTPHeaderField:@"x-access-token"];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                   delegate:self];
@@ -527,7 +532,8 @@ const NSString *server = @"192.168.1.66:8080";
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     if([defaults objectForKey:DEVICE_IDENTIFIER ]==nil) {
         //the device does not exists yet, add it
-        [self getDevicesList: username];
+        NSString *token = [defaults objectForKey:ACCESS_TOKEN];
+        [self getDevicesList: username accessToken: token ];
     }
     else {
         //open reveal controller

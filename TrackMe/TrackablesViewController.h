@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface TrackablesViewController : UIViewController
+@interface TrackablesViewController : UITableViewController<NSURLConnectionDataDelegate>
 @property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
+@property (strong, nonatomic) NSMutableData *receivedData;
+@property (strong, nonatomic) NSMutableArray *trackablesList;
 @end
