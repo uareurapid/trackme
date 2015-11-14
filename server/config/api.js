@@ -16,11 +16,11 @@ module.exports = function(apiRouter) {
 
 
         var expression = null;
-        if(req.query.owner) {
+        if(req.owner) {
 
-            console.log("filter trackables by owner: " + req.query.owner);
+            console.log("filter trackables by owner: " + req.owner);
             expression = {
-                owner : req.query.owner
+                owner : req.owner
             };
         }
         if(expression!=null) {
@@ -35,14 +35,15 @@ module.exports = function(apiRouter) {
         else {
             //TODO NOT POSSIBLE!!!!
             // use mongoose to get all records in the database
-            Trackable.find(function(err, trackables) {
+            //Trackable.find(function(err, trackables) {
 
                 // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                if (err)
-                    res.send(err)
+            //    if (err)
+            //        res.send(err)
 
-                res.json(trackables); // return all trackables in JSON format
-            });
+            //    res.json(trackables); // return all trackables in JSON format
+            //});
+            res.json(400,{err: "Bad request!"});
         }
 
     });
@@ -217,15 +218,15 @@ module.exports = function(apiRouter) {
     // get all devices
     apiRouter.get('/devices', function(req, res) {
 
-
         var expression = null;
-        if(req.query.owner) {
+        if(req.owner) {
 
-            console.log("filter devices by owner: " + req.query.owner);
+            console.log("filter devices by owner: " + req.owner);
             expression = {
-                deviceOwner : req.query.owner
+                deviceOwner : req.owner
             };
         }
+
         if(expression!=null) {
             var query = Device.find(expression);
             query.exec(function (err, devices) {
@@ -238,14 +239,15 @@ module.exports = function(apiRouter) {
         else {
             //TODO NOT POSSIBLE!!!
             // use mongoose to get all todos in the database
-            Device.find(function(err, devices) {
+            //Device.find(function(err, devices) {
 
                 // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-                if (err)
-                    res.send(err)
+            //    if (err)
+            //        res.send(err)
 
-                res.json(devices); // return all devices in JSON format
-            });
+            //    res.json(devices); // return all devices in JSON format
+            //});
+            res.json(400, {err: 'Bad request!'});
         }
 
 

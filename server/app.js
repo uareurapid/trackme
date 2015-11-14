@@ -23,6 +23,7 @@ app.use(morgan('dev'));
 //serve js,css and images from public folder
 app.use(express.static('public'));
 
+//TODO check this good example: https://github.com/Foxandxss/sails-angular-jwt-example
 
 //EJS tutorial
 //https://scotch.io/tutorials/use-ejs-to-template-your-node-application
@@ -71,7 +72,34 @@ apiRouter.use(function(req, res, next) {
 
   console.log("checking tokens and all that stuff");
   // check header or url parameters or post parameters for token
-  var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.cookies.token;
+  var token = req.body.token || req.query.token || req.cookies.token;
+
+  console.log("ROUTER: request headers: " + JSON.stringify(req.headers));
+
+  //TODO send the token and Authorization Bearer token
+  //instead of x-access-token
+  //check the headers
+  if(!token) {
+    if (req.headers && req.headers.authorization) {
+      var parts = req.headers.authorization.split(' ');
+      if (parts.length == 2) {
+        var scheme = parts[0],
+            credentials = parts[1];
+
+        if (/^Bearer$/i.test(scheme)) {
+          token = credentials;
+        }
+      }
+      else {
+        console.log("RESPONSE: 'Format is Authorization: Bearer [token]'");
+        return res.json(401, {err: 'Format is Authorization: Bearer [token]'});
+      }
+    }
+    else {
+      console.log("RESPONSE: 'No Authorization header was found'");
+      return res.json(401, {err: 'No Authorization header was found'});
+    }
+  }
 
   // decode token
   if (token) {
@@ -84,6 +112,9 @@ apiRouter.use(function(req, res, next) {
       } else {
         // if everything is good, save to request for use in other routes
         req.decoded = decoded;
+        var payload = JSON.parse(JSON.stringify(decoded));
+        console.log("Decoded token username payload: " + payload.local.email); // the username, this is EUREKA!!!!
+        req.owner = payload.local.email;
         next();
       }
     });

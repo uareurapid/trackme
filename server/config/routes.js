@@ -75,6 +75,8 @@ module.exports = function(app, passport) {
                     return res.status(500).json({err: 'Could not log in user'});
                 }
 
+                //TODO i can generate a random uuid for this user that will be the given secret
+                //than have a table that associates secret keys with usernames
                 // if user is found and password is right
                 // create a token
                 var jsonToken = jwt.sign(user, conf.secret, {
@@ -126,11 +128,31 @@ module.exports = function(app, passport) {
          */
         if(req.isAuthenticated()) {
 
+
             res.clearCookie('connect.sid', { path: '/' });
             res.clearCookie('token', { path: '/' });
             req.logout();
         }
         res.redirect('/');
+
+    });
+
+    app.get('/rlogout', function(req, res) {
+        console.log("user remote logout...");
+
+        /**
+         * If you want to fully clear the session for the user on logout you can call
+         * req.session.destroy() from your everyauth.everymodule.handleLogout
+         * function. Only req.session.auth is cleared when you call req.logout().
+         */
+        if(req.isAuthenticated()) {
+
+
+            res.clearCookie('connect.sid', { path: '/' });
+            res.clearCookie('token', { path: '/' });
+            req.logout();
+        }
+        res.json(200,{status: 200, message: "Logout success!"});
 
     });
 
