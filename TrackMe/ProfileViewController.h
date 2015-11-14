@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ProfileViewController : UIViewController
+@interface ProfileViewController : UITableViewController<NSURLConnectionDataDelegate>
+
 @property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
+@property (strong, nonatomic) NSMutableData *receivedData;
+- (IBAction)btnLogoutClicked:(id)sender;
+@property (strong,nonatomic) NSString *username;
+
 @end

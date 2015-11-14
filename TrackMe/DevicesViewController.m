@@ -217,12 +217,9 @@
     
     NSString *requestPath = @"/api/devices";
     
-    //[[RKObjectManager sharedManager] HTTPHeaders] setValue:myValue
-                                                         //     forKey:myHeaderName];
     //Here is my custom header code
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
-    [objectManager.HTTPClient setDefaultHeader:@"x-access-token" value:token];
-    //End of custom header code
+    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value: [NSString stringWithFormat:@"Bearer %@",token ]];
     
     [objectManager
      getObjectsAtPath:requestPath

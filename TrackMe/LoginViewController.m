@@ -264,6 +264,8 @@ const NSString *server = @"192.168.1.66:8080";
     
     if(user!=nil) {
         NSLog(@"login ok for username %@",user);
+        NSLog(@"token is %@",token);
+        
         self.username = user;
         
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];

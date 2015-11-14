@@ -37,6 +37,7 @@
 		726EAAF51BE98FFF0034134C /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 726EAAF41BE98FFF0034134C /* ProfileViewController.m */; };
 		72D84D411BF1575600D6B77C /* NewDeviceController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72D84D401BF1575600D6B77C /* NewDeviceController.m */; };
 		72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 72DB9F931BE81E3400DDEC75 /* MapViewController.m */; };
+		72F0093B1BF6AB5600575E8F /* ProfileTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 72F0093A1BF6AB5600575E8F /* ProfileTableViewCell.m */; };
 		FF030E7196A07D12D45F98A6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 34A74A0ED50FDFB829CFB364 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -106,6 +107,8 @@
 		72D84D401BF1575600D6B77C /* NewDeviceController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewDeviceController.m; sourceTree = "<group>"; };
 		72DB9F921BE81E3400DDEC75 /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		72DB9F931BE81E3400DDEC75 /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		72F009391BF6AB5600575E8F /* ProfileTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileTableViewCell.h; sourceTree = "<group>"; };
+		72F0093A1BF6AB5600575E8F /* ProfileTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileTableViewCell.m; sourceTree = "<group>"; };
 		BA808A83FE33D0998EE4A9FD /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -145,6 +148,8 @@
 			isa = PBXGroup;
 			children = (
 				720FC8A61BF54D9A003F3698 /* Device+CoreDataProperties.h */,
+				72F009391BF6AB5600575E8F /* ProfileTableViewCell.h */,
+				72F0093A1BF6AB5600575E8F /* ProfileTableViewCell.m */,
 				720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */,
 				720FC8A81BF54D9A003F3698 /* Device.h */,
 				720FC8A91BF54D9A003F3698 /* Device.m */,
@@ -436,6 +441,7 @@
 				72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */,
 				725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */,
 				7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */,
+				72F0093B1BF6AB5600575E8F /* ProfileTableViewCell.m in Sources */,
 				720FC8AA1BF54D9A003F3698 /* Device+CoreDataProperties.m in Sources */,
 				726EAAE31BE939C10034134C /* HomeViewController.m in Sources */,
 				726EAAD91BE935700034134C /* CustomAnimationController.m in Sources */,
