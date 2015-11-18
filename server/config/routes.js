@@ -106,6 +106,14 @@ module.exports = function(app, passport) {
 
     });
 
+    app.post('/rSIGNUP', function(req, res, next) {
+
+        console.log("RSIGNUP called");
+        //var ProfileController = require('../controllers/profile.js');
+        ProfileController.remoteSignup(req,res,next,passport);
+
+    });
+
     //return username
     app.get('/profile/user', function (req, res) {
         console.log('GET profile/user');

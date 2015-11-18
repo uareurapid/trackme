@@ -276,8 +276,8 @@ module.exports = function(apiRouter) {
         Device.create({
 
             deviceId: req.body.deviceId,
-            deviceDescription: req.body.deviceDescription,
-            deviceOwner: req.body.owner,
+            description: req.body.deviceDescription,
+            owner: req.body.owner,
             done : false
         }, function(err, device) {
             if (err) {
