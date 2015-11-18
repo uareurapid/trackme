@@ -11,6 +11,11 @@
 #import "TrackableTableViewCell.h"
 #import "Constants.h"
 
+#import "Trackable.h"
+#import "Trackable+CoreDataProperties.h"
+#import <RestKit/RestKit.h>
+#import <RestKit/CoreData.h>
+
 @interface TrackablesViewController ()
 
 @end
@@ -22,12 +27,7 @@
     [self customSetup];
     self.trackablesList = [[NSMutableArray alloc] init];
     
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *username = [defaults objectForKey:USERNAME_KEY];
-    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
-    
-    [self getTrackablesList:username accessToken:token];
-    // Do any additional setup after loading the view.
+    [self loadTrackables];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -35,6 +35,71 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void) getTrackablesList {
+    
+    NSString *requestPath = @"/api/trackables";
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *username = [defaults objectForKey:USERNAME_KEY];
+    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
+    
+    //Here is my custom header code
+    RKObjectManager *objectManager = [RKObjectManager sharedManager];
+    [objectManager.HTTPClient setDefaultHeader:@"Authorization" value: [NSString stringWithFormat:@"Bearer %@",token ]];
+    
+    [objectManager
+     getObjectsAtPath:requestPath
+     parameters:nil
+     success: ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         
+         //articles have been saved in core data by now
+         NSArray *fetchedObjects = [self fetchTrackablesFromContext];
+         [self addObjectsToTable: fetchedObjects];
+     }
+     failure: ^(RKObjectRequestOperation *operation, NSError *error) {
+         RKLogError(@"Load failed with error: %@", error);
+     }
+     ];
+    
+}
+
+//load them from core data
+- (NSArray *) fetchTrackablesFromContext {
+    
+    NSManagedObjectContext *context = [RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
+    NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Trackable"];
+    
+    NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:YES];
+    fetchRequest.sortDescriptors = @[descriptor];
+    
+    NSError *error = nil;
+    NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
+    
+    return fetchedObjects;
+    
+}
+
+//ass the objects to the list
+-(void) addObjectsToTable: (NSArray *) fetchedObjects {
+    [self.trackablesList addObjectsFromArray:fetchedObjects];
+    [self.tableView reloadData];
+}
+
+-(void) loadTrackables {
+    
+    NSArray * fetchedObjects = [self fetchTrackablesFromContext];
+    //loaded more than one
+    if(fetchedObjects.count>0) {
+        NSLog(@"adding from local store %lu",(unsigned long)fetchedObjects.count);
+        [self addObjectsToTable: fetchedObjects];
+    }
+    else {
+        [self getTrackablesList];
+    }
+    
+}
+
+/*
 -(void) getTrackablesList:(NSString *)username accessToken:(NSString*) token{
     
     self.receivedData = [[NSMutableData alloc] init];
@@ -42,12 +107,12 @@
     
     NSLog(@"TEST getTrackablesList");
     
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/trackables?owner=%@",username];
+    NSString *getString = [NSString stringWithFormat:  @"%@/api/trackables",SERVER_LOCATION];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
     [request setHTTPMethod:@"GET"];
-    [request setValue:token forHTTPHeaderField:@"x-access-token"];
+    [request setValue: [NSString stringWithFormat:@"Bearer %@", token ] forHTTPHeaderField:@"Authorization"];
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                   delegate:self];
     
@@ -55,23 +120,23 @@
 }
 
 //DELEGATES
-/*
+
  this method might be calling more than one times according to incoming data size
- */
+ 
 -(void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data{
     [self.receivedData appendData:data];
 }
-/*
+
  if there is an error occured, this method will be called by connection
- */
+ 
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
     
     NSLog(@"%@" , error);
 }
 
-/*
+
  if data is successfully received, this method will be called by connection
- */
+ 
 -(void)connectionDidFinishLoading:(NSURLConnection *)connection{
     
     //initialize convert the received data to string with UTF8 encoding
@@ -110,7 +175,7 @@
         }
     }
     [self.tableView reloadData];
-}
+}*/
 
 /*
 #pragma mark - Navigation
@@ -156,12 +221,12 @@
 {
     static NSString *CellIdentifier = @"Cell";
     
-    NSString *trackable = [self.trackablesList objectAtIndex:indexPath.row];
+    Trackable *trackable = [self.trackablesList objectAtIndex:indexPath.row];
     
     TrackableTableViewCell *cell = (TrackableTableViewCell*)[tableView dequeueReusableCellWithIdentifier: CellIdentifier forIndexPath: indexPath];
     
     NSLog(@"adding to the cell label: %@",trackable);
-    cell.trackableName.text = trackable;
+    cell.trackableName.text = trackable.trackableName;
     
     return cell;
 }

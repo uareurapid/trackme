@@ -7,12 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreData/CoreData.h>
 
-@interface Trackable : NSObject
+NS_ASSUME_NONNULL_BEGIN
 
-@property (strong,nonatomic) NSString *name;
-@property (strong,nonatomic) NSString *description;
-@property (strong,nonatomic) NSString *owner;
-@property (strong,nonatomic) NSString *type;
-@property (strong,nonatomic) NSString *privacy;
+@interface Trackable : NSManagedObject
+
+// Insert code here to declare functionality of your managed object subclass
+
 @end
+
+NS_ASSUME_NONNULL_END
+
+#import "Trackable+CoreDataProperties.h"

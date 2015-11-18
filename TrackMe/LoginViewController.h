@@ -40,6 +40,7 @@
 - (IBAction)loginClicked:(id)sender;
 @property (weak, nonatomic) IBOutlet UILabel *lblCreateAccountHint;
 
+@property BOOL isSignup;
 -(void)callBackSuccess;
 
 @end

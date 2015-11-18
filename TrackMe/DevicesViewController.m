@@ -26,19 +26,34 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self customSetup];
+    
     self.devicesList = [[NSMutableArray alloc] init];
     
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *username = [defaults objectForKey:USERNAME_KEY];
-    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
+    //try to load them from persistent store
+    [self loadDevices];
     
-    [self getDevicesList:username accessToken:token];
+    
+   
     // Do any additional setup after loading the view.
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void) loadDevices {
+    
+    NSArray * fetchedObjects = [self fetchDevicesFromContext];
+    //loaded more than one
+    if(fetchedObjects.count>0) {
+        NSLog(@"adding from local store %d",fetchedObjects.count);
+       [self addObjectsToTable: fetchedObjects];
+    }
+    else {
+        [self getDevicesList];
+    }
+    
 }
 
 /*
@@ -213,9 +228,13 @@
 
 #pragma mark - RESTKit
 
-- (void) getDevicesList:(NSString *)username accessToken:(NSString*) token {
+- (void) getDevicesList {
     
     NSString *requestPath = @"/api/devices";
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *username = [defaults objectForKey:USERNAME_KEY];
+    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
     
     //Here is my custom header code
     RKObjectManager *objectManager = [RKObjectManager sharedManager];
@@ -225,8 +244,10 @@
      getObjectsAtPath:requestPath
      parameters:nil
      success: ^(RKObjectRequestOperation *operation, RKMappingResult *mappingResult) {
+         
          //articles have been saved in core data by now
-         [self fetchDevicesFromContext];
+         NSArray *fetchedObjects = [self fetchDevicesFromContext: username];
+         [self addObjectsToTable: fetchedObjects];
      }
      failure: ^(RKObjectRequestOperation *operation, NSError *error) {
          RKLogError(@"Load failed with error: %@", error);
@@ -235,14 +256,14 @@
     
 }
 
-- (void) fetchDevicesFromContext {
+//load them from core data
+- (NSArray *) fetchDevicesFromContext: (NSString*) username {
     
     NSManagedObjectContext *context = [RKManagedObjectStore defaultStore].mainQueueManagedObjectContext;
-    
-    //[request setHTTPMethod:@"GET"];
-    //[request setValue:token forHTTPHeaderField:@"x-access-token"];
-    
     NSFetchRequest *fetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Device"];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"deviceOwner == %@", username];
+    [fetchRequest setPredicate:predicate];
     
     NSSortDescriptor *descriptor = [NSSortDescriptor sortDescriptorWithKey:@"identifier" ascending:YES];
     fetchRequest.sortDescriptors = @[descriptor];
@@ -250,13 +271,16 @@
     NSError *error = nil;
     NSArray *fetchedObjects = [context executeFetchRequest:fetchRequest error:&error];
     
-    //Device *articleList = [fetchedObjects firstObject];
-    
-    [self.devicesList addObjectsFromArray:fetchedObjects];
-    
-    [self.tableView reloadData];
+    return fetchedObjects;
     
 }
+
+//ass the objects to the list
+-(void) addObjectsToTable: (NSArray *) fetchedObjects {
+    [self.devicesList addObjectsFromArray:fetchedObjects];
+    [self.tableView reloadData];
+}
+
 
 @end
 

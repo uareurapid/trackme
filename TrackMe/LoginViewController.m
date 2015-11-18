@@ -27,20 +27,54 @@ NSMutableArray *trackablesList;
 bool addedRecord = false;
 const NSString *server = @"192.168.1.66:8080";
 
+
 - (IBAction)loginClicked:(id)sender {
     
     
-    if([self.btnLogin.titleLabel.text isEqualToString:@"Signup"]) {
-        //am performing  signup
-        [self performSignupRequest];
+    [self checkInputFields];
+}
+
+//check if all in place
+-(void) checkInputFields {
+    
+    if(self.txtUsername.text.length==0 || self.txtPassword.text.length==0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: (self.isSignup? @"Signup": @"Login") message: @"Missing credentials!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+        alert.tag = 100;
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
+    }
+    else if(![self NSStringIsValidEmail:self.txtUsername.text]) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle: (self.isSignup? @"Signup": @"Login") message: @"Invalid email address!" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+        alert.tag = 101;
+        alert.alertViewStyle = UIAlertViewStyleDefault;
+        
+        [alert show];
     }
     else {
-        //normal login
-        [self performLoginRequest];
+        if(self.isSignup) {
+            NSLog(@"do signup");
+            //i am performing a signup
+            [self performSignupRequest];
+        }
+        else {
+             NSLog(@"do login");
+            //i am doing a normal login
+            [self performLoginRequest];
+        }
     }
     
     
-    
+}
+
+-(BOOL) NSStringIsValidEmail:(NSString *)checkString
+{
+    BOOL stricterFilter = NO; // Discussion http://blog.logichigh.com/2010/09/02/validating-an-e-mail-address/
+    NSString *stricterFilterString = @"^[A-Z0-9a-z\\._%+-]+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2,4}$";
+    NSString *laxString = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+    NSString *emailRegex = stricterFilter ? stricterFilterString : laxString;
+    NSPredicate *emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+    return [emailTest evaluateWithObject:checkString];
 }
 
 //LOGIN
@@ -50,8 +84,10 @@ const NSString *server = @"192.168.1.66:8080";
     
     lastRequest = REQUEST_LOGIN;
     
+    NSString *url = [NSString stringWithFormat:@"%@/rlogin",SERVER_LOCATION ];
+    
     // Note that the URL is the "action" URL parameter from the form.
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/rlogin"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
@@ -73,9 +109,12 @@ const NSString *server = @"192.168.1.66:8080";
     lastRequest = REQUEST_SIGNUP;
     
     //TODO check if password and retype are equal!!!
+    NSString *url = [NSString stringWithFormat:@"%@%@",SERVER_LOCATION,@"/rsignup"];
+    
+    NSLog(@"POST TO %@",url);
     
     // Note that the URL is the "action" URL parameter from the form.
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://192.168.1.66:8080/rsignup"]];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     [request setHTTPMethod:@"POST"];
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
     //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
@@ -195,6 +234,7 @@ const NSString *server = @"192.168.1.66:8080";
                                                            delegate:nil
                                                   cancelButtonTitle:@"No"
                                                   otherButtonTitles:@"Yes", nil];
+            alert.tag = 102;
             alert.delegate = self;
             [alert show];
     
@@ -212,7 +252,7 @@ const NSString *server = @"192.168.1.66:8080";
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    if(buttonIndex==1) {
+    if(alertView.tag==102 && buttonIndex==1) {
        //pressed "yes"
         //we show the controller to allow pass a description
             NewDeviceController * controller = [self.storyboard instantiateViewControllerWithIdentifier:@"NewDeviceController"];
@@ -347,7 +387,7 @@ const NSString *server = @"192.168.1.66:8080";
     
     NSLog(@"TEST getDevicesList");
     
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/api/devices?owner=%@",username];
+    NSString *getString = [NSString stringWithFormat:  @"%@/api/devices",SERVER_LOCATION];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
@@ -357,7 +397,7 @@ const NSString *server = @"192.168.1.66:8080";
     
     //NSData *data = [getString dataUsingEncoding:NSUTF8StringEncoding];
     //[request setHTTPBody:data];
-    [request setValue:token forHTTPHeaderField:@"x-access-token"];
+    [request setValue: [NSString stringWithFormat:@"Bearer %@", token ] forHTTPHeaderField:@"Authorization"];
     
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                   delegate:self];
@@ -419,6 +459,7 @@ const NSString *server = @"192.168.1.66:8080";
     [locationManager startUpdatingLocation];
 }
 
+
 //http://www.appcoda.com/how-to-get-current-location-iphone-user/
 #pragma mark - CLLocationManagerDelegate
 
@@ -452,6 +493,7 @@ const NSString *server = @"192.168.1.66:8080";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view, typically from a nib.
     locationManager = [[CLLocationManager alloc] init];
     
@@ -460,15 +502,13 @@ const NSString *server = @"192.168.1.66:8080";
     //clear any previous stuff
     self.txtPassword.text = @"";
     self.txtUsername.text = @"";
-    
  
-   // self.btnLoginSignup.titleLabel.text = @"Login";
-    
+    self.isSignup = false;
     
     //prefills if there is saved data
     [self prefillUserFields];
-    
     [self customSetup];
+    //[self checkExistingCredentials];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -507,6 +547,17 @@ const NSString *server = @"192.168.1.66:8080";
     //[coder encodeObject: _color forKey: @"color"];
     
     [super encodeRestorableStateWithCoder:coder];
+}
+
+-(void) checkExistingCredentials {
+    
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString* user = [defaults objectForKey:USERNAME_KEY];
+    NSString *pass =[SSKeychain passwordForService:@"trackme_service" account:user];
+    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
+    if(user!=nil && pass!=nil && token!=nil) {
+        //[self performSegueWithIdentifier:@"segue_reveal" sender:nil];
+    }
 }
 
 - (IBAction)rememberMeChanged:(id)sender;
@@ -580,20 +631,32 @@ const NSString *server = @"192.168.1.66:8080";
 
 
 - (IBAction)btnSignupClicked:(id)sender{
-    //hide this one
-    self.btnSignup.hidden = true;
-    //change the label of the other one
-    self.btnLogin.titleLabel.text = @"Signup";
-    //hidde the hint
-    self.lblCreateAccountHint.hidden = true;
     
-    //clear these
-    self.txtPassword.text=@"";
+    self.isSignup = !self.isSignup;
+    NSLog(@"clicked....");
+    if(self.isSignup) {
+        //change the label of the other one
+        [self.btnLogin setTitle:@"Signup" forState:UIControlStateNormal];
+        //change the text of this label
+        self.lblCreateAccountHint.text = @"Already have an account?";
+        //change the title of the button
+        [self.btnSignup setTitle: @"Login" forState:UIControlStateNormal];
+    }
+    else {
+        //change the label of the other one
+        [self.btnLogin setTitle:@"Login" forState:UIControlStateNormal];
+        //change the text of this label
+        self.lblCreateAccountHint.text = @"Don´t have an account yet?";
+        //change the title of the button
+        [self.btnSignup setTitle:@"Signup" forState:UIControlStateNormal];
+    }
+    
+    
+    //clear fields
+    self.txtUsername.text=@"";
     self.txtPassword.text=@"";
     
     //perform signup and hidde them again
-    
-    //self.lblRetypePassword.hidden = true;
-    //self.txtRetypePassword.hidden = true;
+
 }
 @end

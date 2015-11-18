@@ -13,5 +13,5 @@
 @property (strong, nonatomic) NSMutableData *receivedData;
 @property (strong, nonatomic) NSMutableArray *devicesList;
 
--(void) fetchDevicesFromContext;
+-(NSArray *) fetchDevicesFromContext;
 @end

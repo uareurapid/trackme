@@ -54,6 +54,7 @@
     
     NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
     NSString* username = [defaults objectForKey:USERNAME_KEY];
+    NSString* token = [defaults objectForKey:ACCESS_TOKEN];
     
     if(username!=nil && self.txtDescription.text.length>0 && self.txtDescription.text.length > 0) {
         
@@ -69,7 +70,10 @@
         // Note that the URL is the "action" URL parameter from the form.
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:requestUrl]];
         [request setHTTPMethod:@"POST"];
+        
+        [request setValue:[NSString stringWithFormat:@"Bearer %@",token ] forHTTPHeaderField:@"Authorization"];
         [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"content-type"];
+        
         //this is hard coded based on your suggested values, obviously you'd probably need to make this more dynamic based on your application's specific data to send
         NSString *postString = [NSString stringWithFormat:  @"deviceId=%@&deviceDescription=%@&owner=%@",self.txtIdentifier.text,self.txtDescription.text,
                                 username];
@@ -152,9 +156,22 @@
     if(added) {
         NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
         [defaults setObject:self.deviceIdentifier forKey:DEVICE_IDENTIFIER];
-        [self btnCloseClicked:self];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Add device"
+                                                        message:@"Device successfully added!"
+                                                       delegate:nil
+                                              cancelButtonTitle:nil
+                                              otherButtonTitles:@"Yes", nil];
+        alert.delegate = self;
+        [alert show];
+    
+        
     }
 
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    [self btnCloseClicked:self];
 }
 
 @end

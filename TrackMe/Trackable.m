@@ -10,17 +10,6 @@
 
 @implementation Trackable
 
+// Insert code here to add functionality to your managed object subclass
 
--(id) initWithName: (NSString*) name description:(NSString*) desc type: (NSString*) trackableType privacy:(NSString*) trackablePrivacy owner:(NSString *)trackableOwner {
-    
-    self = [super init];
-    
-    self.name = name;
-    self.description = desc;
-    self.type = trackableType;
-    self.privacy = trackablePrivacy;
-    self.owner = trackableOwner;
-    
-    return self;
-}
 @end

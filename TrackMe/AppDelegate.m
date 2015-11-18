@@ -32,7 +32,7 @@
     
     //TODO following this article: https://medium.com/ios-os-x-development/restkit-tutorial-how-to-fetch-data-from-an-api-into-core-data-9326af750e10
     // Initialize RestKit
-    NSURL *baseURL = [NSURL URLWithString:@"http://192.168.1.66:8080"];
+    NSURL *baseURL = [NSURL URLWithString: [NSString stringWithFormat: @"%@",SERVER_LOCATION ] ];
     RKObjectManager *objectManager = [RKObjectManager managerWithBaseURL:baseURL];
     
     // Initialize managed object model from bundle
@@ -56,17 +56,18 @@
     managedObjectStore.managedObjectCache = [[RKInMemoryManagedObjectCache alloc] initWithManagedObjectContext:managedObjectStore.persistentStoreManagedObjectContext];
     
     //map the entities
+    //DEVICES
     RKEntityMapping *devicesListMapping = [RKEntityMapping mappingForEntityForName:@"Device" inManagedObjectStore:managedObjectStore];
     devicesListMapping.identificationAttributes = @[@"identifier"];
-    [devicesListMapping addAttributeMappingsFromDictionary:@{ @"_id" : @"identifier", @"deviceId" : @"deviceId", @"deviceDescription" : @"deviceDescription", @"deviceOwner" : @"deviceOwner" }];
+    [devicesListMapping addAttributeMappingsFromDictionary:@{ @"_id" : @"identifier", @"deviceId" : @"deviceId", @"description" : @"deviceDescription", @"owner" : @"deviceOwner" }];
     
-    /*RKEntityMapping *articleMapping = [RKEntityMapping mappingForEntityForName:@"Article" inManagedObjectStore:managedObjectStore];
-    articleMapping.identificationAttributes = @[@"source_url"];
-    [articleMapping addAttributeMappingsFromArray:@[@"publish_date", @"source", @"source_url", @"summary", @"title", @"url"]];*/
+    //TRACKABLES
+    RKEntityMapping *trackablesListMapping = [RKEntityMapping mappingForEntityForName:@"Trackable" inManagedObjectStore:managedObjectStore];
+    trackablesListMapping.identificationAttributes = @[@"identifier"];
+    [trackablesListMapping addAttributeMappingsFromDictionary:@{ @"_id" : @"identifier", @"name" : @"trackableName", @"description" : @"trackableDescription", @"creationDate" : @"creationDate", @"type" : @"type", @"privacy" : @"privacy", @"unlockCode" : @"unlockCode" }];
+
     
-    //[devicesListMapping addPropertyMapping:[RKRelationshipMapping relationshipMappingFromKeyPath:@"articles" toKeyPath:@"articles" withMapping:articleMapping]];
-    
-    RKResponseDescriptor *articleListResponseDescriptor =
+    RKResponseDescriptor *devicesListResponseDescriptor =
     [RKResponseDescriptor responseDescriptorWithMapping:devicesListMapping
                                                  method:RKRequestMethodGET
                                             pathPattern:@"/api/devices"
@@ -74,7 +75,16 @@
                                             statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)
      ];
     
-    [objectManager addResponseDescriptor:articleListResponseDescriptor];
+    RKResponseDescriptor *trackablesListResponseDescriptor =
+    [RKResponseDescriptor responseDescriptorWithMapping:trackablesListMapping
+                                                 method:RKRequestMethodGET
+                                            pathPattern:@"/api/trackables"
+                                                keyPath:nil
+                                            statusCodes:RKStatusCodeIndexSetForClass(RKStatusCodeClassSuccessful)
+     ];
+    
+    [objectManager addResponseDescriptor:devicesListResponseDescriptor];
+    [objectManager addResponseDescriptor:trackablesListResponseDescriptor];
     
     // Enable Activity Indicator Spinner
     [AFNetworkActivityIndicatorManager sharedManager].enabled = YES;

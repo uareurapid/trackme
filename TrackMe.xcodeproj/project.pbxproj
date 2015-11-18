@@ -12,8 +12,9 @@
 		720FC8A51BF54C2D003F3698 /* TrackmeModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A31BF54C2D003F3698 /* TrackmeModel.xcdatamodeld */; };
 		720FC8AA1BF54D9A003F3698 /* Device+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */; };
 		720FC8AB1BF54D9A003F3698 /* Device.m in Sources */ = {isa = PBXBuildFile; fileRef = 720FC8A91BF54D9A003F3698 /* Device.m */; };
+		72456F481BFBF4A000EFD84E /* Trackable+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 72456F471BFBF4A000EFD84E /* Trackable+CoreDataProperties.m */; };
+		72456F4B1BFBF54800EFD84E /* Trackable.m in Sources */ = {isa = PBXBuildFile; fileRef = 72456F4A1BFBF54800EFD84E /* Trackable.m */; };
 		725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070DC1BEE1FF90078EA82 /* NewTrackableController.m */; };
-		725070E11BEE20CB0078EA82 /* Trackable.m in Sources */ = {isa = PBXBuildFile; fileRef = 725070E01BEE20CB0078EA82 /* Trackable.m */; };
 		725610941B3362B800E52A42 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610931B3362B800E52A42 /* main.m */; };
 		725610971B3362B800E52A42 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 725610961B3362B800E52A42 /* AppDelegate.m */; };
 		7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7256109C1B3362B800E52A42 /* LoginViewController.m */; };
@@ -63,10 +64,12 @@
 		720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Device+CoreDataProperties.m"; sourceTree = "<group>"; };
 		720FC8A81BF54D9A003F3698 /* Device.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		720FC8A91BF54D9A003F3698 /* Device.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Device.m; sourceTree = "<group>"; };
+		72456F461BFBF4A000EFD84E /* Trackable+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Trackable+CoreDataProperties.h"; sourceTree = "<group>"; };
+		72456F471BFBF4A000EFD84E /* Trackable+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Trackable+CoreDataProperties.m"; sourceTree = "<group>"; };
+		72456F491BFBF54800EFD84E /* Trackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trackable.h; sourceTree = "<group>"; };
+		72456F4A1BFBF54800EFD84E /* Trackable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trackable.m; sourceTree = "<group>"; };
 		725070DB1BEE1FF90078EA82 /* NewTrackableController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewTrackableController.h; sourceTree = "<group>"; };
 		725070DC1BEE1FF90078EA82 /* NewTrackableController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewTrackableController.m; sourceTree = "<group>"; };
-		725070DF1BEE20CB0078EA82 /* Trackable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trackable.h; sourceTree = "<group>"; };
-		725070E01BEE20CB0078EA82 /* Trackable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Trackable.m; sourceTree = "<group>"; };
 		7256108E1B3362B800E52A42 /* TrackMe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TrackMe.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		725610921B3362B800E52A42 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		725610931B3362B800E52A42 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -149,16 +152,18 @@
 			children = (
 				720FC8A61BF54D9A003F3698 /* Device+CoreDataProperties.h */,
 				72F009391BF6AB5600575E8F /* ProfileTableViewCell.h */,
+				72456F491BFBF54800EFD84E /* Trackable.h */,
+				72456F4A1BFBF54800EFD84E /* Trackable.m */,
 				72F0093A1BF6AB5600575E8F /* ProfileTableViewCell.m */,
 				720FC8A71BF54D9A003F3698 /* Device+CoreDataProperties.m */,
 				720FC8A81BF54D9A003F3698 /* Device.h */,
 				720FC8A91BF54D9A003F3698 /* Device.m */,
-				725070DF1BEE20CB0078EA82 /* Trackable.h */,
-				725070E01BEE20CB0078EA82 /* Trackable.m */,
 				726205E11BF40E7B00FFD833 /* TrackableTableViewCell.h */,
 				720FC89E1BF50498003F3698 /* DeviceTableViewCell.h */,
 				720FC89F1BF50498003F3698 /* DeviceTableViewCell.m */,
 				726205E21BF40E7B00FFD833 /* TrackableTableViewCell.m */,
+				72456F461BFBF4A000EFD84E /* Trackable+CoreDataProperties.h */,
+				72456F471BFBF4A000EFD84E /* Trackable+CoreDataProperties.m */,
 			);
 			name = models;
 			sourceTree = "<group>";
@@ -439,6 +444,7 @@
 				726EAAF21BE98AFE0034134C /* SettingsViewController.m in Sources */,
 				720FC8A01BF50498003F3698 /* DeviceTableViewCell.m in Sources */,
 				72DB9F941BE81E3400DDEC75 /* MapViewController.m in Sources */,
+				72456F4B1BFBF54800EFD84E /* Trackable.m in Sources */,
 				725070DD1BEE1FF90078EA82 /* NewTrackableController.m in Sources */,
 				7256109D1B3362B800E52A42 /* LoginViewController.m in Sources */,
 				72F0093B1BF6AB5600575E8F /* ProfileTableViewCell.m in Sources */,
@@ -446,12 +452,12 @@
 				726EAAE31BE939C10034134C /* HomeViewController.m in Sources */,
 				726EAAD91BE935700034134C /* CustomAnimationController.m in Sources */,
 				726EAAF51BE98FFF0034134C /* ProfileViewController.m in Sources */,
+				72456F481BFBF4A000EFD84E /* Trackable+CoreDataProperties.m in Sources */,
 				726EAAD21BE9231E0034134C /* MenuViewController.m in Sources */,
 				720FC8A51BF54C2D003F3698 /* TrackmeModel.xcdatamodeld in Sources */,
 				726EAAEC1BE984D90034134C /* TrackablesViewController.m in Sources */,
 				725610941B3362B800E52A42 /* main.m in Sources */,
 				72D84D411BF1575600D6B77C /* NewDeviceController.m in Sources */,
-				725070E11BEE20CB0078EA82 /* Trackable.m in Sources */,
 				726205E31BF40E7B00FFD833 /* TrackableTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

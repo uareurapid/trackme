@@ -8,6 +8,7 @@
 
 #import "ProfileViewController.h"
 #import "SWRevealViewController.h"
+#import "LoginViewController.h"
 #import "ProfileTableViewCell.h"
 #import "Constants.h"
 
@@ -123,19 +124,30 @@
     
     if(status!=nil && message!=nil) {
         NSLog(@"received status code %@ for message: %@",status,message);
-        [self performSegueWithIdentifier:@"logout_segue" sender:nil];
+        
+        //pop to initial view controller
+        UIStoryboard* storyboard = [UIStoryboard storyboardWithName:@"MainStoryboard"
+                                                             bundle:nil];
+        LoginViewController *login = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+        
+        [self presentViewController:login animated:YES completion:nil];
     }
     
 }
 
 - (IBAction)btnLogoutClicked:(id)sender {
+    //initWithTitle:NSLocalizedString(@"new_group",@"new_group")
+   UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Logout" message: @"Are you sure?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"OK",nil];
+    alert.alertViewStyle = UIAlertViewStyleDefault;
+    
+    [alert show];
+    
+}
+
+-(void) performLogoutRequest {
     
     self.receivedData = [[NSMutableData alloc] init];
-    
-    
-    NSLog(@"TEST lgout");
-    
-    NSString *getString = [NSString stringWithFormat:  @"http://192.168.1.66:8080/rlogout"];
+    NSString *getString = [NSString stringWithFormat:  @"%@/rlogout",SERVER_LOCATION];
     
     // Note that the URL is the "action" URL parameter from the form.
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:getString]];
@@ -143,6 +155,16 @@
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                   delegate:self];
     [connection start];
+}
+
+//the delegate for the new Group
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if(buttonIndex==1) { //0 - cancel, 1 - save
+    
+        [self performLogoutRequest];
+    }
+    
 }
 
 #pragma mark - Table view data source
