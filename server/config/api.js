@@ -54,7 +54,7 @@ module.exports = function(apiRouter) {
         //only used if privacy protected
         var protectedCode = "";
         if(req.body.privacy=="Protected") {
-            //var ProfileController = require('../controllers/profile.js');
+            var ProfileController = require('../controllers/profile.js');
             protectedCode = ProfileController.generateUUID();
         }
 
