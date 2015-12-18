@@ -44,14 +44,18 @@
 
 -(void) loadDevices {
     
-    NSArray * fetchedObjects = [self fetchDevicesFromContext];
+    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
+    NSString *username = [defaults objectForKey:USERNAME_KEY];
+    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
+    
+    NSArray * fetchedObjects = [self fetchDevicesFromContext: username];
     //loaded more than one
     if(fetchedObjects.count>0) {
-        NSLog(@"adding from local store %d",fetchedObjects.count);
+        NSLog(@"adding %d devices from local store",fetchedObjects.count);
        [self addObjectsToTable: fetchedObjects];
     }
     else {
-        [self getDevicesList];
+        [self getDevicesListForUser: username andToken:token];
     }
     
 }
@@ -228,13 +232,10 @@
 
 #pragma mark - RESTKit
 
-- (void) getDevicesList {
+- (void) getDevicesListForUser: (NSString *) username andToken:(NSString*) token {
     
     NSString *requestPath = @"/api/devices";
     
-    NSUserDefaults *defaults=[NSUserDefaults standardUserDefaults];
-    NSString *username = [defaults objectForKey:USERNAME_KEY];
-    NSString *token = [defaults objectForKey:ACCESS_TOKEN];
     
     //Here is my custom header code
     RKObjectManager *objectManager = [RKObjectManager sharedManager];

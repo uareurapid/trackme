@@ -13,5 +13,6 @@
 @property (strong, nonatomic) NSMutableData *receivedData;
 @property (strong, nonatomic) NSMutableArray *devicesList;
 
--(NSArray *) fetchDevicesFromContext;
+- (NSArray *) fetchDevicesFromContext: (NSString*) username;
+- (void) getDevicesListForUser: (NSString *) username andToken:(NSString*) token;
 @end

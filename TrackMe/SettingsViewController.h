@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UIViewController
+@interface SettingsViewController : UIViewController<UIPickerViewDelegate,UIPickerViewDataSource>
 @property (nonatomic) IBOutlet UIBarButtonItem* revealButtonItem;
+@property (weak, nonatomic) IBOutlet UIPickerView *batchSizePicker;
+@property (weak, nonatomic) IBOutlet UIPickerView *updateIntervalPicker;
+
+
+
+
 @end

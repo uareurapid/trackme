@@ -26,6 +26,8 @@ CLLocationManager *locationManager;
 NSMutableArray *trackablesList;
 bool addedRecord = false;
 const NSString *server = @"192.168.1.66:8080";
+UIActivityIndicatorView *spinner;
+
 
 
 - (IBAction)loginClicked:(id)sender {
@@ -96,6 +98,11 @@ const NSString *server = @"192.168.1.66:8080";
     [request setHTTPBody:data];
     [request setValue:[NSString stringWithFormat:@"%lu", (unsigned long)[data length]] forHTTPHeaderField:@"Content-Length"];
     
+    [request setTimeoutInterval:20];
+    //error.code == NSURLErrorTimedOut
+    
+    [spinner startAnimating];
+    
     NSURLConnection *connection = [[NSURLConnection alloc] initWithRequest:request
                                                                   delegate:self];
     
@@ -140,7 +147,8 @@ const NSString *server = @"192.168.1.66:8080";
  if there is an error occured, this method will be called by connection
  */
 -(void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error{
-    
+    //error.code == NSURLErrorTimedOut
+    [spinner stopAnimating];
     NSLog(@"%@" , error);
 }
 
@@ -496,6 +504,10 @@ const NSString *server = @"192.168.1.66:8080";
     
     // Do any additional setup after loading the view, typically from a nib.
     locationManager = [[CLLocationManager alloc] init];
+    
+    spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    [spinner setCenter:CGPointMake(self.view.frame.size.width/2.0, self.view.frame.size.height/2.0)]; // I do this because I'm in landscape mode
+    [self.view addSubview:spinner]; // spinner is not visible until started
     
     self.txtPassword.delegate = self;
     self.txtUsername.delegate = self;

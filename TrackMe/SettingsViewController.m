@@ -9,8 +9,14 @@
 #import "SettingsViewController.h"
 #import "SWRevealViewController.h"
 
-@interface SettingsViewController ()
+#define PICKER_UPDATE_INTERVAL 0
+#define PICKER_BATCH_SIZE 1
 
+@interface SettingsViewController ()
+{
+NSArray *intervalPickerData;
+NSArray *batchPickerData;
+}
 @end
 
 @implementation SettingsViewController
@@ -37,6 +43,22 @@
 */
 - (void)customSetup
 {
+    
+    
+    // Initialize Data
+    intervalPickerData = @[@"1", @"2", @"3", @"4", @"5", @"6"];
+    // Initialize Data
+    batchPickerData = @[@"1", @"2", @"3", @"4", @"5", @"6"];
+    // Connect data:
+    self.batchSizePicker.delegate = self;
+    self.updateIntervalPicker.delegate = self;
+    
+    self.batchSizePicker.tag = PICKER_BATCH_SIZE;
+    self.updateIntervalPicker.tag = PICKER_UPDATE_INTERVAL;
+    
+    self.updateIntervalPicker.dataSource = self;
+    self.batchSizePicker.dataSource = self;
+    
     SWRevealViewController *revealViewController = self.revealViewController;
     if ( revealViewController )
     {
@@ -48,6 +70,32 @@
     //_label.text = _text;
     //_label.textColor = _color;
 }
+
+#pragma pickerview delegate
+// The number of columns of data
+- (int)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+{
+    return 1;
+}
+
+// The number of rows of data
+- (int)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+{
+    if(pickerView.tag == PICKER_BATCH_SIZE) {
+        return batchPickerData.count;
+    }
+    return intervalPickerData.count;
+}
+
+// The data to return for the row and component (column) that's being passed in
+- (NSString*)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
+{
+    if(pickerView.tag == PICKER_BATCH_SIZE) {
+        return batchPickerData[row];
+    }
+    return intervalPickerData[row];
+}
+
 
 #pragma mark state preservation / restoration
 
