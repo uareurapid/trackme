@@ -10,7 +10,7 @@
 #define Constants_h
 
 #define USERNAME_KEY @"trackme_username"
-#define SERVER_LOCATION @"http://192.168.1.65:8080"
+#define SERVER_LOCATION @"http://trackme.no-ip.net:8080"
 #define SERVICE_KEY @"trackme_service"
 
 #define API_ADD_TRACKABLE @"/api/trackables"

@@ -25,7 +25,7 @@ bool deviceAlreadyAdded = false;
 CLLocationManager *locationManager;
 NSMutableArray *trackablesList;
 bool addedRecord = false;
-const NSString *server = @"192.168.1.66:8080";
+const NSString *server = @"trackme.no-ip.net:8080";
 UIActivityIndicatorView *spinner;
 
 
