@@ -70,6 +70,12 @@ var apiRouter = express.Router();
 //-----------------------------------------------
 apiRouter.use(function(req, res, next) {
 
+
+  var url = require('url');
+  var url_parts = url.parse(req.url, true);
+  var query = url_parts.query;
+  console.log("FULL REQUEST: " + JSON.stringify(query));
+
   console.log("checking tokens and all that stuff");
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.cookies.token;
@@ -104,7 +110,7 @@ apiRouter.use(function(req, res, next) {
   // decode token
   if (token) {
 
-    console.log("i have the token: " + token);
+    console.log("TOKEN received: " + token);
     // verifies secret and checks exp
     jwt.verify(token, app.get('superSecret'), function(err, decoded) {
       if (err) {

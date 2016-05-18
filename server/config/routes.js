@@ -100,15 +100,15 @@ module.exports = function(app, passport) {
     //remote login only
     app.post('/rlogin', function(req, res, next) {
 
-        console.log("rlogin called");
+        console.log("rlogin was called");
         //var ProfileController = require('../controllers/profile.js');
         ProfileController.remoteLogin(req,res,next,passport);
 
     });
 
-    app.post('/rSIGNUP', function(req, res, next) {
+    app.post('/rsignup', function(req, res, next) {
 
-        console.log("RSIGNUP called");
+        console.log("rsignup called");
         //var ProfileController = require('../controllers/profile.js');
         ProfileController.remoteSignup(req,res,next,passport);
 

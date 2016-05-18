@@ -14,15 +14,34 @@ module.exports = function(apiRouter) {
     // get all trackables
     apiRouter.get('/trackables', function(req, res) {
 
-
         var expression = null;
+
+        //***** get the query params ********
+        var url = require('url');
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+        //***********************************
+
         if(req.owner) {
 
             console.log("filter trackables by owner: " + req.owner);
-            expression = {
-                owner : req.owner
-            };
+
+            if(query.trackable_id) {
+                expression = {
+                    owner : req.owner,
+                    _id : query.trackable_id
+
+                };
+                console.log("also filter by id: " + query.trackable_id);
+            }
+            else {
+                expression = {
+                    owner : req.owner
+                };
+            }
+
         }
+
         if(expression!=null) {
             var query = Trackable.find(expression);
             query.exec(function (err, trackables) {
@@ -59,6 +78,11 @@ module.exports = function(apiRouter) {
         }
 
         console.log("received: " + JSON.stringify(req.body));
+
+        if(!req.body.owner) {
+            console.log("trackable owner is missing...");
+            res.json(400, {err: 'Bad request!'});
+        }
         //Return the number of milliseconds since 1970/01/01:
         var timeOfCreation = new Date().getTime();
         // create a device, information comes from AJAX request from Angular
@@ -79,6 +103,7 @@ module.exports = function(apiRouter) {
                 res.send(err);
             }
             else {
+                console.log("trackable created successfully");
                 //send the trackable json
                 res.json(trackable);
             }
@@ -223,7 +248,7 @@ module.exports = function(apiRouter) {
 
             console.log("filter devices by owner: " + req.owner);
             expression = {
-                deviceOwner : req.owner
+                owner : req.owner
             };
         }
 
@@ -237,16 +262,6 @@ module.exports = function(apiRouter) {
             });
         }
         else {
-            //TODO NOT POSSIBLE!!!
-            // use mongoose to get all todos in the database
-            //Device.find(function(err, devices) {
-
-                // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-            //    if (err)
-            //        res.send(err)
-
-            //    res.json(devices); // return all devices in JSON format
-            //});
             res.json(400, {err: 'Bad request!'});
         }
 
@@ -272,20 +287,23 @@ module.exports = function(apiRouter) {
     // create device and send back all todos after creation
     apiRouter.post('/devices', function(req, res) {
 
+        console.log("received id: "+ req.body.deviceId + " description: " + req.body.deviceDescription + " owner: " + req.owner);
         // create a device, information comes from AJAX request from Angular
         Device.create({
 
             deviceId: req.body.deviceId,
             description: req.body.deviceDescription,
-            owner: req.body.owner,
+            owner: req.owner,
             done : false
         }, function(err, device) {
             if (err) {
+                console.log("error adding device: " + err);
                 res.send(err);
             }
             else {
+                console.log("success adding device");
                 //send the newly added device as the API response
-                res.send(device);
+                res.json(device);
             }
 
         });

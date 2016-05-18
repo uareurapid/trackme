@@ -12,6 +12,9 @@ ProfileController.remoteLogin = function(req,res,next,passport){
     var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
     var conf = require('../config/config');
 
+    console.log("user: " + req.body.email);
+    console.log("pass: " + req.body.password);
+
     passport.authenticate('local-login', function(err, user, info) {
         if (err) {
             return res.status(500).json({err: err});
@@ -47,6 +50,8 @@ ProfileController.remoteSignup = function(req,res,next,passport){
         var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
         var conf = require('../config/config');
         var User = require('../models/user');
+
+
         //**********
         User.create({
             username: req.body.email,
