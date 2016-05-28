@@ -190,15 +190,17 @@ module.exports = function(apiRouter) {
     // create device and send back all todos after creation
     apiRouter.post('/records', function(req, res) {
 
-        console.log("latitude: "+req.body.longitude);
+        //these are optional params
+        var recName = req.body.name || 'no_name';
+        var recDescription = req.body.description || 'no_description';
+
         //Return the number of milliseconds since 1970/01/01:
         var timeOfRecord = new Date().getTime();
         // create a record, information comes from AJAX request from Angular
         Record.create({
 
-
-            name: req.body.name,
-            description: req.body.description,
+            name: recName,
+            description: recDescription,
             latitude: req.body.latitude,
             longitude : req.body.longitude,
             time: timeOfRecord,
@@ -211,10 +213,12 @@ module.exports = function(apiRouter) {
 
             // get and return all the records after you create another
             Record.find(function(err, records) {
-                if (err)
-                    res.send(err)
+                if (err) {
+                    console.log("error adding record: " + err);
+                    res.send(err);
+                }
                 res.json(records);
-            })
+            });
         });
 
     });
@@ -286,8 +290,7 @@ module.exports = function(apiRouter) {
 
     // create device and send back all todos after creation
     apiRouter.post('/devices', function(req, res) {
-
-        console.log("received id: "+ req.body.deviceId + " description: " + req.body.deviceDescription + " owner: " + req.owner);
+        
         // create a device, information comes from AJAX request from Angular
         Device.create({
 
