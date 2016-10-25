@@ -290,7 +290,7 @@ module.exports = function(apiRouter) {
 
     // create device and send back all todos after creation
     apiRouter.post('/devices', function(req, res) {
-        
+
         // create a device, information comes from AJAX request from Angular
         Device.create({
 
