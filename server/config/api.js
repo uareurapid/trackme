@@ -187,6 +187,7 @@ module.exports = function(apiRouter) {
 
     });
 
+    //latitude=39.6463779&longitude=-8.8170089&trackableId=563e26b780ff708e0b8cbe9c&deviceId=undefined
     // create device and send back all todos after creation
     apiRouter.post('/records', function(req, res) {
 
@@ -208,17 +209,22 @@ module.exports = function(apiRouter) {
             deviceId: req.body.deviceId,
             done: false
         }, function(err, record) {
-            if (err)
+            if (err) {
                 res.send(err);
+            }
+            else {
+                //send the record back
+                res.json(record);
+            }
 
             // get and return all the records after you create another
-            Record.find(function(err, records) {
-                if (err) {
-                    console.log("error adding record: " + err);
-                    res.send(err);
-                }
-                res.json(records);
-            });
+            //Record.find(function(err, records) {
+            //    if (err) {
+            //        console.log("error adding record: " + err);
+            //        res.send(err);
+            //    }
+            //    res.json(records);
+            //});
         });
 
     });
