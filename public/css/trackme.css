@@ -58,3 +58,13 @@
 .visible {
     visibility: visible;
 }
+
+input[type="radio"]{
+    vertical-align: baseline;
+    margin-right: 5px;
+}
+
+.radio_label {
+    /*margin-left: 3px;
+    padding-left: 3px;*/
+}
