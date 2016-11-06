@@ -266,6 +266,20 @@
                     <div id="collapse6" class="panel-collapse collapse">
                         <div class="panel-body">
 
+                            <div class="boxed-group dangerzone">
+                                <h3>Danger Zone</h3>
+                                <div class="boxed-group-inner">
+                                    <button type="button" class="btn btn-danger boxed-action" ng-click="removeAllTrackables()">Remove All</button>
+                                    <h4>Trackables:</h4>
+                                    <hr/>
+                                    <button type="button" class="btn btn-danger boxed-action" ng-click="removeAllDevices()">Remove All</button>
+                                    <h4>Devices:</h4>
+                                    <hr/>
+                                    <button type="button" class="btn btn-danger boxed-action">Remove All</button>
+                                    <h4>Records:</h4>
+                                </div>
+                            </div>
+
                             <!-- modal code here-->
                             <div ng-controller="RecordsController">
                                 <div class="checkbox" ng-repeat="rec in records">
@@ -274,6 +288,9 @@
                                 </div>
                             </div>
                             <!-- end modal -->
+
+
+
 
                         </div>
                     </div>

@@ -20,7 +20,7 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
                 console.log("device owner: " + data.username);
                 //assign the username to the scope var
                 $scope.formData.owner = data.username;
-                successCallback();
+                successCallback(data.username);
 
             })
             .error(function (data) {
@@ -84,6 +84,33 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+    };
+
+    // delete a trackable after checking it
+    $scope.removeAllDevices = function() {
+
+        $scope.getDeviceOwner(function(username) {
+                //success
+
+                console.log("try delete all devices for " + username);
+
+                $http.delete('/api/devices/delete/all/' + username)
+                    .success(function(data) {
+                        console.log("received " + JSON.stringify(data));
+                    })
+                    .error(function(error) {
+                        console.log("received error" + JSON.stringify(error));
+                    });
+
+
+            },
+            function() {
+                //error callback
+                console.log("error here:");
+
+            }
+        );
+
     };
 
 });

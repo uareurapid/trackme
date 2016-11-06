@@ -36,12 +36,13 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
                 console.log("trackable owner: " + data.username);
                 //assign the username to the scope var
                 $scope.formTrackablesData.owner = data.username;
-                successCallback();
+                successCallback(data.username);
 
             })
             .error(function (data) {
                 console.log('Error: ' + data);
             });
+
     };
 
     //TODO FOR FORM VALIDATION HOWTO CHECK:
@@ -110,6 +111,30 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             .error(function(data) {
                 console.log('Error: ' + data);
             });
+    };
+
+    // delete a trackable after checking it
+    $scope.removeAllTrackables = function() {
+
+        $scope.getTrackableOwner(function(username) {
+            //success
+
+                $http.delete('/api/trackables/delete/all/' + username)
+                    .success(function(data) {
+                        console.log("received " + JSON.stringify(data));
+                    })
+                    .error(function(error) {
+                        console.log("received error" + JSON.stringify(error));
+                    });
+
+
+        },
+        function() {
+            //error callback
+
+        }
+        );
+
     };
 
 });

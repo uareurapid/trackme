@@ -68,3 +68,114 @@ input[type="radio"]{
     /*margin-left: 3px;
     padding-left: 3px;*/
 }
+
+/* from github danger zone */
+.boxed-group {
+    position: relative;
+    margin-bottom: 30px;
+    border-radius: 3px;
+}
+
+.boxed-group>h3, .boxed-group .heading {
+    display: block;
+    padding: 9px 10px 10px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    background-color: #f5f5f5;
+    border: 1px solid #d8d8d8;
+    border-bottom: 0;
+    border-radius: 3px 3px 0 0;
+}
+
+.boxed-group.dangerzone>h3 {
+    color: #fff;
+    text-shadow: 0 -1px 0 #900;
+    background-color: #df3e3e;
+    border: 1px solid #a00;
+}
+
+.boxed-group-inner {
+    padding: 10px;
+    color: #666;
+    background: #fff;
+    border: 1px solid #d8d8d8;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+/** end boxed zone */
+
+/** buttons from github danger zone */
+.btn {
+    position: relative;
+    display: inline-block;
+    padding: 3px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 20px;
+    color: #333;
+    white-space: nowrap;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #eee;
+    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
+    background-image: linear-gradient(#fcfcfc, #eee);
+    border: 1px solid #d5d5d5;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+button {
+    cursor: pointer;
+}
+input, select, textarea, button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+}
+button, select {
+    text-transform: none;
+}
+button, input {
+    overflow: visible;
+}
+
+.btn-danger:disabled, .btn-danger:disabled:hover, .btn-danger.disabled, .btn-danger.disabled:hover {
+    color: #cc8888;
+    background-color: #efefef;
+    background-image: -webkit-linear-gradient(#fefefe, #efefef);
+    background-image: linear-gradient(#fefefe, #efefef);
+    border-color: #e1e1e1;
+}
+.btn:disabled, .btn:disabled:hover, .btn.disabled, .btn.disabled:hover {
+    color: rgba(102,102,102,0.5);
+    cursor: default;
+    background-color: rgba(229,229,229,0.5);
+    background-image: none;
+    border-color: rgba(197,197,197,0.5);
+    box-shadow: none;
+}
+button, html [type="button"], [type="reset"], [type="submit"] {
+    -webkit-appearance: button;
+}
+.boxed-action {
+    float: right;
+    margin-left: 10px;
+}
+.btn-danger {
+    color: #911;
+}
+
+.btn-danger:hover {
+color: #ec5757;
+}
+/*h1, h2, h3, h4, h5, h6*/
+h4 {
+    margin-top: 0;
+    margin-bottom: 0;
+}

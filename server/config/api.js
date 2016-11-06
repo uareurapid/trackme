@@ -129,6 +129,29 @@ module.exports = function(apiRouter) {
         });
     });
 
+    //TODO protect the class, must be issued by same user email
+    // delete all trackables
+    apiRouter.delete('/trackables/delete/all/:owner_id', function(req, res) {
+        console.log("try to remove all of + " + req.params.owner_id);
+        Trackable.remove({
+            owner : req.params.owner_id
+        }, function(err, trackable) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.json(200, {msg: 'Successfully removed trackables!'});
+            }
+
+            // get and return all the trackables after you create another
+            //Trackable.find(function(err, trackables) {
+            //    if (err)
+            //        res.send(err)
+            //    res.json(trackables);
+            //});
+        });
+    });
+
     //---------------------------------------------------------------------
     // Email API
     apiRouter.get('/sendmail', function(req,res) {
@@ -246,6 +269,51 @@ module.exports = function(apiRouter) {
         });
     });
 
+    //for admin ONLY TODO put separated place
+    var deleteAllRecords = function() {
+        console.log("try remove all records from DB: ");
+        Record.remove({}, function(err, records) {
+            if (err) {
+                console.log("unable to deltem all" + err);
+            }
+            else {
+                console.log('Successfully removed all records from DB');
+            }
+        });
+    };
+
+    var deleteAllDeviceRecords = function(deviceId) {
+        console.log("try to remove all records of device " + deviceId);
+        Record.remove({
+            deviceId : deviceId
+        }, function(err, record) {
+            if (err) {
+                console.log.send(err);
+            }
+            else {
+                console.log('Successfully removed record!' + record);
+            }
+
+        });
+    };
+
+    //TODO protect check that the dwvice owner is the same doing the call
+    // delete all records of a device
+    apiRouter.delete('/records/delete/all/:device_id', function(req, res) {
+        console.log("try to remove all records of + " + req.params.device_id);
+        Record.remove({
+            deviceId : req.params.device_id
+        }, function(err, record) {
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.json(200, {msg: 'Successfully removed all records of ' + req.params.device_id});
+            }
+
+        });
+    });
+
     //----------------------------------------------------
     //================DEVICES================================
 
@@ -319,6 +387,37 @@ module.exports = function(apiRouter) {
 
     });
 
+    var deleteDevice = function(deviceId) {
+        console.log("try remove device: " + deviceId);
+        Device.remove({
+            deviceId : deviceId
+        }, function(err, device) {
+            if (err) {
+                console.log(err);
+                return false;
+            }
+            else {
+                console.log('Successfully removed device' + device);
+                return true;
+            }
+        });
+    };
+
+    //for admin ONLY TODO put separated place
+    var deleteAllDevices = function() {
+        console.log("try remove all devices from DB: ");
+        Device.remove({}, function(err, devices) {
+            if (err) {
+                console.log("unable to deltem all" + err);
+            }
+            else {
+                console.log('Successfully removed all devices from DB');
+            }
+        });
+    };
+
+
+
     // delete a device
     apiRouter.delete('/devices/:device_id', function(req, res) {
         Device.remove({
@@ -334,6 +433,41 @@ module.exports = function(apiRouter) {
                 res.json(devices);
             });
         });
+    });
+
+    // delete all devices (will also delete all records of that device
+    apiRouter.delete('/devices/delete/all/:owner_id', function(req, res) {
+        console.log("try to remove all devices of + " + req.params.owner_id);
+
+        //find all devices by this user
+        var query = Device.find({owner:req.params.owner_id });
+        query.exec(function (err, devices) {
+            if (err) {
+                res.send(err);
+            }
+
+            console.log("found " + devices.length + " devices");
+            for(var i=0; i < devices.length; i++) {
+                var deviceId = devices.deviceId;
+                if(deviceId) {
+                    //remove the device by id
+                    if(deleteDevice(deviceId)) {
+                        //remove all records of this device
+                        deleteAllDeviceRecords(deviceId);
+                    }
+                    else {
+                        //something went wrong, could not delete the device
+                        res.send(err);
+                    }
+
+                }
+
+            }
+            res.json(200, {msg: 'Successfully removed devices!'});
+        });
+
+
+
     });
     //--------------------------------------------------------
 
