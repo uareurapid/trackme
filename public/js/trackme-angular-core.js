@@ -46,7 +46,7 @@ trackme.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 
-trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
+trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$interval,$window) {
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
@@ -57,6 +57,13 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
     $scope.mapMarkers = [];
     //will hold the lines between records
     $scope.polylines = [];
+
+    //filtering applyied to the map
+    $scope.trackableFilter = "Show all";
+    $scope.deviceFilter = "Show all";
+
+    //a promise to update the map every 1 minute
+    $scope.intervalUpdatePromise = undefined;
 
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
@@ -93,7 +100,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
         var newstyle = {
          'opacity': '0.75'
-        }
+        };
 
         var marker = {
             latitude: lat,
@@ -139,6 +146,103 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
         return;
     };
 
+    //##################### FILTERING CHANGED  -> REBUILD MAP ####################################
+
+    //will force reload of the map every 1 minute
+    $scope.updateMapPeriodically = function() {
+        console.log("FORCED MAP UPDATE");
+        $scope.deviceChanged(null);
+    };
+
+    //stop periodic updates
+    $scope.stopMapUpdates = function() {
+        if (angular.isDefined($scope.intervalUpdatePromise)) {
+            $interval.cancel($scope.intervalUpdatePromise);
+            $scope.intervalUpdatePromise = undefined;
+        }
+    };
+
+    if (!angular.isDefined($scope.intervalUpdatePromise)) {
+        $scope.intervalUpdatePromise = $interval($scope.updateMapPeriodically,60*1000);
+    }
+
+
+    //########################## ADD MARKERS TO THE MAP ######################
+    //add the records on the map, add polylines and markers
+    var addPositionsOnMap = function(data) {
+
+        //clear markers
+        var markers = [];
+        //polylines
+        $scope.polylines = [];
+
+        //TODO, this is wrong the line should be always between records of same trackable (even if from different devices?)
+        //TODO and the values should be returned in order/date no?? otherwise the lines are not correct
+        var previous = 0;
+        var current = 0;
+        var currentTrackableId = "";
+        var previousTrackableId = "";
+
+        for(var i=0; i< data.length; i++) {
+
+            if(i > 0) {
+                previous = i-1;
+                previousTrackableId = data[previous].trackableId;
+            }
+            current = i;
+            currentTrackableId = data[current].trackableId;
+
+            var latitude = data[i].latitude;
+            var longitude = data[i].longitude;
+            markers.push(createRecordMarker(i,latitude, longitude, $scope.map.bounds));
+
+            current = i;
+
+
+            if( (current!=previous && current > previous) && (previousTrackableId===currentTrackableId) ) {
+                //run the loop again BAD!!!
+                console.log("ADDING A POLYLINE!!!!!");
+
+                var element = {
+                    id: i,
+                    path: [
+                        {
+                            latitude: data[previous].latitude,
+                            longitude: data[previous].longitude
+                        },
+                        {
+                            latitude: data[current].latitude,
+                            longitude: data[current].longitude
+                        }
+                    ],
+
+                    stroke: {
+                        color: '#6060FB',
+                        weight: 3
+                    },
+                    editable: false,
+                    draggable: false,
+                    geodesic: true,
+                    visible: true,
+                    icons: [{
+                        icon: {
+                            path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                        },
+                        offset: '25px',
+                        repeat: '50px'
+                    }]
+                };
+
+                $scope.polylines.push(element);
+
+            }
+        }
+
+        $scope.refreshMap(markers);
+    };
+
+    //#######################################################################
+
     $scope.deviceChanged = function(deviceFilter) {
 
         var path = "/api/records";
@@ -149,6 +253,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
         else {
             path = path + "?device_id=" + deviceFilter;
         }
+
+        $scope.deviceFilter = deviceFilter;
         console.log("device changed to: " + deviceFilter);
 
         //clear markers
@@ -157,13 +263,15 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
             .success(function(data) {
                 $scope.records = data;
                 console.log("received" + JSON.stringify(data));
-                for(var i=0; i< data.length; i++) {
+
+                addPositionsOnMap(data);
+                /*for(var i=0; i< data.length; i++) {
 
                     var latitude = data[i].latitude;
                     var longitude = data[i].longitude;
                     markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
                 }
-                $scope.refreshMap(markers);
+                $scope.refreshMap(markers);*/
             })
             .error(function(data) {
                 console.log('Error: ' + data);
@@ -181,6 +289,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
         else {
             path = path + "?trackable_id=" + trackableFilter;
         }
+        $scope.trackableFilter = trackableFilter;
         console.log("trackable changed to: " + trackableFilter);
 
         //clear markers
@@ -190,14 +299,16 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
                 $scope.records = data;
                 console.log("received" + JSON.stringify(data));
 
-                for(var i=0; i< data.length; i++) {
+                addPositionsOnMap(data);
+
+                /*for(var i=0; i< data.length; i++) {
 
                     var latitude = data[i].latitude;
                     var longitude = data[i].longitude;
                     markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
                 }
 
-                $scope.refreshMap(markers);
+                $scope.refreshMap(markers);*/
             })
             .error(function(data) {
                 console.log('Error: ' + data);
@@ -205,10 +316,18 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
     };
 
+    //###################################################################################
 
+    // ON EXIT STUFF
 
-    
+    $window.onbeforeunload =  $scope.onExit;
+    $scope.onExit = function() {
+        $scope.stopMapUpdates();
+        console.log("exiting");
+        return ('bye bye');
+    };
 
+    //############################################
 
     //TODO make sure we have values on everything!!!!! makes the map unresponsive
 
@@ -232,6 +351,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
                     //TODO, this is wrong the line should be always between records of same trackable (even if from different devices?)
                     //TODO and the values should be returned in order/date no?? otherwise the lines are not correct
+                    /**
                     var previous = 0;
                     var current = 0;
                     var currentTrackableId = "";
@@ -289,11 +409,11 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi) {
 
                         }
 
-                    }
+                    }*/
 
 
-
-
+                    //add the records on the map, add polylines and markers
+                    addPositionsOnMap(data);
 
 
 

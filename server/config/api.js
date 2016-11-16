@@ -437,7 +437,7 @@ module.exports = function(apiRouter) {
 
     // delete all devices (will also delete all records of that device
     apiRouter.delete('/devices/delete/all/:owner_id', function(req, res) {
-        console.log("try to remove all devices of + " + req.params.owner_id);
+        console.log("try to remove all devices of " + req.params.owner_id);
 
         //find all devices by this user
         var query = Device.find({owner:req.params.owner_id });
@@ -448,22 +448,19 @@ module.exports = function(apiRouter) {
 
             console.log("found " + devices.length + " devices");
             for(var i=0; i < devices.length; i++) {
-                var deviceId = devices.deviceId;
+                var deviceId = devices[i].deviceId;
+                var id = devices[i]._id;//DB id
                 if(deviceId) {
                     //remove the device by id
                     if(deleteDevice(deviceId)) {
                         //remove all records of this device
-                        deleteAllDeviceRecords(deviceId);
+                        deleteAllDeviceRecords(id);
                     }
-                    else {
-                        //something went wrong, could not delete the device
-                        res.send(err);
-                    }
-
                 }
 
             }
-            res.json(200, {msg: 'Successfully removed devices!'});
+            //express deprecated res.json(status, obj): Use res.status(status).json(obj)
+            res.status(200).json({msg: 'Successfully removed devices!'});
         });
 
 
