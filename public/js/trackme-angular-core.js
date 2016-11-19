@@ -14,28 +14,23 @@
 // A module in AngularJS is a place where you can collect and organize
 // components like controllers, services, directives, and filters
 
-var trackme = angular.module('trackme', ['uiGmapgoogle-maps','ngCookies']);
+var trackme = angular.module('trackme', ['uiGmapgoogle-maps','ngCookies','angular-popover']);
 
-/**
- * A service can be used to share data between controllers
-trackme.service('sharedProperties', function () {
-    var property = 'First';
+//Define the same constants that we have server side
+trackme.value('CONSTANTS',{
+                PROTECTED_PATH: "protected",
+                PUBLIC_PATH: "opened",//trackables that are public to anyone
+                QUERY_STRING: {
+                    UNLOCK_CODE: "unlock_code",
+                    TRACKABLE_ID: "tid"
+                }
+            });
 
-    return {
-        getProperty: function () {
-            return property;
-        },
-        setProperty: function(value) {
-            property = value;
-        }
-    };
 
-    //use it in a controller
-    function Ctrl2($scope, sharedProperties) {
-    $scope.prop2 = "Second";
-    $scope.both = sharedProperties.getProperty() + $scope.prop2;
-}
-});*/
+
+//var url = require('url');
+//var url_parts = url.parse(req.url, true);
+//var query = url_parts.query;
 
 
 trackme.config(function(uiGmapGoogleMapApiProvider) {
@@ -46,13 +41,31 @@ trackme.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 
-trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$interval,$window) {
+trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$interval,$window,$location, CONSTANTS) {
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
 
     //$scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
+
+    //---------------------- PARSE URL PARAMETERS ------------------------------
+    var parseUrlParameters = function(paramName) {
+        paramName = paramName.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+        var regex = new RegExp('[\\?&]' + paramName + '=([^&#]*)');
+        var results = regex.exec(location.search);
+        return results === null ? null : decodeURIComponent(results[1].replace(/\+/g, ' '));
+    };
+
+
+    //do i have parameters for an unprotected route??
+    var tid = parseUrlParameters(CONSTANTS.QUERY_STRING.TRACKABLE_ID);
+    var unlock_code = parseUrlParameters(CONSTANTS.QUERY_STRING.UNLOCK_CODE);
+
+    var hasProtectedParams = (tid!==null && unlock_code!==null);
+    var hasPublicParams = tid!==null;
+    //-------------------------------------------------------------------------
+    
     //will hold the map markers
     $scope.mapMarkers = [];
     //will hold the lines between records
@@ -139,7 +152,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
         $scope.mapMarkers.push(createRecordMarker(1,32.779680, -79.935493, $scope.map.bounds));  
 
-        console.log("refreshing map for device/trackable change....");
+        console.log("refreshing map....");
         //optional param if you want to refresh you can pass null undefined or false or empty arg
         $scope.map.control.refresh($scope.map.center);//{latitude: 32.779680, longitude: -79.935493}
         $scope.map.control.getGMap().setZoom($scope.map.zoom);
@@ -265,19 +278,14 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                 console.log("received" + JSON.stringify(data));
 
                 addPositionsOnMap(data);
-                /*for(var i=0; i< data.length; i++) {
 
-                    var latitude = data[i].latitude;
-                    var longitude = data[i].longitude;
-                    markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
-                }
-                $scope.refreshMap(markers);*/
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
 
     };
+
 
     $scope.trackableChanged = function(trackableFilter) {
 
@@ -301,14 +309,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
                 addPositionsOnMap(data);
 
-                /*for(var i=0; i< data.length; i++) {
-
-                    var latitude = data[i].latitude;
-                    var longitude = data[i].longitude;
-                    markers.push(createRecordMarker(i, latitude, longitude, $scope.map.bounds));
-                }
-
-                $scope.refreshMap(markers);*/
             })
             .error(function(data) {
                 console.log('Error: ' + data);
@@ -337,7 +337,22 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         return $scope.map.bounds;
     }, function(nv, ov) {
 
-        console.log("generating new map...");
+        //TODO check: localhost:8080/protected?tid=582cd8ba7f5c845943765a46&unlock_code=ffd34d9d-5b42-494f-83a8-19b536d1bfb9
+
+        var apiRoute = null;
+
+        if(hasProtectedParams) {
+            //unprotected route, relies on params (tid && unlock_code mandatory)
+            apiRoute = '/trackable_records?tid='+tid+"&unlock_code="+unlock_code;
+        }
+        else if(hasPublicParams) {
+            //just tid is mandatory
+            apiRoute = '/trackable_records?tid='+tid;
+        }
+        else {
+            //normal protected route
+            apiRoute = '/api/records';
+        }
 
         // Only need to regenerate once
         if (!ov.southwest && nv.southwest) {
@@ -345,71 +360,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
             $scope.polylines = [];
             // when landing on the page, get all todos and show them
-            $http.get('/api/records')
+            $http.get(apiRoute)
                 .success(function(data) {
                     console.log("records: " + JSON.stringify(data));
-
-                    //TODO, this is wrong the line should be always between records of same trackable (even if from different devices?)
-                    //TODO and the values should be returned in order/date no?? otherwise the lines are not correct
-                    /**
-                    var previous = 0;
-                    var current = 0;
-                    var currentTrackableId = "";
-                    var previousTrackableId = "";
-                    for(var i=0; i< data.length; i++) {
-
-                        if(i > 0) {
-                            previous = i-1;
-                            previousTrackableId = data[previous].trackableId;
-                        }
-                        current = i;
-                        currentTrackableId = data[current].trackableId;
-
-                        var latitude = data[i].latitude;
-                        var longitude = data[i].longitude;
-                        markers.push(createRecordMarker(i,latitude, longitude, $scope.map.bounds));
-
-                        current = i;
-
-
-                        if( (current!=previous && current > previous) && (previousTrackableId===currentTrackableId) ) {
-                            //run the loop again BAD!!!
-                            console.log("ADDING A POLYLINE!!!!!");
-                            $scope.polylines  = [
-                                {
-                                    id: i,
-                                    path: [
-                                            {
-                                                latitude: data[previous].latitude,
-                                                longitude: data[previous].longitude
-                                            },
-                                            {
-                                                latitude: data[current].latitude,
-                                                longitude: data[current].longitude
-                                            }
-                                        ],
-
-                                    stroke: {
-                                        color: '#6060FB',
-                                        weight: 3
-                                    },
-                                    editable: false,
-                                    draggable: false,
-                                    geodesic: true,
-                                    visible: true,
-                                    icons: [{
-                                        icon: {
-                                            path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
-                                        },
-                                        offset: '25px',
-                                        repeat: '50px'
-                                    }]
-                                }
-                            ];
-
-                        }
-
-                    }*/
 
 
                     //add the records on the map, add polylines and markers

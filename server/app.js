@@ -15,6 +15,8 @@ var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config/config');
 app.set('superSecret', config.secret); // secret variable
 
+var CONSTANTS = require('./config/constants');
+
 mongoose.connect(db.url);
 
 // use morgan to log requests to the console
@@ -47,6 +49,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 //==============================================================================
 // Configure normal routes (un-protected)
 //======================================================================
+//TODO the public routes should be here
 require('./config/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
 
@@ -64,6 +67,7 @@ require('./config/routes.js')(app, passport); // load our routes and pass in our
 var apiRouter = express.Router();
 // get an instance of the express Router
 
+
 //-----------------------------------------------
 // middleware to use for all requests
 // route middleware to verify a token
@@ -74,9 +78,24 @@ apiRouter.use(function(req, res, next) {
   var url = require('url');
   var url_parts = url.parse(req.url, true);
   var query = url_parts.query;
-  console.log("FULL REQUEST: " + JSON.stringify(query));
+  console.log("FULL REQUEST: " + JSON.stringify(query) + " req.originalUrl: " + req.originalUrl + " : " + CONSTANTS.PROTECTED_PATH);
 
-  console.log("checking tokens and all that stuff");
+  if(req.originalUrl.indexOf(CONSTANTS.PUBLIC_PATH)>-1) {
+    console.log("authorize public path request: ");
+    next();
+    return;
+  }
+  //request for a protected trackable?
+  if(req.originalUrl.indexOf(CONSTANTS.PROTECTED_PATH)>-1) {
+
+      if(query[CONSTANTS.QUERY_STRING.UNLOCK_CODE]) {
+        console.log("authorize protected code request: ");
+        next();
+        return;
+      }
+  }
+
+  console.log("PRIVATE STUFF....checking tokens and all that stuff");
   // check header or url parameters or post parameters for token
   var token = req.body.token || req.query.token || req.cookies.token;
 
@@ -152,6 +171,12 @@ require('./config/api.js')(apiRouter);
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
 app.use('/api', apiRouter);
+
+//protected route for protected trackables
+//app.use('/protected',apiRouter);
+
+//public trackables, accessible to anyone who knows the id, TODO good idea??
+//app.use('/opened',apiRouter);
 
 /*
 apiRouter.use('xpto',function (req, res, next) {

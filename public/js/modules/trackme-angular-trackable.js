@@ -26,6 +26,9 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
         console.log("privacy changed to: " + $scope.formTrackablesData.privacy);
     };
 
+    $scope.selectedTrackable = "Show all";
+    //actually the trackbale object
+    $scope.trackable = undefined;
 
     //############ GET THE TRACKABLE OWNER #####################################
     $scope.getTrackableOwner = function(successCallback, errorCallback) {
@@ -48,8 +51,85 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     //TODO FOR FORM VALIDATION HOWTO CHECK:
     //https://scotch.io/tutorials/angularjs-form-validation
 
-    $scope.selectedTrackable = "Show all";
+    $scope.canShowDetails = function(selection) {
+        $scope.selectedTrackable = selection;
+        return $scope.selectedTrackable !== "Show all";
+    };
 
+    $scope.showTrackableDetails = function() {
+
+
+        String.prototype.replaceAll = String.prototype.replaceAll || function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+
+        var apiPath = "/api/trackables/" + JSON.stringify($scope.selectedTrackable).replaceAll("\"","");
+        $http.get(apiPath)
+            .success(function(trackable) {
+
+                //the API resturns an array of 1
+                if(trackable.length>0) {
+
+                    $scope.trackable = trackable[0];
+
+                    // Define the tour!
+                    /*var tour = {
+                        id: "trackable-hopscotch",
+                        steps: [
+                            {
+                                showCTAButton: true,
+                                title: "Trackable details!",
+                                content: "<hr/><p><strong>Name:</strong> " + trackable[0].name +"</p>" +
+                                "<p><strong>Description:</strong> " + trackable[0].description +"</p>" +
+                                ( (trackable[0].privacy==='Protected') ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),
+                                target: "my_panel_title",
+                                placement: "right"
+                            }
+                        ]
+                    };
+
+                    hopscotch.startTour(tour);*/
+
+                    var privacy = trackable[0].privacy;
+
+                    var calloutMgr = hopscotch.getCalloutManager();
+                    calloutMgr.createCallout({
+                        id: 'attach-icon',
+                        title: "Trackable details!",
+                        content: "<hr/><p><strong>Name:</strong> " + trackable[0].name +"</p>" +
+                        "<p><strong>Description:</strong> " + trackable[0].description +"</p>" +
+                        "<p><strong>Privacy: </strong>" + privacy + "</p>" +
+                        ( (privacy==='Protected') ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),
+                        target: "filter_by_trackable",
+                        placement: "right",
+                        showCloseButton: true
+                    });
+                }
+
+
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+
+
+    };
+
+    window.shareTrackable = function() {
+        console.log("selected:" + $scope.selectedTrackable);
+        //I can only share after i see the details window
+        if($scope.trackable) {
+            var uri = "mailto:?subject=";
+            uri += encodeURIComponent("check this trackable");
+            uri += "&body=";
+            uri += encodeURIComponent("Check it here: http://localhost:8080/protected?tid=" +
+            $scope.trackable._id + "&unlock_code=" + $scope.trackable.unlockCode);
+
+            location.href=uri;
+        }
+
+    };
 
     //######## GET ALL TRACKABLES ###############
     $scope.getAllTrackables = function() {

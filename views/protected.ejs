@@ -1,0 +1,109 @@
+<!doctype html>
+
+<html lang="en" ng-app="trackme">
+<!-- ASSIGN OUR ANGULAR MODULE -->
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A layout example that shows off a responsive email layout.">
+
+    <title>Track.Me - The place to track the things you love!</title>
+
+    <!-- optionally install locally npm install purecss-->
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+
+    <!-- tour-->
+    <link rel="stylesheet" href="css/hopscotch.min.css">
+
+    <!--[if lte IE 8]>
+    <link rel="stylesheet" href="css/layouts/email-old-ie.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+    <link rel="stylesheet" href="css/layouts/email.css">
+    <!--<![endif]-->
+
+    <link rel="stylesheet" href="bootstrap/3.3.5/css/bootstrap.css">
+    <link rel="stylesheet" href="css/trackme.css">
+
+
+    <!-- SPELLS -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script><!-- load angular -->
+
+    <!-- ng-popover stuff -->
+    <script src="js/angular-popover.min.js"></script>
+    <link rel="stylesheet" href="css/angular-popover.css">
+
+    <!-- check this ONE TODO -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
+    <!-- use cookies-->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-cookies.min.js"></script>
+
+
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
+    <script src="bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!-- my angular js core file -->
+    <script src="js/trackme-angular-core.js"></script>
+    <script src="js/modules/trackme-angular-device.js"></script>
+    <script src="js/modules/trackme-angular-trackable.js"></script>
+    <script src="js/modules/trackme-angular-profile.js"></script>
+    <script src="js/modules/trackme-angular-record.js"></script>
+
+
+    <script src='js/lodash.min.js'></script>
+    <script src='js/angular-simple-logger.min.js'></script>
+    <script src='js/angular-google-maps.min.js'></script>
+
+
+    <style>
+        /*html, body { height: 100%; margin: 0; padding: 0; }*/
+        /*#map-container                    {  height: 100%; width: 100%  }*/
+    </style>
+
+</head>
+<!-- SET THE CONTROLLER AND GET ALL DEVICES -->
+<body>
+<!-- BEGIN: Sticky Header -->
+<div id="header_container">
+    <div id="my_header">
+
+    </div>
+</div>
+<div id="tour_content">
+    <p></p>
+</div>
+<!-- END: Sticky Header -->
+<script src="js/hopscotch.js"></script>
+<script src="js/tour.js"></script> <!-- define and start your tour in this file -->
+
+<div ng-controller="MapController">
+    <div> <!--ng-controller="MapController"-->
+
+        <ui-gmap-google-map control="map.control" center='map.center' zoom='map.zoom' draggable="true" options="map.options" bounds="map.bounds">
+
+            <ui-gmap-markers models="mapMarkers" coords="'self'" icon="'icon'">
+
+            </ui-gmap-markers>
+
+
+            <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'
+                              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable" icons='p.icons'></ui-gmap-polyline>
+
+        </ui-gmap-google-map>
+
+    </div>
+
+</div>
+
+
+<!-- BEGIN: Sticky Footer -->
+<div id="footer_container">
+    <div id="my_footer">
+        Copyright @ 2015 PC Dreams Software
+    </div>
+</div>
+<!-- END: Sticky Footer -->
+</body>
+</html>

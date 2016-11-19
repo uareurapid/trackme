@@ -31,6 +31,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script><!-- load jquery -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script><!-- load angular -->
 
+    <!-- ng-popover stuff -->
+    <script src="js/angular-popover.min.js"></script>
+    <link rel="stylesheet" href="css/angular-popover.css">
+
     <!-- check this ONE TODO -->
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-animate.min.js"></script>
     <!-- use cookies-->
@@ -107,6 +111,13 @@
                                     <select id="filter_by_trackable" ng-model="selectedTrackable" ng-change="trackableChanged(selectedTrackable)" ng-options="trackable._id as trackable.name for trackable in trackables">
                                         <option value="">Show all</option>
                                     </select>
+
+                                    <!-- http://tarun-dugar.github.io/ng-popover/-->
+                                    <!--<button angular-popover direction="right" template="Just some text!" style="position: relative;">
+                                        Click me!
+                                    </button>-->
+
+                                    <input type="button" style="float:right" ng-show="canShowDetails(selectedTrackable)" value="Show details" ng-click="showTrackableDetails()">
                                     <!-- LOOP OVER THE trackables IN $scope.trackables -->
                                     <!--<div class="checkbox" ng-repeat="trackable in trackables">
                                         <label>{{ trackable.name }}</label>

@@ -28,12 +28,116 @@ module.exports = function(app, passport) {
         
     });
 
+    //########################### checkProtectedRouteParams #################################################
+    //Auxiliar function to check if neeeded parameters are present in the request
+    //for protected trackables we need the "tid" and "unlock_code"
+    //for public trackables we only need the "tid"
+    var checkProtectedRouteParams = function(req) {
+
+        var CONSTANTS = require('./constants');
+        var url = require('url');
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+        console.log("PROTECTED REQUEST: " + JSON.stringify(query) + " req.originalUrl: " +
+            req.originalUrl + " : " + CONSTANTS.PROTECTED_PATH);
+
+        if(req.originalUrl.indexOf(CONSTANTS.PUBLIC_PATH)>-1) {
+
+            return query[CONSTANTS.QUERY_STRING.TRACKABLE_ID];
+        }
+        //request for a protected trackable?
+        else if(req.originalUrl.indexOf(CONSTANTS.PROTECTED_PATH)>-1) {
+
+            return query[CONSTANTS.QUERY_STRING.UNLOCK_CODE] && query[CONSTANTS.QUERY_STRING.TRACKABLE_ID];
+
+        }
+    };
+    //############################################################################
+
     // =====================================
     // HOME PAGE (with login links) ========
     // =====================================
     app.get('/', function(req, res) {
         res.render('index.ejs');
     });
+
+
+    // =====================================
+    // PROTECTED MAP ===============================
+    // =====================================
+    app.get('/protected', function(req, res) {
+
+        var result = checkProtectedRouteParams(req);
+        if(!result) {
+            res.redirect('/home');//TODO app some landing page for bad requests??
+        }
+        else {
+            res.render('protected.ejs');
+        }
+
+    });
+
+    //get the trackable details to show on the map
+    app.get('/trackable_records', function(req, res) {
+
+        console.log("PROTECTED trackable_records ROUTE CALLED");
+        //***** get the query params ********
+        var url = require('url');
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+
+        var filterExpression = {};
+        //***********************************
+        //trackable id is manadatory, always, for a protected or public
+        //unlock code is only mandatory for proteceted trackables
+        if(!query.tid) {
+            res.json(403, {err: 'Unauthorized!'});
+        }
+        else {
+            filterExpression = {_id: query.tid };
+        }
+
+        if(query.unlock_code) {
+
+            filterExpression.unlockCode = query.unlock_code;
+
+        }
+
+        console.log("FINAL FILTER EXPRESSION: " + JSON.stringify(filterExpression));
+        var Trackables = require('../models/trackable.js');
+        Trackables.find(
+            //filter expression
+            filterExpression,function(err, trackable) {
+                //could not find the trackable info, ABORT
+                if (err) {
+                    console.log("COULD NOT FIND TRACKABLE Info");
+                    res.send(err);
+                }
+                else {
+                    //now get the record
+                    console.log("NOW get the record");
+
+                    var Records = require('../models/record.js');
+                    Records.find(
+                        //filter expression
+                        {trackableId: query.tid},function(err, record) {
+                            if (err) {
+                                res.send(err);
+                            }
+                            else {
+                                res.json(record);
+                            }
+
+                        });
+                }
+
+            });
+
+
+
+
+    });
+
 
     // =====================================
     // LOGIN ===============================

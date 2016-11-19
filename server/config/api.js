@@ -129,6 +129,55 @@ module.exports = function(apiRouter) {
         });
     });
 
+    //get details
+    apiRouter.get('/trackables/:trackable_id', function(req, res) {
+
+            // get and return all the trackables after you create another
+            Trackable.find(
+                //filter expression
+                {_id : req.params.trackable_id},function(err, trackable) {
+                if (err) {
+                    res.send(err);
+                }
+                else {
+                    res.json(trackable);
+                }
+
+            });
+    });
+
+    //get details
+    /*apiRouter.get('/trackable_info', function(req, res) {
+
+        console.log("PROTECTED ROUTE CALLED");
+        //***** get the query params ********
+        var url = require('url');
+        var url_parts = url.parse(req.url, true);
+        var query = url_parts.query;
+        //***********************************
+        if(query.unlock_code) {
+            console.log("UNLOCK CODE: " + query.unlock_code);
+
+            Trackable.find(
+                //filter expression
+                {unlockCode : query.unlock_code}
+
+                ,function(err, trackable) {
+                    if (err) {
+                        res.send(err);
+                    }
+                    else {
+                        res.json(trackable);
+                    }
+
+                });
+        }
+        else {
+            res.json(403, {err: 'Unauthorized!'});
+        }
+
+    });*/
+
     //TODO protect the class, must be issued by same user email
     // delete all trackables
     apiRouter.delete('/trackables/delete/all/:owner_id', function(req, res) {
