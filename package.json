@@ -42,5 +42,8 @@
     "jsonwebtoken":"~5.4.1",
     "hopscotch": "~0.2.5"
 
+  },
+  "engines": {
+    "node": ">=6.2.0"
   }
 }
