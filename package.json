@@ -40,7 +40,8 @@
     "angular-google-maps":"~2.2.1",
     "nodemailer":"~1.8.0",
     "jsonwebtoken":"~5.4.1",
-    "hopscotch": "~0.2.5"
+    "hopscotch": "~0.2.5",
+    "cors":"2.8.3"
 
   },
   "engines": {
