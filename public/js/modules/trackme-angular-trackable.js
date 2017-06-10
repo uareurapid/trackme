@@ -123,7 +123,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             var uri = "mailto:?subject=";
             uri += encodeURIComponent("check this trackable");
             uri += "&body=";
-            uri += encodeURIComponent("Check it here: http://localhost:8080/protected?tid=" +
+            uri += encodeURIComponent("Check it here: http://trackme.no-ip.net:8080/protected?tid=" +
             $scope.trackable._id + "&unlock_code=" + $scope.trackable.unlockCode);
 
             location.href=uri;

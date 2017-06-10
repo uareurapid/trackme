@@ -9,6 +9,7 @@ var session  = require('express-session');//express session
 var cookieParser = require('cookie-parser');//read the cookies for auth
 var flash    = require('connect-flash');
 var db = require('./config/db');
+var cors = require('cors');
 
 //configurations for the json tokens
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
@@ -45,6 +46,11 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
+
+
+//CORS middleware
+//ALLOW CORS REQUESTS
+app.use(cors());
 
 //==============================================================================
 // Configure normal routes (un-protected)

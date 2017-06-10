@@ -65,7 +65,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     var hasProtectedParams = (tid!==null && unlock_code!==null);
     var hasPublicParams = tid!==null;
     //-------------------------------------------------------------------------
-    
+
     //will hold the map markers
     $scope.mapMarkers = [];
     //will hold the lines between records
