@@ -270,17 +270,22 @@ module.exports = function(apiRouter) {
         //Return the number of milliseconds since 1970/01/01:
         var timeOfRecord = new Date().getTime();
         // create a record, information comes from AJAX request from Angular
-        Record.create({
 
-            name: recName,
-            description: recDescription,
-            latitude: req.body.latitude,
-            longitude : req.body.longitude,
-            time: timeOfRecord,
-            trackableId: req.body.trackableId,
-            deviceId: req.body.deviceId,
-            done: false
-        }, function(err, record) {
+        //check if is a batch payload
+        var isBatchPayload = (req.body.length && req.body.length > 0);
+
+        //set to true when all records have been added
+        var doneBatch = false;
+        var lastError = null;
+        //on complete handler
+        var onComplete = function(err, record) {
+
+            lastError = err;
+            //don´t send anything at this point
+            if(isBatchPayload && !doneBatch) {
+                return;
+            }
+            //otherwise send it, must be single payload record
             if (err) {
                 res.send(err);
             }
@@ -288,16 +293,50 @@ module.exports = function(apiRouter) {
                 //send the record back
                 res.json(record);
             }
+        };
 
-            // get and return all the records after you create another
-            //Record.find(function(err, records) {
-            //    if (err) {
-            //        console.log("error adding record: " + err);
-            //        res.send(err);
-            //    }
-            //    res.json(records);
-            //});
-        });
+        //it´s a batch request?
+        if(isBatchPayload) {
+            var record = null;
+            console.log("add a batch record: " + req.body);
+            //process them in a loop
+            for(var i = 0; i < req.body.length; i++) {
+
+               //create the record object from the payload
+               record = {
+
+                    name: recName,
+                    description: recDescription,
+                    latitude: req.body[i].latitude,
+                    longitude : req.body[i].longitude,
+                    time: timeOfRecord,
+                    trackableId: req.body[i].trackableId,
+                    deviceId: req.body[i].deviceId,
+                    done: false
+                };
+                //add it to DB
+                Record.create(record, onComplete);
+            }
+            //done processing the batch
+            doneBatch = true;
+            onComplete(lastError,record);
+        }
+        else {
+            console.log("add a single record: " + req.body);
+            //single payload record
+            Record.create({
+
+                name: recName,
+                description: recDescription,
+                latitude: req.body.latitude,
+                longitude : req.body.longitude,
+                time: timeOfRecord,
+                trackableId: req.body.trackableId,
+                deviceId: req.body.deviceId,
+                done: false
+            },onComplete);
+        }
+
 
     });
 
