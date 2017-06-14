@@ -272,7 +272,7 @@ module.exports = function(apiRouter) {
         // create a record, information comes from AJAX request from Angular
 
         //check if is a batch payload
-        var isBatchPayload = (req.body.length && req.body.length > 0);
+        var isBatchPayload = (req.body.batch && req.body.batch.length);
 
         //set to true when all records have been added
         var doneBatch = false;
@@ -300,18 +300,19 @@ module.exports = function(apiRouter) {
             var record = null;
             console.log("add a batch record: " + req.body);
             //process them in a loop
-            for(var i = 0; i < req.body.length; i++) {
+            var batchPayload = req.body.batch;
+            for(var i = 0; i < batchPayload.length; i++) {
 
                //create the record object from the payload
                record = {
 
                     name: recName,
                     description: recDescription,
-                    latitude: req.body[i].latitude,
-                    longitude : req.body[i].longitude,
+                    latitude: req.batchPayload[i].latitude,
+                    longitude : req.batchPayload[i].longitude,
                     time: timeOfRecord,
-                    trackableId: req.body[i].trackableId,
-                    deviceId: req.body[i].deviceId,
+                    trackableId: req.batchPayload[i].trackableId,
+                    deviceId: req.batchPayload[i].deviceId,
                     done: false
                 };
                 //add it to DB
