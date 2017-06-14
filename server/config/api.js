@@ -298,11 +298,13 @@ module.exports = function(apiRouter) {
         //it´s a batch request?
         if(isBatchPayload) {
             var record = null;
-            console.log("add a batch record: " + req.body);
             //process them in a loop
             var batchPayload = req.body.batch;
+            console.log("add a batch record: " + req.body.length);
             for(var i = 0; i < batchPayload.length; i++) {
 
+                console.log("latitude: " + batchPayload[i].latitude);
+                console.log("longitude: " + batchPayload[i].longitude);
                //create the record object from the payload
                record = {
 
