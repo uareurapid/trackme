@@ -300,7 +300,7 @@ module.exports = function(apiRouter) {
             var record = null;
             //process them in a loop
             var batchPayload = req.body.batch;
-            console.log("add a batch record: " + req.body.length);
+            console.log("add a batch record: " + batchPayload.length);
             for(var i = 0; i < batchPayload.length; i++) {
 
                 console.log("latitude: " + batchPayload[i].latitude);
