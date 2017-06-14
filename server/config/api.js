@@ -240,7 +240,7 @@ module.exports = function(apiRouter) {
             var query = Record.find(expression).sort( [['time', 1]] );// get all items asc by created date;
             query.exec(function (err, records) {
                 if (err)
-                    res.send(err)
+                    res.send(err);
 
                 res.send(records);
             });
@@ -251,7 +251,7 @@ module.exports = function(apiRouter) {
 
                 // if there is an error retrieving, send the error. nothing after res.send(err) will execute
                 if (err)
-                    res.send(err)
+                    res.send(err);
 
                 res.json(records); // return all records in JSON format
             }).sort( [['time', 1]] );// get all items asc by created date.;
@@ -308,11 +308,11 @@ module.exports = function(apiRouter) {
 
                     name: recName,
                     description: recDescription,
-                    latitude: req.batchPayload[i].latitude,
-                    longitude : req.batchPayload[i].longitude,
+                    latitude: batchPayload[i].latitude,
+                    longitude : batchPayload[i].longitude,
                     time: timeOfRecord,
-                    trackableId: req.batchPayload[i].trackableId,
-                    deviceId: req.batchPayload[i].deviceId,
+                    trackableId: batchPayload[i].trackableId,
+                    deviceId: batchPayload[i].deviceId,
                     done: false
                 };
                 //add it to DB
