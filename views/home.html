@@ -87,6 +87,11 @@
 <div id="layout" class="content pure-g" ng-controller="MapController">
     <div id="nav" class="pure-u">
 
+        <button ng-click="toggleModal('Success')" class="btn btn-default">Success</button>
+        <modal visible="showModal">
+            Any additional data / buttons
+        </modal>
+
         <div class="container min-300" ng-controller="TrackablesController">
             <h2 class="h2_white_bold" id="my_panel_title">My Panel</h2>
 
