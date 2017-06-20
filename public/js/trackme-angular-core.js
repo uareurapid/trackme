@@ -86,9 +86,14 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             'mouse event position: ' + eventArgs[0].latLng.toUrlValue());
     };
 
-    var clickFn = function() {
-        $window.alert("clicked");
+    $scope.showModal = false;
+
+    $scope.toggleModal = function(btnClicked){
+        $window.alert("hi there");
+        //$scope.buttonClicked = btnClicked;
+        $scope.showModal = !$scope.showModal;
     };
+
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
 
@@ -137,7 +142,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                 latitude: lat,
                 longitude: lng
             },
-            click: clickFn,
             options: {
                 label: 'Paulo Cristo',
                 title: 'm' + i
@@ -409,6 +413,47 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     uiGmapGoogleMapApi.then(function(maps) {
 
     });
+});
+
+//a directive to add in the html template
+trackme.directive('modal', function () {
+    return {
+        template: '<div class="modal fade">' +
+        '<div class="modal-dialog">' +
+        '<div class="modal-content">' +
+        '<div class="modal-header">' +
+        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+        '<h4 class="modal-title">clicked!!</h4>' +
+        '</div>' +
+        '<div class="modal-body" ng-transclude></div>' +
+        '</div>' +
+        '</div>' +
+        '</div>',
+        restrict: 'E',
+        transclude: true,
+        replace:true,
+        scope:true,
+        link: function postLink(scope, element, attrs) {
+            scope.$watch(attrs.visible, function(value){
+                if(value == true)
+                    $(element).modal('show');
+                else
+                    $(element).modal('hide');
+            });
+
+            $(element).on('shown.bs.modal', function(){
+                scope.$apply(function(){
+                    scope.$parent[attrs.visible] = true;
+                });
+            });
+
+            $(element).on('hidden.bs.modal', function(){
+                scope.$apply(function(){
+                    scope.$parent[attrs.visible] = false;
+                });
+            });
+        }
+    };
 });
 
 
