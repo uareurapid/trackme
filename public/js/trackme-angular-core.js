@@ -78,6 +78,17 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     //a promise to update the map every 1 minute
     $scope.intervalUpdatePromise = undefined;
 
+    $scope.clickedMarker = function(marker, eventName, model, eventArgs) {
+        $window.alert(
+            'marker position: ' + marker.getPosition().toUrlValue() + '\n' +
+            'event name: ' + eventName + '\n' +
+            'model id: ' + model.id + '\n' +
+            'mouse event position: ' + eventArgs[0].latLng.toUrlValue());
+    };
+
+    var clickFn = function() {
+        $window.alert("clicked");
+    };
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
 
@@ -115,14 +126,13 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
          'opacity': '0.75'
         };
 
-        var clickFn = function() {
-            alert("clicked");
-        };
+
 
         var marker = {
             latitude: lat,
             longitude: lng,
             title: 'm' + i,
+            label: 'Paulo Cristo',
             cords: {
                 latitude: lat,
                 longitude: lng
