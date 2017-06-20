@@ -94,6 +94,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         $scope.showModal = !$scope.showModal;
     };
 
+    var infowindow = new google.maps.InfoWindow({
+        content: "XPTO"
+    });
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
 
@@ -154,6 +157,10 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
         };
         marker[idKey] = i;
+        marker.addListener('click', function() {
+            infowindow.open($scope.map, marker);
+        });
+
         return marker;
     };
 
