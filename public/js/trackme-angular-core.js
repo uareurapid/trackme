@@ -115,16 +115,27 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
          'opacity': '0.75'
         };
 
+        var clickFn = function() {
+            alert("clicked");
+        };
+
         var marker = {
             latitude: lat,
             longitude: lng,
             title: 'm' + i,
+            cords: {
+                latitude: lat,
+                longitude: lng
+            },
+            click: clickFn,
             options: {
-                labelContent : 'Paulo Cristo',
+                label: 'Paulo Cristo',
+                title: 'm' + i
+                /*labelContent : 'Paulo Cristo',
                 labelAnchor: "36 61",
                 labelClass: 'labelClass',
                 labelStyle: newstyle,
-                labelInBackground: false
+                labelInBackground: false*/
             }
 
         };
