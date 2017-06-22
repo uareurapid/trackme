@@ -178,7 +178,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         //clear previous markers
         $scope.mapMarkers = newMarkers;
 
-        $scope.mapMarkers.push(createRecordMarker(1,32.779680, -79.935493, $scope.map.bounds));  
+        //$scope.mapMarkers.push(createRecordMarker(1,32.779680, -79.935493, $scope.map.bounds));
 
         console.log("refreshing map....");
         //optional param if you want to refresh you can pass null undefined or false or empty arg
