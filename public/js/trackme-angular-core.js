@@ -224,6 +224,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         var currentTrackableId = "";
         var previousTrackableId = "";
 
+        alert("got marhers " + data.length);
         for(var i=0; i< data.length; i++) {
 
             if(i > 0) {
