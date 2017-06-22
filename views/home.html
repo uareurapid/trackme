@@ -87,10 +87,6 @@
 <div id="layout" class="content pure-g" ng-controller="MapController">
     <div id="nav" class="pure-u">
 
-        <button ng-click="toggleModal('Success')" class="btn btn-default">Success</button>
-        <modal visible="showModal">
-            Any additional data / buttons
-        </modal>
 
         <div class="container min-300" ng-controller="TrackablesController">
             <h2 class="h2_white_bold" id="my_panel_title">My Panel</h2>
@@ -328,11 +324,25 @@
                         <div>
                             <div>
                                 <label class="markerToolTipLabel" ng-non-bindable>{{name}}</label>
+                                <br/>
+                                <label class="markerToolTipLabel" ng-non-bindable>{{latitude}}</label>
+                                <br/>
+                                <label class="markerToolTipLabel" ng-non-bindable>{{label}}</label>
+                                <br/>
+                                <label class="markerToolTipLabel" ng-non-bindable>{{time}}</label>
                                 <div class="icons" ng-controller="infoWindowCtrl">
                                     <span class="glyphicon glyphicon-eye-open customGlyph" ng-mouseover="glyphClick()" ng-click="glyphClick()"></span>
                                     <span class="glyphicon glyphicon-eye-close customGlyph" ng-click="glyphClick()"></span>
+
                                 </div>
                             </div>
+
+
+                                <!--<button ng-click="toggleModal('Success')" class="btn btn-default">Success</button>
+                            <modal visible="showModal">
+                                Any additional data / buttons
+                            </modal>-->
+
                         </div>
                     </ui-gmap-windows>
 
@@ -344,6 +354,7 @@
         </ui-gmap-google-map>
 
     </div>
+
 </div>
 
 

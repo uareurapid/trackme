@@ -86,57 +86,21 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             'mouse event position: ' + eventArgs[0].latLng.toUrlValue());
     };
 
-    $scope.showModal = false;
-
-    $scope.toggleModal = function(btnClicked){
-        $window.alert("hi there");
-        //$scope.buttonClicked = btnClicked;
-        $scope.showModal = !$scope.showModal;
-    };
-
     //creates the marker for the record on the map!!!
-    var createRecordMarker = function(i, lat,lng, bounds, idKey) {
+    var createRecordMarker = function(i, record, bounds, idKey) {
 
         if (idKey == null) {
             idKey = "id";
         }
 
-        /*
-
-         //icon as background image
-         var newstyle = {
-         'background-image':'url("img/markers/'+value[8]+'")',
-         'background-size': '36.5px 61px',
-         'background-position': 'top left',
-         'background-repeat': 'no-repeat'
-         }
-
-        on css
-         .labelClass {
-         padding-top:29px;
-         padding-left:2px;
-         color:#000;
-         font-family: 'open_sansregular';
-         height:61px;
-         width:37px;
-         font-size:9px;
-         line-height: 12px;
-         }
-
-
-
-         */
-
-        var newstyle = {
-         'opacity': '0.75'
-        };
-
-
+        var lat = record.latitude;
+        var lng = record.longitude;
 
         var marker = {
             latitude: lat,
             longitude: lng,
             title: 'm' + i,
+            time: record.time,
             label: 'Paulo Cristo',
             show:false,
             name: 'Location: ' + '(' + lat + '),('+  lng + ')',
@@ -147,11 +111,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             options: {
                 label: 'Paulo Cristo',
                 title: 'm' + i
-                /*labelContent : 'Paulo Cristo',
-                labelAnchor: "36 61",
-                labelClass: 'labelClass',
-                labelStyle: newstyle,
-                labelInBackground: false*/
             }
 
         };
@@ -233,9 +192,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             current = i;
             currentTrackableId = data[current].trackableId;
 
-            var latitude = data[i].latitude;
-            var longitude = data[i].longitude;
-            markers.push(createRecordMarker(i,latitude, longitude, $scope.map.bounds));
+
+            markers.push(createRecordMarker(i,data[i], $scope.map.bounds));
 
             current = i;
 
@@ -416,12 +374,21 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     uiGmapGoogleMapApi.then(function(maps) {
 
     });
+
+    $scope.showModal = false;
+
+    $scope.toggleModal = function(btnClicked){
+        $window.alert("hi there");
+        //$scope.buttonClicked = btnClicked;
+        $scope.showModal = !$scope.showModal;
+    };
 });
 
-trackme.controller('infoWindowCtrl', function($scope) {
+
+trackme.controller('infoWindowCtrl', function($scope,$window) {
     $scope.glyphClick = function() {
         console.log('Button clicked!');
-    }
+    };
 });
 
 //a directive to add in the html template
