@@ -324,6 +324,18 @@
 
             <ui-gmap-markers models="mapMarkers" coords="'self'" icon="'icon'"><!--click="clickedMarker">-->
 
+                    <ui-gmap-windows show="show">
+                        <div>
+                            <div>
+                                <label class="markerToolTipLabel" ng-non-bindable>{{name}}</label>
+                                <div class="icons" ng-controller="infoWindowCtrl">
+                                    <span class="glyphicon glyphicon-eye-open customGlyph" ng-mouseover="glyphClick()" ng-click="glyphClick()"></span>
+                                    <span class="glyphicon glyphicon-eye-close customGlyph" ng-click="glyphClick()"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </ui-gmap-windows>
+
             </ui-gmap-markers>
 
             <ui-gmap-polyline ng-repeat="p in polylines" path="p.path" stroke="p.stroke" visible='p.visible'

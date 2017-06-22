@@ -94,9 +94,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         $scope.showModal = !$scope.showModal;
     };
 
-    var infowindow = new google.maps.InfoWindow({
-        content: "XPTO"
-    });
     //creates the marker for the record on the map!!!
     var createRecordMarker = function(i, lat,lng, bounds, idKey) {
 
@@ -141,6 +138,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             longitude: lng,
             title: 'm' + i,
             label: 'Paulo Cristo',
+            show:false,
+            name: 'Location:' + i,
             cords: {
                 latitude: lat,
                 longitude: lng
@@ -420,6 +419,12 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     uiGmapGoogleMapApi.then(function(maps) {
 
     });
+});
+
+trackme.controller('infoWindowCtrl', function($scope) {
+    $scope.glyphClick = function() {
+        console.log('Button clicked!');
+    }
 });
 
 //a directive to add in the html template
