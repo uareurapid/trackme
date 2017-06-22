@@ -139,7 +139,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             title: 'm' + i,
             label: 'Paulo Cristo',
             show:false,
-            name: 'Location:' + i,
+            name: 'Location: ' + '(' + lat + '),('+  lng + ')',
             cords: {
                 latitude: lat,
                 longitude: lng
@@ -224,7 +224,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         var currentTrackableId = "";
         var previousTrackableId = "";
 
-        alert("got marhers " + data.length);
         for(var i=0; i< data.length; i++) {
 
             if(i > 0) {
