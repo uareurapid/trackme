@@ -156,9 +156,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
         };
         marker[idKey] = i;
-        marker.addListener('click', function() {
-            infowindow.open($scope.map, marker);
-        });
 
         return marker;
     };
