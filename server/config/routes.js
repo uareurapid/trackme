@@ -85,7 +85,7 @@ module.exports = function(app, passport) {
         var url = require('url');
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
-        
+
         var filterExpression = {};
         //***********************************
         //trackable id is manadatory, always, for a protected or public
@@ -103,6 +103,7 @@ module.exports = function(app, passport) {
 
         }
 
+        //TODO check also http://mongoosejs.com/docs/queries.html
         console.log("FINAL FILTER EXPRESSION: " + JSON.stringify(filterExpression));
         res.json(filterExpression);return;
         var Trackables = require('../models/trackable.js');
@@ -110,7 +111,7 @@ module.exports = function(app, passport) {
             //filter expression
             filterExpression,function(err, trackable) {
                 //could not find the trackable info, ABORT
-                if (err) {
+                if (err || !trackable) {
                     console.log("COULD NOT FIND TRACKABLE Info");
                     res.send(err);
                 }
