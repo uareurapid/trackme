@@ -330,6 +330,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         if(hasProtectedParams) {
             //unprotected route, relies on params (tid && unlock_code mandatory)
             apiRoute = '/trackable_records?tid='+tid+"&unlock_code="+unlock_code;
+            console.log("########### api route is: " + apiRoute);
         }
         else if(hasPublicParams) {
             //just tid is mandatory
