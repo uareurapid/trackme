@@ -105,7 +105,6 @@ module.exports = function(app, passport) {
 
         //TODO check also http://mongoosejs.com/docs/queries.html
         console.log("FINAL FILTER EXPRESSION: " + JSON.stringify(filterExpression));
-        res.json(filterExpression);return;
         var Trackables = require('../models/trackable.js');
         Trackables.find(
             //filter expression
