@@ -85,8 +85,7 @@ module.exports = function(app, passport) {
         var url = require('url');
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
-
-        alert("query is: " + query);
+        
         var filterExpression = {};
         //***********************************
         //trackable id is manadatory, always, for a protected or public
@@ -105,6 +104,7 @@ module.exports = function(app, passport) {
         }
 
         console.log("FINAL FILTER EXPRESSION: " + JSON.stringify(filterExpression));
+        res.json(filterExpression);return;
         var Trackables = require('../models/trackable.js');
         Trackables.find(
             //filter expression
