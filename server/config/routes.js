@@ -86,7 +86,8 @@ module.exports = function(app, passport) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
-        var filterExpression = {};
+        var filterById = null;
+        var filterByUnlockCode = null;
         //***********************************
         //trackable id is manadatory, always, for a protected or public
         //unlock code is only mandatory for proteceted trackables
@@ -94,34 +95,40 @@ module.exports = function(app, passport) {
             res.json(403, {err: 'Unauthorized!'});
         }
         else {
-            filterExpression = {_id: query.tid };
+            filterById = query.tid;
         }
 
         if(query.unlock_code) {
 
-            filterExpression.unlockCode = query.unlock_code;
+            filterByUnlockCode = query.unlock_code;
 
         }
 
         //TODO check also http://mongoosejs.com/docs/queries.html
         console.log("FINAL FILTER EXPRESSION: " + JSON.stringify(filterExpression));
         var Trackables = require('../models/trackable.js');
-        Trackables.find(
-            //filter expression
-            filterExpression,function(err, trackable) {
+
+        if(filterByUnlockCode!==null) {
+
+            Trackables.find(
+                //filter expression
+                {
+                    _id :filterById,
+                    unlockCode: filterByUnlockCode
+                },function(err, trackable) {
                 //could not find the trackable info, ABORT
                 if (err || !trackable) {
                     console.log("COULD NOT FIND TRACKABLE Info");
                     res.send(err);
                 }
                 else {
-                    //now get the record
-                    console.log("NOW get the record");
-
+                    //now get the records
                     var Records = require('../models/record.js');
                     Records.find(
                         //filter expression
-                        {trackableId: query.tid},function(err, record) {
+                        {
+                            trackableId: query.tid
+                        },function(err, record) {
                             if (err) {
                                 res.send(err);
                             }
@@ -133,6 +140,41 @@ module.exports = function(app, passport) {
                 }
 
             });
+        }
+        else {
+            //JUST FILTER BY ID
+            Trackables.find(
+                //filter expression
+                {
+                    _id :filterById
+                },function(err, trackable) {
+                    //could not find the trackable info, ABORT
+                    if (err || !trackable) {
+                        console.log("COULD NOT FIND TRACKABLE Info");
+                        res.send(err);
+                    }
+                    else {
+                        //now get the records
+                        var Records = require('../models/record.js');
+                        Records.find(
+                            //filter expression
+                            {
+                                trackableId: query.tid
+                            },function(err, record) {
+                                if (err) {
+                                    res.send(err);
+                                }
+                                else {
+                                    res.json(record);
+                                }
+
+                            });
+                    }
+
+                });
+        }
+
+
 
 
 
