@@ -86,6 +86,7 @@ module.exports = function(app, passport) {
         var url_parts = url.parse(req.url, true);
         var query = url_parts.query;
 
+        alert("query is: " + query);
         var filterExpression = {};
         //***********************************
         //trackable id is manadatory, always, for a protected or public
