@@ -360,7 +360,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                     console.log(data);
                 })
                 .error(function(data) {
-                    console.log('Error: ' + data);
+                    console.log('Error: ' + JSON.stringify(data));
                 });
 
 

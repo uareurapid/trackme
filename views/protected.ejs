@@ -85,6 +85,32 @@
 
             <ui-gmap-markers models="mapMarkers" coords="'self'" icon="'icon'">
 
+                <ui-gmap-windows show="show">
+                    <div>
+                        <div>
+                            <label class="markerToolTipLabel" ng-non-bindable>{{name}}</label>
+                            <br/>
+                            <label class="markerToolTipLabel" ng-non-bindable>{{latitude}}</label>
+                            <br/>
+                            <label class="markerToolTipLabel" ng-non-bindable>{{label}}</label>
+                            <br/>
+                            <label class="markerToolTipLabel" ng-non-bindable>{{time}}</label>
+                            <div class="icons" ng-controller="infoWindowCtrl">
+                                <span class="glyphicon glyphicon-eye-open customGlyph" ng-mouseover="glyphClick()" ng-click="glyphClick()"></span>
+                                <span class="glyphicon glyphicon-eye-close customGlyph" ng-click="glyphClick()"></span>
+
+                            </div>
+                        </div>
+
+
+                        <!--<button ng-click="toggleModal('Success')" class="btn btn-default">Success</button>
+                    <modal visible="showModal">
+                        Any additional data / buttons
+                    </modal>-->
+
+                    </div>
+                </ui-gmap-windows>
+
             </ui-gmap-markers>
 
 
