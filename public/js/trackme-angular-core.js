@@ -360,7 +360,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                     console.log(data);
                 })
                 .error(function(data) {
-                    if(date.errorCode && data.errorCode===403) {
+                    if(data.errorCode && data.errorCode===403) {
                         $window.alert(JSON.stringify(data));
                     }
                     console.log('Error: ' + JSON.stringify(data));
