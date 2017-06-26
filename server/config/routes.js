@@ -109,7 +109,7 @@ module.exports = function(app, passport) {
 
         if(filterByUnlockCode!==null) {
 
-            /*Trackables.find()
+            Trackables.find()
                 .and([
                 //filter expression
                 {_id :filterById}, {unlockCode: filterByUnlockCode}
@@ -117,8 +117,7 @@ module.exports = function(app, passport) {
                 .exec(function(err, trackable) {
                 //could not find the trackable info, ABORT
                 if (err || !trackable || trackable.length==0) {
-                    console.log("COULD NOT FIND TRACKABLE Info");
-                    res.send("COULD NOT FIND TRACKABLE Info");
+                    res.json(403, {err: 'Unauthorized!'});
                 }
                 else {
                     //now get the records
@@ -137,7 +136,7 @@ module.exports = function(app, passport) {
 
                         });
                 }
-               });*/
+               });
         }
         else {
             //JUST FILTER BY ID
@@ -148,7 +147,6 @@ module.exports = function(app, passport) {
                 },function(err, trackable) {
                     //could not find the trackable info, ABORT
                     if (err || !trackable) {
-                        console.log("COULD NOT FIND TRACKABLE Info");
                         res.send(err);
                     }
                     else {
