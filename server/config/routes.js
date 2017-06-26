@@ -109,7 +109,7 @@ module.exports = function(app, passport) {
 
         if(filterByUnlockCode!==null) {
 
-            Trackables.find()
+            /*Trackables.find()
                 .and([
                 //filter expression
                 {_id :filterById}, {unlockCode: filterByUnlockCode}
@@ -137,7 +137,7 @@ module.exports = function(app, passport) {
 
                         });
                 }
-               });
+               });*/
         }
         else {
             //JUST FILTER BY ID
