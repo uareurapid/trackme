@@ -346,7 +346,7 @@ module.exports = function(apiRouter) {
     // delete a record
     apiRouter.delete('/records/:record_id', function(req, res) {
         Record.remove({
-            _id : req.params.record_id
+            id: req.params.record_id
         }, function(err, record) {
             if (err)
                 res.send(err);
