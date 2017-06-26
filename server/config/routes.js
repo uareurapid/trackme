@@ -117,7 +117,7 @@ module.exports = function(app, passport) {
                 .exec(function(err, trackable) {
                 //could not find the trackable info, ABORT
                 if (err || !trackable || trackable.length==0) {
-                    res.json(403, {err: 'Unauthorized!'});
+                    res.json(403, {errorCode: 403, errorMessage: 'Unauthorized!'});
                 }
                 else {
                     //now get the records

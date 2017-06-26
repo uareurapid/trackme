@@ -360,6 +360,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                     console.log(data);
                 })
                 .error(function(data) {
+                    if(date.errorCode && data.errorCode===403) {
+                        $window.alert(JSON.stringify(data));
+                    }
                     console.log('Error: ' + JSON.stringify(data));
                 });
 
@@ -378,8 +381,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     $scope.showModal = false;
 
     $scope.toggleModal = function(btnClicked){
-        $window.alert("hi there");
-        //$scope.buttonClicked = btnClicked;
+
         $scope.showModal = !$scope.showModal;
     };
 });
