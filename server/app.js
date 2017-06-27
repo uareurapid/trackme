@@ -11,6 +11,9 @@ var flash    = require('connect-flash');
 var db = require('./config/db');
 var cors = require('cors');
 
+//session persistence store
+var MongoStore = require('connect-mongo')(session);
+
 //configurations for the json tokens
 var jwt    = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config/config');
@@ -18,6 +21,7 @@ app.set('superSecret', config.secret); // secret variable
 
 var CONSTANTS = require('./config/constants');
 
+//https://github.com/jdesboeufs/connect-mongo
 mongoose.connect(db.url);
 
 // use morgan to log requests to the console
@@ -41,8 +45,10 @@ app.use(cookieParser()); // read cookies (needed for auth)
 
 require('./config/passport')(passport); // pass passport for configuration
 
+//create the connection object for the store
+var theStoreConnection = new MongoStore({mongooseConnection: mongoose.connection});
 // required for passport
-app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch', store: theStoreConnection} )) ; // session secret
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
