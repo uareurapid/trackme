@@ -169,7 +169,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
     //########################## ADD MARKERS TO THE MAP ######################
     //add the records on the map, add polylines and markers
-    var addPositionsOnMap = function(data) {
+    var addPositionsOnMap = function(data, protectedRoute) {
 
         //clear markers
         var markers = [];
@@ -236,6 +236,12 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                 $scope.polylines.push(element);
 
             }
+        }
+
+        //center the map on the last point added
+        if(protectedRoute && data.length > 0 ) {
+            $scope.map.center.latitude = data[data.length - 1].latitude;
+            $scope.map.center.longitude = data[data.length - 1].longitude;
         }
 
         $scope.refreshMap(markers);
@@ -353,7 +359,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
 
                     //add the records on the map, add polylines and markers
-                    addPositionsOnMap(data);
+                    addPositionsOnMap(data, hasProtectedParams);
 
 
 
