@@ -225,7 +225,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
                     visible: true,
                     icons: [{
                         icon: {
-                            path: google.maps.SymbolPath.BACKWARD_OPEN_ARROW
+                            //https://developers.google.com/maps/documentation/javascript/symbols
+                            path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
                         },
                         offset: '25px',
                         repeat: '50px'
