@@ -15,6 +15,10 @@ ProfileController.remoteLogin = function(req,res,next,passport){
     console.log("user: " + req.body.email);
     console.log("pass: " + req.body.password);
 
+    //related with keep me logged in for
+    var expiresIn = req.body.expire_session;
+    console.log("expire_session: " + expiresIn);
+
     passport.authenticate('local-login', function(err, user, info) {
         if (err) {
             return res.status(500).json({err: err});
@@ -30,7 +34,8 @@ ProfileController.remoteLogin = function(req,res,next,passport){
             // if user is found and password is right
             // create a token
             var jsonToken = jwt.sign(user, conf.secret, {
-                expiresInMinutes: 1440 // expires in 24 hours
+                //expiresInMinutes: 1440 // expires in 24 hours (default)
+                expiresInMinutes: expiresIn || 1440
             });
 
             console.log("request headers: " + JSON.stringify(req.headers));
@@ -38,7 +43,8 @@ ProfileController.remoteLogin = function(req,res,next,passport){
                 {   status: 'Login successful!',
                     email:user.local.email,
                     token:jsonToken,
-                    expires: 1440
+                    expires: expiresIn
+                    //1440
                 });
 
         });
