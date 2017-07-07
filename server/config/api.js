@@ -445,10 +445,13 @@ module.exports = function(apiRouter) {
         Device.findById(req.params.device_id,function(err, device) {
 
             // if there is an error retrieving, send the error. nothing after res.send(err) will execute
-            if (err)
-                res.send(err)
+            if (err) {
+                res.send(err);
+            }
+            else {
+                res.json(device); // return all devices in JSON format
+            }
 
-            res.json(device); // return all devices in JSON format
         });
 
     });

@@ -73,24 +73,6 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
 
                     $scope.trackable = trackable[0];
 
-                    // Define the tour!
-                    /*var tour = {
-                        id: "trackable-hopscotch",
-                        steps: [
-                            {
-                                showCTAButton: true,
-                                title: "Trackable details!",
-                                content: "<hr/><p><strong>Name:</strong> " + trackable[0].name +"</p>" +
-                                "<p><strong>Description:</strong> " + trackable[0].description +"</p>" +
-                                ( (trackable[0].privacy==='Protected') ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),
-                                target: "my_panel_title",
-                                placement: "right"
-                            }
-                        ]
-                    };
-
-                    hopscotch.startTour(tour);*/
-
                     var privacy = trackable[0].privacy;
 
                     var calloutMgr = hopscotch.getCalloutManager();

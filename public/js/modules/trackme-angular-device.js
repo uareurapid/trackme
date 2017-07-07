@@ -31,6 +31,49 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
     $scope.selectedDevice = "Show all";
 
 
+    //show the device name and description as well (maybe the date added too)?
+    $scope.canShowDeviceDetails = function(selection) {
+       $scope.selectedDevice = selection;
+       return $scope.selectedDevice !== "Show all";
+    };
+
+    $scope.showDeviceDetails = function() {
+
+
+        String.prototype.replaceAll = String.prototype.replaceAll || function(search, replacement) {
+                var target = this;
+                return target.replace(new RegExp(search, 'g'), replacement);
+            };
+
+        var apiPath = "/api/devices/" + JSON.stringify($scope.selectedDevice).replaceAll("\"","");
+        $http.get(apiPath)
+            .success(function(device) {
+
+                //the API resturns an array of 1
+                if(device) {
+
+                    var calloutMgr = hopscotch.getCalloutManager();
+                    calloutMgr.createCallout({
+                        id: 'attach-icon',
+                        title: "Device details!",
+                        content: "<hr/><p><strong>deviceId:</strong> " + device.deviceId +"</p>" +
+                        "<p><strong>Description:</strong> " + device.description +"</p>" +
+                        "<p><strong>Owner:</strong> " + device.owner +"</p>",
+                        target: "filter_by_device",
+                        placement: "right",
+                        showCloseButton: true
+                    });
+                }
+
+
+            })
+            .error(function(data) {
+                console.log('Error showDeviceDetails: ' + data);
+            });
+
+
+    };
+
     //############ GET ALL USER DEVICES ##################
     $scope.getUserDevices = function() {
 

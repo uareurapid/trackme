@@ -279,7 +279,29 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
     };
 
+    /*var getTrackableDetails = function(trackableId) {
+        var apiPath = "/api/trackables/" + trackableId;
+        $http.get(apiPath)
+            .success(function(trackable) {
 
+                //the API resturns an array of 1
+                if(trackable.length>0) {
+
+                    console.log("OK I GOT THE ONE....");
+                    $scope.currentFilteredTrackable = trackable[0];
+                }
+
+
+            })
+            .error(function(data) {
+                console.log('Error on getTrackableDetails: ' + data);
+                $scope.currentFilteredTrackable = null;
+            });
+    };*/
+
+
+    //called when i change the filtering option (filter by trackable)
+    //i should also get the details object maybe here too? so i would have all the info available at this point
     $scope.trackableChanged = function(trackableFilter) {
 
         var path = "/api/records";
@@ -293,8 +315,6 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         $scope.trackableFilter = trackableFilter;
         console.log("trackable changed to: " + trackableFilter);
 
-        //clear markers
-        var markers = [];
         $http.get(path)
             .success(function(data) {
                 $scope.records = data;
