@@ -62,11 +62,8 @@ module.exports = function(app, passport) {
     });
 
 
-    // =====================================
-    // PROTECTED MAP ===============================
-    // =====================================
-    app.get('/protected', function(req, res) {
-
+    //common function to process both protected and opened paths
+    var routeProtectedPath = function(req, res) {
         var result = checkProtectedRouteParams(req);
         if(!result) {
             res.redirect('/home');//TODO app some landing page for bad requests??
@@ -74,6 +71,21 @@ module.exports = function(app, passport) {
         else {
             res.render('protected.ejs');
         }
+    };
+    // =====================================
+    // PROTECTED MAP ===============================
+    // =====================================
+    app.get('/protected', function(req, res) {
+
+        routeProtectedPath(req,res);
+    });
+
+    // =====================================
+    // OPEN/PUBLIC PATH (same as above but for public trackables that do not need unlock code) ===============================
+    // =====================================
+    app.get('/opened', function(req, res) {
+
+        routeProtectedPath(req,res);
 
     });
 
