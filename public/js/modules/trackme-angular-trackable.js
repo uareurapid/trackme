@@ -100,6 +100,9 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
 
     window.shareTrackable = function() {
         console.log("selected:" + $scope.selectedTrackable);
+
+        //WANT TO USE REQUIRE.JS ??? --> https://www.sitepoint.com/using-requirejs-angularjs-applications/
+
         //I can only share after i see the details window
         if($scope.trackable) {
 
@@ -108,7 +111,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
               if(isProtected && unlockCode) {
                 return  "/protected?tid=" + id + "&unlock_code=" + unlockCode;
               }
-                return "/public?tid=" + id;
+                return "/opened?tid=" + id;
             };
 
             var isProtected = ($scope.trackable.privacy === 'Protected');
