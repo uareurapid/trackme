@@ -82,7 +82,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
                         content: "<hr/><p><strong>Name:</strong> " + trackable[0].name +"</p>" +
                         "<p><strong>Description:</strong> " + trackable[0].description +"</p>" +
                         "<p><strong>Privacy: </strong>" + privacy + "</p>" +
-                        ( (privacy==='Protected') ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),
+                        ( (privacy==='Protected' || privacy==='Public' ) ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),
                         target: "filter_by_trackable",
                         placement: "right",
                         showCloseButton: true
@@ -102,11 +102,23 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
         console.log("selected:" + $scope.selectedTrackable);
         //I can only share after i see the details window
         if($scope.trackable) {
+
+            //gets the correct API url considering the trackable privacy
+            var getAPIURL = function(isProtected, unlockCode,id) {
+              if(isProtected && unlockCode) {
+                return  "/protected?tid=" + id + "&unlock_code=" + unlockCode;
+              }
+                return "/public?tid=" + id;
+            };
+
+            var isProtected = ($scope.trackable.privacy === 'Protected');
+
             var uri = "mailto:?subject=";
             uri += encodeURIComponent("check this trackable");
             uri += "&body=";
-            uri += encodeURIComponent("Check it here: " + document.location.origin + "/protected?tid=" +
-            $scope.trackable._id + "&unlock_code=" + $scope.trackable.unlockCode);
+            uri += encodeURIComponent("Check it here: " + document.location.origin + getAPIURL(isProtected,$scope.trackable.unlockCode,$scope.trackable._id));
+
+            //$scope.trackable._id + () ? "&unlock_code=" + $scope.trackable.unlockCode : "");
 
             location.href=uri;
         }

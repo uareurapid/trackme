@@ -15,6 +15,8 @@ ProfileController.remoteLogin = function(req,res,next,passport){
     console.log("user: " + req.body.email);
     console.log("pass: " + req.body.password);
 
+    //TODO jsonwebtoken: expiresInMinutes and expiresInSeconds is deprecated. ()
+    //expires '1d', '5d'
     //related with keep me logged in for
     var expiresIn = req.body.expire_session;
     console.log("expire_session: " + expiresIn);
@@ -37,6 +39,11 @@ ProfileController.remoteLogin = function(req,res,next,passport){
                 //expiresInMinutes: 1440 // expires in 24 hours (default)
                 expiresInMinutes: expiresIn || 1440
             });
+
+            //PROTECTION TO NOT ALLOW MORE THAN 5 days and less than 1
+            //if(expiresIn && !isNaN(expiresIn)) {
+            //    expiresIn = Math.min(1440, 60*24*5);
+            //}
 
             console.log("request headers: " + JSON.stringify(req.headers));
             res.status(200).json(
