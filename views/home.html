@@ -307,6 +307,28 @@
                                     <label>{{ rec.longitude }}</label>
                                 </div>
                             </div>
+
+                            <button class="btn btn-primary" ng-click="showModal1 = true">Show Modal</button>
+                            <button class="btn btn-primary" ng-click="showModal2 = true">Show Static Modal</button>
+                            <modal visible="showModal1" on-sown="modalOneShown()" on-hide="modalOneHide()">
+                                <modal-header title="Modal Titel 1"></modal-header>
+                                <modal-body>
+                                    <h3>This is modal body</h3>
+                                </modal-body>
+                                <modal-footer>
+                                    <button class="btn btn-primary"  ng-click="hide(1)">Save</button>
+                                </modal-footer>
+                            </modal>
+
+                            <modal visible="showModal2" backdrop="static">
+                                <modal-header title="Modal Titel 2"></modal-header>
+                                <modal-body>
+                                    <h3>This is modal body</h3>
+                                </modal-body>
+                                <modal-footer>
+                                    <button class="btn btn-primary" ng-click="hide(2)">Save</button>
+                                </modal-footer>
+                            </modal>
                             <!-- end modal -->
 
 
