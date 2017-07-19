@@ -52,9 +52,14 @@ var tour = {
             content: "Here is where you can define some general tracking settings.",
             target: "my_settings",
             placement: "bottom"
+        },
+        {
+            title: "Path Markers",
+            content: "These symbols help you understand the trackable path direction on the map.",
+            target: "div_map_legend",
+            placement: "right"
         }
     ]
 };
 
-// Start the tour!
-hopscotch.startTour(tour);
+window.tour = tour;

@@ -44,16 +44,20 @@
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>-->
     <script src="bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+
     <!-- for the modal dialogs mainly -->
-    <!--<script src="js/ui-bootstrap-tpls-0.14.3.min.js"></script>-->
+    <link rel="stylesheet" href="ng-dialog/css/ngDialog.min.css">
+    <link rel="stylesheet" href="ng-dialog/css/ngDialog-theme-default.min.css">
+    <script src="ng-dialog/js/ngDialog.min.js"></script>
+   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>-->
 
     <!-- this should not be the way to include it, must come included from trackme-angular-core.js-->
     <!--<script src="js/modules/welcome-dialog.js"></script>-->
 
     <!-- my angular js core file -->
-    <script src="js/trackme-angular-core.js"></script>
     <script src="js/modules/trackme-angular-device.js"></script>
     <script src="js/modules/trackme-angular-trackable.js"></script>
+    <script src="js/trackme-angular-core.js"></script>
     <script src="js/modules/trackme-angular-profile.js"></script>
     <script src="js/modules/trackme-angular-record.js"></script>
 
@@ -149,11 +153,11 @@
                                     <p role="form">
 
                                             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                                                <label for="trackable_name">Name:</label>
-                                                <input id="trackable_name" type="text" class="form-control input-sm" placeholder="name" ng-model="formTrackablesData.name">
+                                                <label for="trackable_name">Name: <span class="label_normal">(*)</span></label>
+                                                <input id="trackable_name" type="text" class="form-control input-sm" placeholder="name" ng-required="true" ng-model="formTrackablesData.name">
 
-                                                <label for="trackable-description">Description:</label>
-                                                <input id="trackable-description" type="text" class="form-control input-sm" placeholder="description" ng-model="formTrackablesData.description">
+                                                <label for="trackable-description">Description: <span class="label_normal">(*)</span></label>
+                                                <input id="trackable-description" type="text" class="form-control input-sm" placeholder="description" ng-required="true" ng-model="formTrackablesData.description">
 
                                                 <p>
                                                 <hr/>
@@ -178,6 +182,9 @@
                                                 <!--<input name="trackable_unlockcode" id="trackable_unlockcode" type="hidden" size="20" value="" ng-model="formTrackablesData.unlockCode">-->
                                                 <br/>
                                                 <button type="submit" class="btn btn-primary btn-sm" ng-click="createTrackable()">Add trackable</button>
+                                                <p class="fields_hint">
+                                                    <br/>Note: fields with <span class="label_normal">(*)</span> are required
+                                                </p>
                                     </form>
                                 <!--</div>-->
                             </div>
@@ -240,15 +247,18 @@
                                     <form role="form">
 
                                             <!-- BIND THIS VALUE TO formData.text IN ANGULAR -->
-                                            <label for="device_id">Device Id:</label>
-                                            <input id="device_id" type="text" class="form-control input-sm" placeholder="Identifier" ng-model="formData.deviceId">
+                                            <label for="device_id">Device Id: <span class="label_normal">(*)</span></label>
+                                            <input id="device_id" type="text" class="form-control input-sm" placeholder="Identifier" ng-required="true" ng-model="formData.deviceId">
 
-                                            <label for="device-description">Device description:</label>
-                                            <input id="device-description" type="text" class="form-control input-sm" placeholder="Description" ng-model="formData.deviceDescription">
+                                            <label for="device-description">Device description: <span class="label_normal">(*)</span></label>
+                                            <input id="device-description" type="text" class="form-control input-sm" placeholder="Description" ng-required="true" ng-model="formData.deviceDescription">
 
                                         <br/>
                                         <!-- createDevice() WILL CREATE NEW devices -->
                                         <button type="submit" class="btn btn-primary btn-sm" ng-click="createDevice()">Add device</button>
+                                        <p class="fields_hint">
+                                            <br/>Note: fields with <span class="label_normal">(*)</span> are required
+                                        </p>
                                     </form>
 
                             </div>
@@ -301,40 +311,27 @@
                             </div>
 
                             <!-- modal code here-->
-                            <div ng-controller="RecordsController">
+                            <!--<div ng-controller="RecordsController">
                                 <div class="checkbox" ng-repeat="rec in records">
                                     <label>{{ rec.latitude }}</label>
                                     <label>{{ rec.longitude }}</label>
                                 </div>
-                            </div>
-
-                            <button class="btn btn-primary" ng-click="showModal1 = true">Show Modal</button>
-                            <button class="btn btn-primary" ng-click="showModal2 = true">Show Static Modal</button>
-                            <modal visible="showModal1" on-sown="modalOneShown()" on-hide="modalOneHide()">
-                                <modal-header title="Modal Titel 1"></modal-header>
-                                <modal-body>
-                                    <h3>This is modal body</h3>
-                                </modal-body>
-                                <modal-footer>
-                                    <button class="btn btn-primary"  ng-click="hide(1)">Save</button>
-                                </modal-footer>
-                            </modal>
-
-                            <modal visible="showModal2" backdrop="static">
-                                <modal-header title="Modal Titel 2"></modal-header>
-                                <modal-body>
-                                    <h3>This is modal body</h3>
-                                </modal-body>
-                                <modal-footer>
-                                    <button class="btn btn-primary" ng-click="hide(2)">Save</button>
-                                </modal-footer>
-                            </modal>
-                            <!-- end modal -->
-
-
+                            </div>-->
 
 
                         </div>
+                    </div>
+                </div>
+
+                <p>&nbsp;</p>
+                <p></p>
+                <div class="boxed-group dangerzone" id="div_map_legend">
+                <h3>Map markers legend</h3>
+                    <br/>
+                    <div class="legend_container">
+                        <div class="start_path"><span> => Start of path marker</span></div>
+                        <div class="middle_path"><span> => Middle of path marker</span></div>
+                        <div class="finish_path"><span> => End of path marker</span></div>
                     </div>
                 </div>
             </div>
@@ -352,17 +349,20 @@
                     <ui-gmap-windows show="show">
                         <div>
                             <div>
-                                <label class="markerToolTipLabel" ng-non-bindable>{{name}}</label>
+                                <label class="markerToolTipLabel" ng-non-bindable>{{location}}</label>
                                 <br/>
-                                <label class="markerToolTipLabel" ng-non-bindable>{{latitude}}</label>
-                                <br/>
+                                <!--<label class="markerToolTipLabel" ng-non-bindable>{{latitude}}</label>
+                                <br/>-->
                                 <label class="markerToolTipLabel" ng-non-bindable>{{label}}</label>
                                 <br/>
                                 <label class="markerToolTipLabel" ng-non-bindable>{{time}}</label>
+
+                                <!-- don´t know what to put here
                                 <div class="icons" ng-controller="infoWindowCtrl">
                                     <span class="glyphicon glyphicon-eye-open customGlyph" ng-mouseover="glyphClick()" ng-click="glyphClick()"></span>
                                     <span class="glyphicon glyphicon-eye-close customGlyph" ng-click="glyphClick()"></span>
                                 </div>
+                                -->
 
                             </div>
 

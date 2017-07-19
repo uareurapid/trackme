@@ -3,9 +3,15 @@
  */
 
 //device module
-var trackme = angular.module('trackme').controller('DevicesController',function ($scope, $cookies, $http) {
+var trackmeDevice = angular.module('trackmeDevice',['ngDialog']);
 
-    $scope.formData = {};
+trackmeDevice.controller('DevicesController',function ($scope, $cookies, $http, ngDialog) {
+
+    $scope.formData = {
+
+       deviceId: "",
+       deviceDescription: ""
+    };
 
     //all these stuff should be on the services, not on the controllers,
     //$http and $resource on services, $scope on controllers
@@ -100,9 +106,37 @@ var trackme = angular.module('trackme').controller('DevicesController',function 
 
         console.log("submitting the form to add a new device for user: " + $scope.formData.owner);
 
+
+        if(!$scope.formData.deviceId.length || !$scope.formData.deviceDescription) {
+            //for the dialog
+            $scope.message = "Please fill all the required fields";
+            $scope.name = "";
+            ngDialog.open(
+                {
+                    template: 'dialog_add.html',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                });
+            return;
+        }
+
         //now submit the form and create the device
         $http.post('/api/devices', $scope.formData)
             .success(function(data) {
+
+                //close the panel
+                angular.element('#collapse4').collapse('hide');
+
+                //for the dialog
+                $scope.message = "Successfuly added ";
+                $scope.name = $scope.formData.deviceId;
+                ngDialog.open(
+                    {
+                        template: 'dialog_add.html',
+                        className: 'ngdialog-theme-default',
+                        scope: $scope
+                    });
+
 
                 $scope.formData.deviceId = ""; // clear the form so our user is ready to enter another
                 $scope.formData.deviceDescription = "";

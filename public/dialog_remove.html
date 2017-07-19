@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div class="modal-header">
+    <h3>{{modal_title}}</h3>
+</div>
+<!--<form ng-submit="submit()">-->
+    <div class="modal-body">
+        <div class="row">
+            <div class="col-md-12">
+                {{message}} <strong>{{name}}</strong>?
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div class="ngdialog-buttons">'+
+                <button type="button" class="ngdialog-button ngdialog-button-secondary" ng-click="closeThisDialog(0)">No</button>'+
+                <button type="button" class="ngdialog-button ngdialog-button-primary" ng-click="deleteAll()">Yes</button>' +
+            </div>
+        </div>
+       </div>
+<!--</form>-->
+</body>
+</html>

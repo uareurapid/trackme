@@ -5,12 +5,13 @@
 /* CSS for the content of page. I am giving top and bottom padding of 80px to make sure the header and footer do not overlap the content.*/
 #my_container { margin:0 auto; overflow:auto; padding:80px 0; width:940px; }
 
-.angular-google-map-container{margin:0 auto; overflow:auto; padding:80px 0; width:100%; min-height: 1000px}
+.angular-google-map-container{margin:0 auto; overflow:auto; padding:80px 0; width:100%; min-height:940px}
 
 .trackable-form, .device-form { text-align: left }
 #my_content{}
 
-#main {overflow: hidden;}
+#main {overflow: hidden;
+    height: 100%;!important;}
 
 .btn-sm-right{text-align: right}
 
@@ -24,8 +25,8 @@
 .min-300 {width: 300px; min-width: 300px;padding-right: 5px; padding-left:5px }
 
 /* Make Footer Sticky */
-#footer_container { background:#eee; border:1px solid #666; bottom:0; height:60px; left:0; position:fixed; width:100%; }
-#my_footer { line-height:60px; margin:0 auto; width:940px; text-align:center; }
+#footer_container { background:rgb(37, 42, 58); border-top:1px solid #666; bottom:0; height:60px; left:0; position:fixed; width:100%; }
+#my_footer { line-height:60px; margin:0 auto; width:940px; text-align:center; color: white }
 
 #html_colored {
 
@@ -121,10 +122,11 @@ input[type="radio"]{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: #eee;
-    background-image: -webkit-linear-gradient(#fcfcfc, #eee);
-    background-image: linear-gradient(#fcfcfc, #eee);
-    border: 1px solid #d5d5d5;
+    background-color: #f0ad4e;
+    /*#eee;*/
+   /* background-image: -webkit-linear-gradient(#fcfcfc, #eee);
+    background-image: linear-gradient(#fcfcfc, #eee);*/
+    border: 1px solid #000066;
     border-radius: 3px;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -150,15 +152,21 @@ button, input {
     background-color: #efefef;
     background-image: -webkit-linear-gradient(#fefefe, #efefef);
     background-image: linear-gradient(#fefefe, #efefef);
-    border-color: #e1e1e1;
+    border-color: #000066;
 }
 .btn:disabled, .btn:disabled:hover, .btn.disabled, .btn.disabled:hover {
     color: rgba(102,102,102,0.5);
     cursor: default;
     background-color: rgba(229,229,229,0.5);
     background-image: none;
-    border-color: rgba(197,197,197,0.5);
+    border-color: #000066;
     box-shadow: none;
+}
+
+.btn-primary:hover {
+    color: black;
+    background-color: #f0ad4e;
+    border-color: #eea236;
 }
 button, html [type="button"], [type="reset"], [type="submit"] {
     -webkit-appearance: button;
@@ -174,8 +182,54 @@ button, html [type="button"], [type="reset"], [type="submit"] {
 .btn-danger:hover {
 color: #ec5757;
 }
+
+.btn-warning:hover {
+    color: black;
+}
 /*h1, h2, h3, h4, h5, h6*/
 h4 {
     margin-top: 0;
     margin-bottom: 0;
+}
+
+label .label_normal {
+    font-weight: normal;
+}
+
+/* override dialog dismiss button, ugly */
+.ngdialog-close {
+    display: none;
+}
+
+.legend_container {
+    display: inline;
+    text-align: left;
+    color: white;
+}
+
+.legend_container span{
+    vertical-align: middle;
+    margin-left: 50px;
+}
+
+.start_path {
+    background-image: url("../img/grn-circle.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 48px;
+    min-height: 48px;
+}
+.middle_path {
+    background-image: url("../img/orange-circle.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 48px;
+    min-height: 48px;
+}
+.finish_path {
+    background-image: url("../img/red-circle.png");
+    background-position: left;
+    background-repeat: no-repeat;
+    background-size: 48px;
+    min-height: 48px;
 }

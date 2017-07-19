@@ -3,7 +3,9 @@
  */
 
 //trackables controller
-var trackme = angular.module('trackme').controller('TrackablesController',function ($scope, $cookies, $http) {
+var trackmeTrackable = angular.module('trackmeTrackable',['ngDialog']);
+
+trackmeTrackable.controller('TrackablesController',function ($scope, $cookies, $http, ngDialog) {
 
     $scope.testGetProfile = function() {
         $scope.$emit("GetUserProfile", {});
@@ -16,7 +18,7 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
     $scope.formTrackablesData = {};
 
     //default privacy level
-    $scope.formTrackablesData.privacy = "Private"
+    $scope.formTrackablesData.privacy = "Private";
 
     $scope.formTrackablesData.showPrivacy = false;
 
@@ -163,19 +165,48 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
 
         //first thing is get the username
         //i do not need to check the username again, since the value is available since first landed on the page
+        if(!$scope.formTrackablesData.name.length || !$scope.formTrackablesData.description) {
+            //for the dialog
+            $scope.message = "Please fill all the required fields";
+            $scope.name = "";
+            ngDialog.open(
+                {
+                    template: 'dialog_add.html',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                });
+            return;
+        }
 
         //now send the trackable data
         console.log("sending new trackable request now...");
         $http.post('/api/trackables', $scope.formTrackablesData)
             .success(function(data) {
+
+                //close the panel
+                angular.element('#collapse2').collapse('hide');
+
+                //for the dialog
+                $scope.message = "Successfuly added ";
+                $scope.name = $scope.formTrackablesData.name;
+                ngDialog.open(
+                    {
+                        template: 'dialog_add.html',
+                        className: 'ngdialog-theme-default',
+                        scope: $scope
+                    });
+
                 //get them all again and clear the form fields
                 $scope.getAllTrackables();
+
+
             })
             .error(function(data) {
                 console.log('Error: ' + data);
             });
 
     };
+
 
     // delete a trackable after checking it
     $scope.deleteTrackable = function(id) {
@@ -190,27 +221,56 @@ var trackme = angular.module('trackme').controller('TrackablesController',functi
             });
     };
 
-    // delete a trackable after checking it
-    $scope.removeAllTrackables = function() {
+
+    //delete all trackables
+    $scope.deleteAll = function() {
 
         $scope.getTrackableOwner(function(username) {
-            //success
+                //success
 
                 $http.delete('/api/trackables/delete/all/' + username)
                     .success(function(data) {
                         console.log("received " + JSON.stringify(data));
+                        //close the settings panel
+                        angular.element('#collapse6').collapse('hide');
                     })
                     .error(function(error) {
                         console.log("received error" + JSON.stringify(error));
                     });
 
 
-        },
-        function() {
-            //error callback
+            },
+            function() {
+                //error callback
 
-        }
+            }
         );
+
+    };
+
+    // delete a trackable after checking it
+    //this just asks for confirmation, the method above does the job
+    $scope.removeAllTrackables = function() {
+
+        //TODO need to define the template for the dialog first
+
+        $scope.message = 'Are you sure you want to remove all';
+        $scope.name = "trackables";
+        $scope.modal_title = "Confirm deletion";
+
+        ngDialog.open({
+            preCloseCallback: function(value) {
+                var nestedConfirmDialog = ngDialog.openConfirm({
+                    template:'dialog_remove.html',
+                    className: 'ngdialog-theme-default',
+                    scope: $scope
+                });
+
+                // NOTE: return the promise from openConfirm
+                return nestedConfirmDialog;
+            }
+        });
+
 
     };
 

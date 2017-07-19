@@ -14,7 +14,7 @@
 // A module in AngularJS is a place where you can collect and organize
 // components like controllers, services, directives, and filters
 
-var trackme = angular.module('trackme', ['uiGmapgoogle-maps','ngCookies','angular-popover']);
+var trackme = angular.module('trackme', ['uiGmapgoogle-maps','ngCookies','angular-popover','ngDialog','trackmeDevice','trackmeTrackable']);
 
 //Define the same constants that we have server side
 trackme.value('CONSTANTS',{
@@ -41,7 +41,7 @@ trackme.config(function(uiGmapGoogleMapApiProvider) {
     });
 });
 
-trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$interval,$window,$location, CONSTANTS) {
+trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $interval,$window,$location, CONSTANTS,ngDialog) {
     // Do stuff with your $scope.
     // Note: Some of the directives require at least something to be defined originally!
     // e.g. $scope.markers = []
@@ -87,7 +87,44 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
     };
 
     //creates the marker for the record on the map!!!
-    var createRecordMarker = function(i, record, bounds, idKey) {
+    var createRecordMarker = function(i, record, bounds, idKey, totalRec) {
+
+
+        var iconBase = 'https://maps.google.com/mapfiles/kml/paddle/';
+        var icons = {
+            finish: {
+                icon: iconBase + 'red-circle.png'
+            },
+            start: {
+                icon: iconBase + 'grn-circle.png'
+            },
+            middle: {
+                icon: iconBase + 'orange-circle.png'
+            }
+        };
+
+        var getIcon = function() {
+          if(i===0) {
+              return icons.start.icon;
+          }
+          else if(i === (totalRec - 1 )) {
+              return icons.finish.icon;
+          }
+          else {
+              return icons.middle.icon;
+          }
+        };
+
+        /*var pinSymbol = function(color) {
+          return {
+              path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
+              fillColor: color,
+              fillOpacity: 1,
+              strokeColor: '#000',
+              strokeWeight: 2,
+              scale: 0.4
+          };
+        };*/
 
         if (idKey == null) {
             idKey = "id";
@@ -100,18 +137,19 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             latitude: lat,
             longitude: lng,
             title: 'm' + i,
-            time: record.time,
+            time: 'Date/Time: ' + record.time,
             label: 'Paulo Cristo',
-            show:false,
-            name: 'Location: ' + '(' + lat + '),('+  lng + ')',
+            show:false,//do not show info without clicking the marker
+            location: 'Location: ' + '(' + lat + '),('+  lng + ')',
             cords: {
                 latitude: lat,
                 longitude: lng
             },
-            options: {
+            /*options: {
                 label: 'Paulo Cristo',
                 title: 'm' + i
-            }
+            },*/
+            icon: getIcon()
 
         };
         marker[idKey] = i;
@@ -125,12 +163,19 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             longitude: -99.6680
         },
         zoom: 4,
-        control:{},
-        bounds: {}
+
+       // control:{streetViewControl:true},
+        bounds: {},
+        options: {
+            scrollwheel: true,
+            scaleControl:true,
+            streetViewControl:true,
+            streetViewControlOptions: {position: 3},
+            zoomControlOptions: {position: 3}, //RIGHT_TOP
+            panControl: true
+        }
     };
-    $scope.options = {
-        scrollwheel: true
-    };
+
 
     //call this
     $scope.refreshMap = function (newMarkers) {
@@ -166,10 +211,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         $scope.intervalUpdatePromise = $interval($scope.updateMapPeriodically,60*1000);
     }
 
-
     //########################## ADD MARKERS TO THE MAP ######################
     //add the records on the map, add polylines and markers
-    var addPositionsOnMap = function(data, protectedRoute) {
+    var addPositionsOnMap = function(data) {
 
         //clear markers
         var markers = [];
@@ -183,7 +227,9 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         var currentTrackableId = "";
         var previousTrackableId = "";
 
-        for(var i=0; i< data.length; i++) {
+        var numberOfPoints = data.length;
+
+        for(var i=0; i < data.length; i++) {
 
             if(i > 0) {
                 previous = i-1;
@@ -193,7 +239,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
             currentTrackableId = data[current].trackableId;
 
 
-            markers.push(createRecordMarker(i,data[i], $scope.map.bounds));
+            markers.push(createRecordMarker(i,data[i], $scope.map.bounds,null, numberOfPoints));
 
             current = i;
 
@@ -239,7 +285,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
         }
 
         //center the map on the last point added
-        if(protectedRoute && data.length > 0 ) {
+        if(data.length > 0 ) {
             $scope.map.center.latitude = data[data.length - 1].latitude;
             $scope.map.center.longitude = data[data.length - 1].longitude;
         }
@@ -379,7 +425,7 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
 
                     //add the records on the map, add polylines and markers
-                    addPositionsOnMap(data, hasProtectedParams);
+                    addPositionsOnMap(data);
 
 
 
@@ -405,12 +451,8 @@ trackme.controller("MapController", function($scope,$http,uiGmapGoogleMapApi,$in
 
     });
 
-    $scope.showModal = false;
+    //https://github.com/likeastore/ngDialog
 
-    $scope.toggleModal = function(btnClicked){
-
-        $scope.showModal = !$scope.showModal;
-    };
 });
 
 
@@ -420,10 +462,93 @@ trackme.controller('infoWindowCtrl', function($scope,$window) {
     };
 });
 
+
+/*
+trackme.directive('modal', function(){
+        return {
+            template: '<div class="modal fade bs-example-modal-lg center-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"><div class="modal-dialog modal-sm"><div class="modal-content" ng-transclude><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title" id="myModalLabel">Modal title</h4></div></div></div></div>',
+            restrict: 'E',
+            transclude: true,
+            replace:true,
+            scope:{visible:'=', onSown:'&', onHide:'&'},
+            link:function postLink(scope, element, attrs){
+
+                $(element).modal({
+                    show: false,
+                    keyboard: attrs.keyboard,
+                    backdrop: attrs.backdrop
+                });
+
+                scope.$watch(function(){return scope.visible;}, function(value){
+
+                    if(value == true){
+                        $(element).modal('show');
+                    }else{
+                        $(element).modal('hide');
+                    }
+                });
+
+                $(element).on('shown.bs.modal', function(){
+                    scope.$apply(function(){
+                        scope.$parent[attrs.visible] = true;
+                    });
+                });
+
+                $(element).on('shown.bs.modal', function(){
+                    scope.$apply(function(){
+                        scope.onSown({});
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function(){
+                    scope.$apply(function(){
+                        scope.$parent[attrs.visible] = false;
+                    });
+                });
+
+                $(element).on('hidden.bs.modal', function(){
+                    scope.$apply(function(){
+                        scope.onHide({});
+                    });
+                });
+            }
+        };
+    }
+);
+
+trackme.directive('modalHeader', function(){
+    return {
+        template:'<div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">{{title}}</h4></div>',
+        replace:true,
+        restrict: 'E',
+        scope: {title:'@'}
+    };
+});
+
+trackme.directive('modalBody', function(){
+    return {
+        template:'<div class="modal-body" ng-transclude></div>',
+        replace:true,
+        restrict: 'E',
+        transclude: true
+    };
+});
+
+trackme.directive('modalFooter', function(){
+    return {
+        template:'<div class="modal-footer" ng-transclude></div>',
+        replace:true,
+        restrict: 'E',
+        transclude: true
+    };
+});*/
+
 //a directive to add in the html template
+
+/*
 trackme.directive('modal', function () {
     return {
-        template: '<div class="modal fade">' +
+        template: '<div class="modal center-modal fade">' +
         '<div class="modal-dialog">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
@@ -459,7 +584,7 @@ trackme.directive('modal', function () {
             });
         }
     };
-});
+});*/
 
 
 

@@ -2,11 +2,18 @@
  * Created by paulocristo on 31/10/15.
  */
 
-var trackme = angular.module('trackme').controller('ProfileController',function ($scope, $http) {
+var trackme = angular.module('trackme');
+
+trackme.controller('ProfileController',function ($scope, $http) {
+
     $scope.userinfo = {};
     $scope.greeting = {};
     $http.get('/profile/user')
         .success(function (data) {
+            //TODO start the tour only if is the first login
+            // Start the tour!
+            hopscotch.startTour(window.tour);
+
             $scope.userinfo = data;
             $scope.greeting = 'Welcome ' + $scope.userinfo.username +'!';
             console.log(data);

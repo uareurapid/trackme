@@ -126,6 +126,7 @@ module.exports = function(app, passport) {
                 //filter expression
                 {_id :filterById}, {unlockCode: filterByUnlockCode}
                 ])
+                .limit(1000)
                 .exec(function(err, trackable) {
                 //could not find the trackable info, ABORT
                 if (err || !trackable || trackable.length==0) {
@@ -137,7 +138,8 @@ module.exports = function(app, passport) {
                     Records.find(
                         //filter expression
                         {
-                            trackableId: query.tid
+                            trackableId: query.tid,
+                            limit: 1000
                         },function(err, record) {
                             if (err) {
                                 res.send(err);
@@ -155,7 +157,8 @@ module.exports = function(app, passport) {
             Trackables.find(
                 //filter expression
                 {
-                    _id :filterById
+                    _id :filterById,
+                    limit: 1000
                 },function(err, trackable) {
                     //could not find the trackable info, ABORT
                     if (err || !trackable) {
@@ -167,7 +170,8 @@ module.exports = function(app, passport) {
                         Records.find(
                             //filter expression
                             {
-                                trackableId: query.tid
+                                trackableId: query.tid,
+                                limit: 1000
                             },function(err, record) {
                                 if (err) {
                                     res.send(err);

@@ -43,7 +43,7 @@ module.exports = function(apiRouter) {
         }
 
         if(expression!=null) {
-            var query = Trackable.find(expression);
+            var query = Trackable.find(expression).limit(1000);
             query.exec(function (err, trackables) {
                 if (err)
                     res.send(err)
@@ -237,7 +237,7 @@ module.exports = function(apiRouter) {
         //do we have a filtering option?
         if(expression!==null) {
 
-            var query = Record.find(expression).sort( [['time', 1]] );// get all items asc by created date;
+            var query = Record.find(expression).sort( [['time', 1]]).limit(1000);// get all items asc by created date;
             query.exec(function (err, records) {
                 if (err)
                     res.send(err);
@@ -422,7 +422,7 @@ module.exports = function(apiRouter) {
         }
 
         if(expression!=null) {
-            var query = Device.find(expression);
+            var query = Device.find(expression).limit(1000);
             query.exec(function (err, devices) {
                 if (err)
                     res.send(err)
