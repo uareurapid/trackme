@@ -67,6 +67,7 @@ module.exports = function(apiRouter) {
 
     });
 
+    //TODO check if name exists already improve msg
     // create trackables and send back all todos after creation
     apiRouter.post('/trackables', function(req, res) {
 
@@ -79,10 +80,30 @@ module.exports = function(apiRouter) {
 
         console.log("received: " + JSON.stringify(req.body));
 
-        if(!req.body.owner) {
+        if(!req.body.owner || !req.body.name) {
             console.log("trackable owner is missing...");
             res.json(400, {err: 'Bad request!'});
         }
+
+        var expression = {
+            owner : req.owner,
+            name : req.body.name
+
+        };
+
+        //First check the name uniqueness
+        var query = Trackable.find(expression).limit(1);
+        query.exec(function (err, trackables) {
+                if (!err ){
+                    var errorMsg = "Unable to create trackable, already exists with name: " + expression.name;
+                    console.log(errorMsg);
+                    res.json(500,{err: errorMsg});
+                    return; //exit
+
+                }
+        });
+
+
         //Return the number of milliseconds since 1970/01/01:
         var timeOfCreation = new Date().getTime();
         // create a device, information comes from AJAX request from Angular
