@@ -91,10 +91,11 @@ module.exports = function(apiRouter) {
 
         };
 
+
         //First check the name uniqueness
         var query = Trackable.find(expression).limit(1);
         query.exec(function (err, trackables) {
-                if (!err ){
+                if (trackables && trackables.length > 0 ){
                     var errorMsg = "Unable to create trackable, already exists with name: " + expression.name;
                     console.log(errorMsg);
                     res.json(500,{err: errorMsg});
