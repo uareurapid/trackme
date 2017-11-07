@@ -85,13 +85,42 @@ module.exports = function(apiRouter) {
             res.json(400, {err: 'Bad request!'});
         }
 
+        var createTrackable = function() {
+
+            //Return the number of milliseconds since 1970/01/01:
+            var timeOfCreation = new Date().getTime();
+            // create a device, information comes from AJAX request from Angular
+            Trackable.create({
+
+                name: req.body.name,
+                description: req.body.description,
+                owner: req.body.owner,
+                creationDate: timeOfCreation,
+                privacy: req.body.privacy,
+                type: req.body.type,
+                unlockCode: protectedCode,
+                done : false
+            }, function(err, trackable) {
+                if (err)
+                {
+                    console.log("unable to create trackable: " + err);
+                    res.send(err);
+                }
+                else {
+                    console.log("trackable created successfully");
+                    //send the trackable json
+                    res.json(trackable);
+                }
+
+            });
+        };
+
+
         var expression = {
             owner : req.owner,
             name : req.body.name
 
         };
-
-
         //First check the name uniqueness
         var query = Trackable.find(expression).limit(1);
         query.exec(function (err, trackables) {
@@ -99,38 +128,15 @@ module.exports = function(apiRouter) {
                     var errorMsg = "Unable to create trackable, already exists with name: " + expression.name;
                     console.log(errorMsg);
                     res.json(500,{err: errorMsg});
-                    return; //exit
 
+                }
+                else {
+                    createTrackable();
                 }
         });
 
 
-        //Return the number of milliseconds since 1970/01/01:
-        var timeOfCreation = new Date().getTime();
-        // create a device, information comes from AJAX request from Angular
-        Trackable.create({
 
-            name: req.body.name,
-            description: req.body.description,
-            owner: req.body.owner,
-            creationDate: timeOfCreation,
-            privacy: req.body.privacy,
-            type: req.body.type,
-            unlockCode: protectedCode,
-            done : false
-        }, function(err, trackable) {
-            if (err)
-            {
-                console.log("unable to create trackable: " + err);
-                res.send(err);
-            }
-            else {
-                console.log("trackable created successfully");
-                //send the trackable json
-                res.json(trackable);
-            }
-
-        });
 
     });
 
@@ -481,25 +487,48 @@ module.exports = function(apiRouter) {
     // create device and send back all todos after creation
     apiRouter.post('/devices', function(req, res) {
 
-        // create a device, information comes from AJAX request from Angular
-        Device.create({
 
-            deviceId: req.body.deviceId,
-            description: req.body.deviceDescription,
-            owner: req.owner,
-            done : false
-        }, function(err, device) {
-            if (err) {
-                console.log("error adding device: " + err);
-                res.send(err);
+        var createDevice =  function() {
+            // create a device, information comes from AJAX request from Angular
+            Device.create({
+
+                deviceId: req.body.deviceId,
+                description: req.body.deviceDescription,
+                owner: req.owner,
+                done : false
+            }, function(err, device) {
+                if (err) {
+                    console.log("error adding device: " + err);
+                    res.send(err);
+                }
+                else {
+                    console.log("success adding device");
+                    //send the newly added device as the API response
+                    res.json(device);
+                }
+
+            });
+        };
+
+        var expression = {
+            owner : req.owner,
+            deviceId : req.body.deviceId
+
+        };
+        //First check the name uniqueness
+        var query = Device.find(expression).limit(1);
+        query.exec(function (err, devices) {
+            if (devices && devices.length > 0 ){
+                var errorMsg = "Unable to create device, already exists with name: " + expression.deviceId;
+                console.log(errorMsg);
+                res.json(500,{err: errorMsg});
+
             }
             else {
-                console.log("success adding device");
-                //send the newly added device as the API response
-                res.json(device);
+                createDevice();
             }
-
         });
+
 
     });
 
