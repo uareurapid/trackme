@@ -35,6 +35,7 @@ ProfileController.remoteLogin = function(req,res,next,passport){
 
             // if user is found and password is right
             // create a token
+            console.log("signing: " + JSON.stringify(user));
             var jsonToken = jwt.sign(user, conf.secret, {
                 //expiresInMinutes: 1440 // expires in 24 hours (default)
                 expiresInMinutes: expiresIn || 1440
