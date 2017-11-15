@@ -65,15 +65,27 @@ ProfileController.remoteSignup = function(req,res,next,passport){
         var User = require('../models/user');
 
 
+        console.log("user: " + req.body.email);
+        console.log("pass: " + req.body.password);
+
         //**********
-        User.create({
+        var theUser = User.create({
             username: req.body.email,
             password: req.body.password
         }, function(err, account) {
 
-            if (err) {
+            console.log("account: " + JSON.stringify(account) + " theUser: " + JSON.stringify(theUser));
+            /*if (err) {
                 return res.status(500).json({err: err});
             }
+
+
+            req.login(account, function(err) {
+                if (err) {
+                    return res.status(401).json({err: info});
+                }
+                return res.redirect('/dashboard');
+            });*/
 
             //passport.authenticate('local')(req, res, function () {
             //    return res.status(200).json({status: 'Registration successful!'});
