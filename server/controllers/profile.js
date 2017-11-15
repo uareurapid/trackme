@@ -72,11 +72,11 @@ ProfileController.remoteSignup = function(req,res,next,passport){
         console.log("pass: " + req.body.password);
 
         //**********
-        var theUser = User.create({
-            local : {   email: req.body.email, password: req.body.password }
+        User.create({
+            local : {   email: req.body.email, password: User.generateHash(req.body.password) }
         }, function(err, account) {
 
-            console.log("account: " + JSON.stringify(account) + " user: " + JSON.stringify(theUser));
+            console.log("account: " + JSON.stringify(account));
             /*if (err) {
                 return res.status(500).json({err: err});
             }
