@@ -22,6 +22,8 @@ ProfileController.remoteLogin = function(req,res,next,passport){
     console.log("expire_session: " + expiresIn);
 
     passport.authenticate('local-login', function(err, user, info) {
+
+        console.log("user object: " + JSON.stringify(user));
         if (err) {
             return res.status(500).json({err: err});
         }
@@ -71,10 +73,7 @@ ProfileController.remoteSignup = function(req,res,next,passport){
 
         //**********
         var theUser = User.create({
-            email: req.body.email,
-            local : {   email: req.body.email,
-                        password: req.body.password
-                    }
+            local : {   email: req.body.email, password: req.body.password }
         }, function(err, account) {
 
             console.log("account: " + JSON.stringify(account) + " user: " + JSON.stringify(theUser));
