@@ -69,14 +69,14 @@ ProfileController.remoteSignup = function(req,res,next,passport){
         console.log("pass: " + req.body.password);
 
         //**********
-        var user = User.create({
+        var theUser = User.create({
             email: req.body.email,
             local : {   email: req.body.email,
                         password: req.body.password
                     }
         }, function(err, account) {
 
-            console.log("accout: " + JSON.stringify(account) + " user: " + JSON.stringify(user));
+            console.log("account: " + JSON.stringify(account) + " user: " + JSON.stringify(theUser));
             /*if (err) {
                 return res.status(500).json({err: err});
             }
@@ -94,13 +94,13 @@ ProfileController.remoteSignup = function(req,res,next,passport){
             //passport.authenticate('local')(req, res, function () {
             //    return res.status(200).json({status: 'Registration successful!'});
             //});
-            //passport.authenticate('local-login', function(err, user, info) {
-            //    if (err) {
-            //        return res.status(500).json({err: err});
-            //    }
-            //    if (!user) {
-            //        return res.status(401).json({err: info});
-            //    }
+            passport.authenticate('local-login', function(err, user, info) {
+                if (err) {
+                    return res.status(500).json({err: err});
+                }
+                if (!user) {
+                    return res.status(401).json({err: info});
+                }
                 req.logIn(user, function(err) {
                     if (err) {
                         return res.status(500).json({err: 'Could not log in user'});
@@ -113,10 +113,15 @@ ProfileController.remoteSignup = function(req,res,next,passport){
                     });
 
                     console.log("request headers: " + JSON.stringify(req.headers));
-                    res.status(200).json({status: 'Signup successful!',email:user.local.email,token:jsonToken});
+                    res.status(200).json(
+                        {
+                            status: 'Signup successful!',
+                            email: user.local.email,
+                            token:jsonToken
+                        });
 
                 });
-           // })(req, res, next);
+            })(req, res, next);
         });
 
 };
