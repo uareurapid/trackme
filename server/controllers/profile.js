@@ -66,14 +66,16 @@ ProfileController.remoteSignup = function(req,res,next,passport){
         var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
         var conf = require('../config/config');
         var User = require('../models/user');
-
+        var bcrypt   = require('bcrypt-nodejs');
 
         console.log("user: " + req.body.email);
         console.log("pass: " + req.body.password);
 
+
+        var hashedPassword = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8), null);
+
         //**********
-        User.create({
-            local : {   email: req.body.email, password: User.generateHash(req.body.password) }
+        User.create({local : {   email: req.body.email, password: hashedPassword }
         }, function(err, account) {
 
             console.log("account: " + JSON.stringify(account));
