@@ -66,6 +66,15 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
     var hasPublicParams = tid!==null;
     //-------------------------------------------------------------------------
 
+    var mapIsReady = false;
+
+    // uiGmapGoogleMapApi is a promise.
+    // The "then" callback function provides the google.maps object.
+    uiGmapGoogleMapApi.then(function(maps) {
+        mapIsReady = true;
+    });
+
+
     //will hold the map markers
     $scope.mapMarkers = [];
     //will hold the lines between records
@@ -179,6 +188,9 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
 
 
     //call this
+    //Error: undefined is not an object (evaluating '$scope.map.control.refresh')
+    //refreshMap@https://trackme-app.herokuapp.com/js/trackme-angular-core.js:190:27
+    //    addPositionsOnMap@https://trackme-app.herokuapp.com/js/trackme-angular-core.js:294:26
     $scope.refreshMap = function (newMarkers) {
         //clear previous markers
         $scope.mapMarkers = newMarkers;
@@ -317,7 +329,10 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
                 $scope.records = data;
                 console.log("received" + JSON.stringify(data));
 
-                addPositionsOnMap(data);
+                if(mapIsReady) {
+                    addPositionsOnMap(data);
+                }
+
 
             })
             .error(function(data) {
@@ -367,7 +382,10 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
                 $scope.records = data;
                 console.log("received" + JSON.stringify(data));
 
-                addPositionsOnMap(data);
+                if(mapIsReady) {
+                    addPositionsOnMap(data);
+                }
+
 
             })
             .error(function(data) {
@@ -426,7 +444,10 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
 
 
                     //add the records on the map, add polylines and markers
-                    addPositionsOnMap(data);
+                    if(mapIsReady) {
+                        addPositionsOnMap(data);
+                    }
+
 
 
 
@@ -446,11 +467,7 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
     }, true);
 
 
-    // uiGmapGoogleMapApi is a promise.
-    // The "then" callback function provides the google.maps object.
-    uiGmapGoogleMapApi.then(function(maps) {
 
-    });
 
     //https://github.com/likeastore/ngDialog
 
