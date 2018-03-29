@@ -81,7 +81,8 @@ trackmeTrackable.controller('TrackablesController',function ($scope, $cookies, $
                     calloutMgr.createCallout({
                         id: 'attach-icon',
                         title: "Trackable details!",
-                        content: "<hr/><p><strong>Name:</strong> " + trackable[0].name +"</p>" +
+                        content: "<hr/><p><strong>Type:</strong> " + trackable[0].type +"</p>" +
+                        "<p><strong>Name:</strong> " + trackable[0].name +"</p>" +
                         "<p><strong>Description:</strong> " + trackable[0].description +"</p>" +
                         "<p><strong>Privacy: </strong>" + privacy + "</p>" +
                         ( (privacy==='Protected' || privacy==='Public' ) ? "<input type='button' onclick='shareTrackable()' value='Share this trackable'>" : ""),

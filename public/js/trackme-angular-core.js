@@ -138,7 +138,8 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
             longitude: lng,
             title: 'm' + i,
             time: 'Date/Time: ' + record.time,
-            label: 'Paulo Cristo',
+            label: 'Owner: Paulo Cristo',
+            trackableId: "TID: " + record.trackableId,
             show:false,//do not show info without clicking the marker
             location: 'Location: ' + '(' + lat + '),('+  lng + ')',
             cords: {
