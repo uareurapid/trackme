@@ -174,7 +174,7 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
         },
         zoom: 4,
 
-       // control:{streetViewControl:true},
+        control:{},//streetViewControl:true
         bounds: {},
         options: {
             scrollwheel: true,
