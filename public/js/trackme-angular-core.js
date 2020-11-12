@@ -207,6 +207,7 @@ trackme.controller("MapController", function($scope,$http, uiGmapGoogleMapApi, $
     //##################### FILTERING CHANGED  -> REBUILD MAP ####################################
 
     //will force reload of the map every 1 minute
+    //TODO this is not respecting the trackable/device selection
     $scope.updateMapPeriodically = function() {
         console.log("FORCED MAP UPDATE");
         $scope.deviceChanged(null);
